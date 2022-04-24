@@ -1,4 +1,4 @@
-from interfaces.collide_interfaces import CollideInterface
+from obj_properties.collide_interfaces import CollideInterface
 from constants.properties import POINT_TYPE
 from math import dist
 

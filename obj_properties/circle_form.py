@@ -1,5 +1,5 @@
 from math import sin, cos, radians, dist
-from interfaces.collide_interfaces import CollideInterface
+from obj_properties.collide_interfaces import CollideInterface
 from abc import abstractmethod
 from constants.properties import CIRCLE_TYPE, RECT_TYPE, LINE_TYPE, POINT_TYPE, HEXAGON_TYPE
 

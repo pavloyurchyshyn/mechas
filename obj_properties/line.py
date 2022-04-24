@@ -1,6 +1,6 @@
 from math import cos, sin, dist
 from common.math_functions import get_angle_between_dots
-from interfaces.collide_interfaces import CollideInterface
+from obj_properties.collide_interfaces import CollideInterface
 from constants.properties import CIRCLE_TYPE, RECT_TYPE, LINE_TYPE
 
 

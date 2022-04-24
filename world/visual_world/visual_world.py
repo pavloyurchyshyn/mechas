@@ -10,13 +10,16 @@ from settings.UI_setings.menus_settings.round_menu.arena_window import MIN_SCALE
 
 from visual.font_loader import DEFAULT_FONT
 
+from visual.main_window import MAIN_SCREEN
+from pygame.draw import circle as draw_circle
+
 
 class VisualHex(Hexagon):
     def __init__(self, x, y, size, surface=None, indexes=None):
         self._indexes = indexes
         self._surface = surface
         super().__init__(x=x, y=y + 1, size=size)
-
+        self._draw_d_pos = 0, 0
         if indexes:
             self.draw_img()
 
@@ -28,15 +31,14 @@ class VisualHex(Hexagon):
         self._img.blit(c, (x - c.get_width() / 2, y - c.get_height() / 2))
 
     def draw(self):
-        draw_lines(self._surface, (255, 255, 255), 1, self._dots[1:], 4)
-        self._surface.blit(self._img, self.left_top)
-        draw_lines(self._surface, (255, 255, 255), 1, self._dots[1:], 2)
+        x, y = self.left_top
+        dx, dy = self._draw_d_pos
+        self._surface.blit(self._img, (x-dx, y-dy))
+        d = [[x-dx, y-dy] for x, y in self._dots[1:]]
+        draw_lines(self._surface, (255, 255, 255), 1, d, 2)
 
-    def draw_bold(self):
-        draw_lines(self._surface, (255, 255, 255), 1, self.dots[1:], 3)
 
-
-class VisualWorld:
+class WorldMarkup:
     def __init__(self):
         self._hex_size = HEX_SIZE
 
@@ -59,12 +61,11 @@ class VisualWorld:
         self._x_size = None
         self._y_size = None
 
-    def draw(self):
-        for h in self._hexes:
-            h.draw()
+        self._horizontal_count = 0
+        self._vertical_count = 0
 
     def build_world_img(self):
-        self._image = get_surface(self._x_size, self._y_size, transparent=1)
+        self._image = get_surface(self._x_size, self._y_size)
         for h in self._hexes:
             h._surface = self._image
             h.draw()
@@ -74,12 +75,12 @@ class VisualWorld:
 
     def build_from_list(self, arena: list = DIAMOND, even: bool = False):
         self._hexes.clear()
-
+        self._vertical_count = len(arena)
+        self._horizontal_count = len(max(arena, key=lambda a: len(a)))
         self._arena = arena
         self._even = even
 
         self._hex_example = VisualHex(0, 0, self._hex_size)
-
         for y, line in enumerate(arena):
             for x, val in enumerate(arena[y]):
                 if val:
@@ -137,16 +138,15 @@ class VisualWorld:
         return self._left_hex.x - self._left_hex.size, self._top_hex.y - self._top_hex.inner_circle_r
 
     def get_world_rect(self):
-        left = min(self._hexes, key=lambda h: h.x)
-        x0 = left.x - left.size
-        top = min(self._hexes, key=lambda h: h.y)
-        y0 = top.y - top.inner_circle_r
+        # left = min(self._hexes, key=lambda h: h.x)
+        # x0 = left.x - left.size
+        # top = min(self._hexes, key=lambda h: h.y)
+        # y0 = top.y - top.inner_circle_r
 
-        return x0, y0, self.get_world_x_size(), self.get_world_y_size()
+        return *self.left_top, self.get_world_x_size(), self.get_world_y_size()
 
     # ======================================================
-
-    def scale(self, value):
+    def scale(self, value, start_x=0, start_y=0):
         self._hex_example.scale(value)
 
         size = self._hex_example.size
@@ -155,10 +155,9 @@ class VisualWorld:
 
         for h in self._hexes:
             x, y = h._indexes
-
-            yp = y * height + (height // 2 * self.get_step(x))
-            xp = x * distance
-
+            yp = start_y + y * height + (height // 2 * self.get_step(x))
+            xp = start_x + x * distance
+            h._draw_d_pos = start_x, start_y
             h.build(xp, yp, size)
             h.draw_img()
 
@@ -171,19 +170,6 @@ class VisualWorld:
         else:
             return 1 if x % 2 else 0
 
-    def make_hex_with_coords(self, x, y):
-        if (x, y) not in self._coordinates_hex_dict:
-            return None
-
-        if self._even:
-            step = 0 if x % 2 else 1
-        else:
-            step = 1 if x % 2 else 0
-
-        yp = y * self._hex_example.height + (self._hex_example.height // 2 * step)
-        xp = x * self._hex_example.distance
-        return Hexagon(xp, yp, self._hex_example.size)
-
     def close_cell(self, coordinates):
         self._coordinates_hex_dict[coordinates].close()
 
@@ -192,16 +178,10 @@ class VisualWorld:
             if h.collide_point(point):
                 return h
 
-    def convert_coordinates_to_indexes(self, x, y):
-        x = x // self._hex_example.distance
-        y = (y - (self._hex_example.height // 2 * self.get_step(x))) // self._hex_example.height
-        return x, y
-
-    def normalize_coordinates(self, x, y):
-        x, y = self.convert_coordinates_to_indexes(x, y)
-        yp = y * self._hex_example.height + (self._hex_example.height // 2 * self.get_step(x))
-        xp = x * self._hex_example.distance
-        return xp, yp
+    def draw_markup(self):
+        for h in self._hexes:
+            draw_lines(MAIN_SCREEN, (255, 0, 0), 1, h._dots[1:], 1)
+            draw_circle(MAIN_SCREEN, (255, 0, 0), h._center, h._inner_circle_r, 1)
 
     @property
     def image(self):
@@ -210,3 +190,4 @@ class VisualWorld:
 
 if __name__ == '__main__':
     pass
+

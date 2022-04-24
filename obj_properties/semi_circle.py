@@ -1,5 +1,5 @@
 from math import radians, cos, sin, dist
-from interfaces.collide_interfaces import CollideInterface
+from obj_properties.collide_interfaces import CollideInterface
 from common.math_functions import get_angle_between_dots
 from constants.properties import SEMI_CIRCLE_TYPE
 

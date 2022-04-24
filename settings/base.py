@@ -21,4 +21,5 @@ COMMON_GAME_SETTINGS_JSON_PATH = 'common_game_settings.json'  # os.path.join(SET
 PLAYER_NICKNAME_KEY = 'player_nickname'
 
 # patterns
-LOG_FILE_PATTERN = os.path.join(LOGS_FOLDER, '{}_' + datetime.datetime.today().strftime("%Y-%m-%d-%H.%M.%S") + '.txt')
+LOG_FILE_PATTERN = os.path.join(LOGS_FOLDER, '{}_.txt')
+# LOG_FILE_PATTERN = os.path.join(LOGS_FOLDER, '{}_' + datetime.datetime.today().strftime("%Y-%m-%d-%H.%M.%S") + '.txt')

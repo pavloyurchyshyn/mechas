@@ -1,4 +1,4 @@
-from interfaces.collide_interfaces import CollideInterface
+from obj_properties.collide_interfaces import CollideInterface
 from math import cos, sin, sqrt, dist, radians
 from constants.properties import CIRCLE_TYPE, RECT_TYPE, LINE_TYPE, POINT_TYPE, HEXAGON_TYPE
 
