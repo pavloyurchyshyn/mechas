@@ -33,7 +33,7 @@ class GameRunner:
         from pygame import display, draw, Surface, constants
 
         from constants.colors import WHITE
-        from constants.game_stages import ROUND_STAGE
+        from constants.game_stages import StagesConstants
 
         from settings.global_parameters import get_slow_motion_k, update_slow_motion, get_fps
         from settings.base import VERSION, FPS
@@ -77,7 +77,7 @@ class GameRunner:
             start = finish
             # update time
             G_Clock.update(dt)
-            if STAGES.current_stage == ROUND_STAGE:
+            if STAGES.current_stage == StagesConstants.ROUND_STAGE:
                 update_slow_motion(d_time=dt)
                 R_Clock.update(dt * get_slow_motion_k())
 

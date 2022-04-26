@@ -10,7 +10,7 @@ from visual.main_window import SCREEN_H, SCREEN_W, HALF_SCREEN_W, HALF_SCREEN_H,
 from settings.UI_setings.menus_settings.main_menu import MAIN_MENU_BUTTONS, exit_warning, \
     activate_exit_warning_message, deactivate_exit_warning_message
 from settings.global_parameters import pause_available, pause_step
-from constants.game_stages import MAIN_MENU_STAGE
+from constants.game_stages import StagesConstants
 
 # from visual.base.visual_effects_controller import VisualEffectsController
 # from visual.base.diamond_effect import DiamondEffect
@@ -28,7 +28,7 @@ class MainMenu(MenuUI):
     def __init__(self):
         super().__init__(buttons=MAIN_MENU_BUTTONS,
                          buttons_objects=[TEST_DRAW_BUTTON, ],
-                         name=MAIN_MENU_STAGE, surface=MAIN_SCREEN)
+                         name=StagesConstants.MAIN_MENU_STAGE, surface=MAIN_SCREEN)
         self.create_buttons()
         self._fade_surface = self.get_surface(transparent=True)
         self._fade_surface.fill(HALF_EMPTY)
@@ -68,8 +68,6 @@ class MainMenu(MenuUI):
 
         for button in self._elements:
             button.update()
-
-        self.spawn_particle()
 
         if GLOBAL_KEYBOARD.ESC and pause_available() and not exit_warning():
             pause_step()

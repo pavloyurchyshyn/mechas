@@ -6,7 +6,7 @@ from pygame.constants import SRCALPHA
 from pygame import draw
 
 from visual.UI_base.text_UI import Text
-from visual.UI_controller import UI_TREE
+from visual.UIController import UI_TREE
 from common.global_clock import GLOBAL_CLOCK
 from visual.font_loader import DEFAULT_FONT_SIZE
 
@@ -67,8 +67,8 @@ class Button(Rectangle):
                  background_color=(0, 0, 0, 120),  # r, g, b, t
                  transparent=0,
 
-                 click_delay=1,
-                 time_b_click=None,
+                 click_with_delay=True,
+                 time_b_click=0.1,
                  id=None,
 
                  click_anim_dur=None,
@@ -76,11 +76,12 @@ class Button(Rectangle):
 
         self.id = id
 
-        x = int(x) if x else int(p_x_pos * SCREEN_W)
-        if not x:
+        x = int(x) if x is not None else int(p_x_pos * SCREEN_W)
+        if x is None:
             raise Exception(f'{text} X position not defined')
-        y = int(y) if y else int(p_y_pos * SCREEN_H)
-        if not y:
+
+        y = int(y) if y is not None else int(p_y_pos * SCREEN_H)
+        if y is None:
             raise Exception(f'{text} Y position not defined')
 
         size_x = int(size_x * X_SCALE) if size_x else Button.BUTTON_X_SIZE
@@ -155,7 +156,7 @@ class Button(Rectangle):
             self._current_button_pic = self._r_active_button if active_pic else self._r_non_active_button
 
         self._next_click_time = -1
-        self._click_with_delay = click_delay
+        self._click_with_delay = click_with_delay
         self._time_b_click = time_b_click if time_b_click is not None else Button.CLICK_DELAY
 
         self._clicked = False

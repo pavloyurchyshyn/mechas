@@ -15,3 +15,5 @@ CROSSHAIR_LINE_CENTER_DISTANCE_KEY = 'crosshair_line_center_distance'
 CROSSHAIR_LINE_WIGHT_KEY = 'crosshair_line_wight'
 CROSSHAIR_ROTATE_KEY = 'crosshair_rotate_angle'
 CROSSHAIR_COLOR_KEY = 'crosshair_color'
+
+DELAY_TIME = 0.1

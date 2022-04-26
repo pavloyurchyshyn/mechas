@@ -1,23 +1,27 @@
-from common.singletone import Singleton
-from visual.main_window import MAIN_SCREEN
-from common.global_clock import GLOBAL_CLOCK
-from common.global_mouse import GLOBAL_MOUSE
-from common.global_keyboard import GLOBAL_KEYBOARD
-from settings.default_keys import *
 from pygame.draw import lines
 from pygame import constants
 from math import dist, cos
+
+from common.singletone import Singleton
 from common.stages import Stages
 from common.img_loader import normalize_color
 from common.logger import Logger
+from common.global_clock import GLOBAL_CLOCK
+from common.global_mouse import GLOBAL_MOUSE
+from common.global_keyboard import GLOBAL_KEYBOARD
+
+from visual.main_window import MAIN_SCREEN
+
+from settings.default_keys import *
 
 
-class UI_controller(metaclass=Singleton):
+class UIController(metaclass=Singleton):
     logger = Logger().LOGGER
 
     def __init__(self, ):
         self.tree = {}
-        self.reversed_tree = {}
+        self.name_to_menu_dict = {}
+
         self.focused_element = None
         self.current_menu = None
 
@@ -206,11 +210,15 @@ class UI_controller(metaclass=Singleton):
 
     def add_menu(self, menu, *elements, enter_focus=None):
         self.tree[menu.name] = {button.id: button for button in elements if button.id}
+        self.name_to_menu_dict[menu.name] = menu
         self.logger.info(f'Added menu {menu.name} with elements: {self.tree[menu.name]}')
         # print(list(self.tree.items())[-1])
 
         if enter_focus:
             self.enter_default_focus[menu.name] = enter_focus
+
+    def get_menu(self, name):
+        return self.name_to_menu_dict.get(name)
 
     def drop_focused(self):
         self.focused_element = None
@@ -235,4 +243,4 @@ class UI_controller(metaclass=Singleton):
         return self.next_enter > 0
 
 
-UI_TREE = UI_controller()
+UI_TREE = UIController()

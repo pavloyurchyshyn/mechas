@@ -6,20 +6,23 @@ from settings.mouse_default import CROSSHAIR_SURFACE_SIZE_KEY, DEFAULT_CROSSHAIR
     DEFAULT_CROSSHAIR_DOT_EXISTS, DEFAULT_CROSSHAIR_DOT_SIZE, DEFAULT_CROSSHAIR_LINE_SIZE, \
     CROSSHAIR_DOT_EXISTS_KEY, CROSSHAIR_DOT_SIZE_KEY, CROSSHAIR_LINE_SIZE_KEY, \
     DEFAULT_CROSSHAIR_LINE_CENTER_DISTANCE, CROSSHAIR_LINE_CENTER_DISTANCE_KEY, \
-    DEFAULT_CROSSHAIR_LINE_WIGHT, CROSSHAIR_LINE_WIGHT_KEY, DEFAULT_CROSSHAIR_SIZE,\
-    DEFAULT_CROSSHAIR_ROTATE, CROSSHAIR_ROTATE_KEY, DEFAULT_CROSSHAIR_COLOR, CROSSHAIR_COLOR_KEY
+    DEFAULT_CROSSHAIR_LINE_WIGHT, CROSSHAIR_LINE_WIGHT_KEY, DEFAULT_CROSSHAIR_SIZE, \
+    DEFAULT_CROSSHAIR_ROTATE, CROSSHAIR_ROTATE_KEY, DEFAULT_CROSSHAIR_COLOR, CROSSHAIR_COLOR_KEY, DELAY_TIME
 from pygame.draw import line as draw_line
 from pygame.draw import circle as draw_circle
 from pygame import mouse
 from pygame.transform import rotate, scale, smoothscale
 
 from math import cos, sin, radians
+from time import time
 
 
 class Mouse:
     MOUSE_SIZE = (DEFAULT_CROSSHAIR_SIZE,
-                  DEFAULT_CROSSHAIR_SIZE)  # (DEFAULT_CROSSHAIR_SIZE * GAME_SCALE, DEFAULT_CROSSHAIR_SIZE * GAME_SCALE)
+                  DEFAULT_CROSSHAIR_SIZE)
     MAIN_SCREEN = MAIN_SCREEN
+
+    LMB_DELAY = DELAY_TIME
 
     def __init__(self, rel=None, pos=None, pressed=None):
         self.mouse = mouse
@@ -33,7 +36,8 @@ class Mouse:
         self._line_size = get_param_from_cgs(CROSSHAIR_LINE_SIZE_KEY, DEFAULT_CROSSHAIR_LINE_SIZE)
         self._dot_exists = get_param_from_cgs(CROSSHAIR_DOT_EXISTS_KEY, DEFAULT_CROSSHAIR_DOT_EXISTS)
         self._dot_size = get_param_from_cgs(CROSSHAIR_DOT_SIZE_KEY, DEFAULT_CROSSHAIR_DOT_SIZE)
-        self._line_center_distance = get_param_from_cgs(CROSSHAIR_LINE_CENTER_DISTANCE_KEY, DEFAULT_CROSSHAIR_LINE_CENTER_DISTANCE)
+        self._line_center_distance = get_param_from_cgs(CROSSHAIR_LINE_CENTER_DISTANCE_KEY,
+                                                        DEFAULT_CROSSHAIR_LINE_CENTER_DISTANCE)
         self._line_wight = get_param_from_cgs(CROSSHAIR_LINE_WIGHT_KEY, DEFAULT_CROSSHAIR_LINE_WIGHT)
         self._rotate = get_param_from_cgs(CROSSHAIR_ROTATE_KEY, DEFAULT_CROSSHAIR_ROTATE)
         self._color = get_param_from_cgs(CROSSHAIR_COLOR_KEY, DEFAULT_CROSSHAIR_COLOR)
@@ -44,6 +48,8 @@ class Mouse:
         self.create_crosshair()
 
         self.mouse.set_visible(False)
+
+        self.lbm_delay = 0
 
     def update(self):
         self._rel = self.mouse.get_rel()
@@ -93,11 +99,20 @@ class Mouse:
             draw_circle(crosshair_surface, self._color, surface_center, self._dot_size)
 
         pic = rotate(crosshair_surface, self._rotate)
-        self._picture = smoothscale(pic, (pic.get_width()*GAME_SCALE, pic.get_height()*GAME_SCALE))
+        self._picture = smoothscale(pic, (pic.get_width() * GAME_SCALE, pic.get_height() * GAME_SCALE))
 
     def draw(self):
         Mouse.MAIN_SCREEN.blit(self._picture, (self._pos[0] - self._picture.get_width() // 2,
                                                self._pos[1] - self._picture.get_height() // 2))
+
+    @property
+    def delayed_lmb(self):
+        if time() > self.lbm_delay:
+            self.lbm_delay = time() + self.LMB_DELAY
+
+            return self.lmb
+        else:
+            return False
 
     @property
     def lmb(self):
@@ -114,7 +129,6 @@ class Mouse:
     @rmb.setter
     def rmb(self, val):
         self._pressed[1] = val
-
 
     @property
     def network_data(self):

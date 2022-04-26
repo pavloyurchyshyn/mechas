@@ -6,10 +6,10 @@ from common.global_keyboard import GLOBAL_KEYBOARD
 from settings.UI_setings.menus_settings.round_pause import ROUND_PAUSE_BUTTONS, \
     PAUSE_MAIN_SCREEN_COPY
 
-from common.stages import Stages
+from common.stages import StagesConstants
 from constants.game_stages import ROUND_PAUSE_STAGE
 
-set_main_menu_stage = Stages().set_main_menu_stage
+set_main_menu_stage = StagesConstants().set_main_menu_stage
 
 
 class RoundPause(MenuUI):

@@ -1,5 +1,5 @@
 from visual.UI_base.text_UI import Text
-from visual.UI_controller import UI_TREE
+from visual.UIController import UI_TREE
 
 from obj_properties.rect_form import Rectangle
 from common.global_mouse import GLOBAL_MOUSE

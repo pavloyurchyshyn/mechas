@@ -8,7 +8,7 @@ GLOBAL_SETTINGS = {
     'client_instance': 0,
     'slow_motion': 0,
     'slow_motion_value': 0.05,
-    'fps': get_param_from_cgs('fps_config', 0),
+    'fps': get_param_from_cgs('fps_config', 60),
 }
 
 

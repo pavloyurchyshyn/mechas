@@ -7,7 +7,7 @@ from visual.main_window import SCREEN_W, SCREEN_H, MAIN_SCREEN
 
 from visual.UI_base.button_UI import Button
 from visual.UI_base.text_UI import Text
-from visual.UI_controller import UI_TREE
+from visual.UIController import UI_TREE
 from common.global_mouse import GLOBAL_MOUSE
 
 
@@ -167,11 +167,9 @@ class MenuUI(Rectangle):
 
     @classmethod
     def click(cls) -> bool or int:
-        if cls.GLOBAL_MOUSE.lmb:
-            if cls.NEXT_CLICK < GLOBAL_CLOCK.time:
-                cls.NEXT_CLICK = GLOBAL_CLOCK.time + cls.CLICK_DELAY
-                UI_TREE.drop_focused()
-                return 1
+        if cls.GLOBAL_MOUSE.delayed_lmb:
+            UI_TREE.drop_focused()
+            return 1
 
         return 0
 

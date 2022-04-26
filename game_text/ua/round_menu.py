@@ -1,0 +1,2 @@
+class ExitRound:
+    exit = 'Вихід'

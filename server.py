@@ -21,7 +21,7 @@ import sys
 
 
 class Server:
-    TIME_WITHOUT_CONNECTION = 30
+    TIME_WITHOUT_CONNECTION = 180
 
     def __init__(self):
         self.address = socket.gethostbyname(socket.gethostname())
@@ -58,19 +58,13 @@ class Server:
 
     def start_game_logic_status_check(self):
         LOGGER.info('Alive check started')
-        start = time()
         LOGGER.info('Sever Game loop started.')
-        update_delay = 1 / 32
+        update_delay = 1 / 64
         LOGGER.info(f'Tick rate {64}. Time per frame: {update_delay}')
-        next_update = -1
 
         finish = time() + 10
         while self.alive:
             t = time()
-            #if t > next_update:
-            #    next_update = t + update_delay
-                # self.clock.update(update_delay)
-                # self.stages[self.current_stage]()
             for token, conn in self.players_connections.items():
                 response = conn.recv()
                 if response:
@@ -81,27 +75,10 @@ class Server:
                 self.alive = False
                 LOGGER.info(f'Timeout')
             sl = update_delay - (time() - t)
-            LOGGER.info(f'sleep {sl}')
+            LOGGER.info(f'Time spent for calculation {time() - t}, sleep {sl}')
             if sl > 0:
                 sleep(sl)
-
-            # elif next_update - t - 0.05 > 0.01:
-            #     LOGGER.info('Sleep')
-            #     sleep(next_update - t - 0.05)
-
-        # while self.alive:
-        #     for token, conn in self.players_connections.items():
-        #         response = conn.recv()
-        #         if response:
-        #             LOGGER.info(f'{token}: {response}')
-        #         conn.send(self.json_to_str({'all_ok': True}))
-
-            if time() - start > 10:
-                self.alive = False
-            # if self.GAME_LOGIC.alive:
-            #     sleep(5)
-            # else:
-            #     self.stop()
+        LOGGER.info('Stopped')
 
     def start_connection_handling(self):
         start_new_thread(self.__connection_handling, ())

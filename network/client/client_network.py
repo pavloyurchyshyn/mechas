@@ -88,6 +88,7 @@ class Network:
 
     def send(self, data):
         try:
+            LOGGER.info(f'Sending: {data}')
             self.connection.send(self.json_to_str(data))
         except socket.error as e:
             LOGGER.error(f"Failed to send data {e}")

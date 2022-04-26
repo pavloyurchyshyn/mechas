@@ -4,13 +4,13 @@ from common.global_keyboard import GLOBAL_KEYBOARD
 from common.stages import Stages
 from common.logger import Logger
 
-from constants.game_stages import *
+from constants.game_stages import StagesConstants
 from constants.network_keys import NetworkKeys, ServerConnectAnswers
 
 from stages.main_menu.page import MAIN_MENU_UI as MAIN_MENU_LOGIC
 from stages.round.page import ROUND_STAGE_LOGIC
 
-from visual.UI_controller import UI_TREE
+from visual.UIController import UI_TREE
 
 from network.server.server_controller import ServerController
 from network.client.client_network import Network
@@ -23,10 +23,11 @@ class GameBody:
         self._keyboard = GLOBAL_KEYBOARD
         self.stage_controller = Stages()
         self._stages = {
-            MAIN_MENU_STAGE: self.main_menu,
-            LOADING_STAGE: self.loading_to_round,
-            ROUND_STAGE: self.round,
-            EXIT_STAGE: self._close_game,
+            StagesConstants.MAIN_MENU_STAGE: self.main_menu,
+            StagesConstants.LOADING_STAGE: self.loading_to_round,
+            StagesConstants.ROUND_STAGE: self.round,
+            StagesConstants.ROUND_CLOSE: self.close_round,
+            StagesConstants.EXIT_STAGE: self._close_game,
         }
 
         self.server_controller: ServerController = ServerController()
@@ -39,9 +40,8 @@ class GameBody:
             response = self.client.connect()
             if self.client.connected:
                 LOGGER.info('Client connected')
-                self.stage_controller.set_round_stage()
-                # from _thread import start_new_thread
-                # start_new_thread(self.__round_recv_thread, ())
+                from _thread import start_new_thread
+                start_new_thread(self.__round_recv_thread, ())
             else:
                 self.client = None
                 raise ConnectionError(response.get(NetworkKeys.ServerMessages, ''))
@@ -64,6 +64,7 @@ class GameBody:
         self._check_alt_and_f4()
 
     def __round_recv_thread(self):
+        LOGGER.info(f'Started RECV thread.')
         self.stage_controller.set_round_stage()
 
         while self.client.connected:
@@ -75,10 +76,20 @@ class GameBody:
                 self.stage_controller.set_main_menu_stage()
 
     def round(self):
-        ROUND_STAGE_LOGIC.update()
+        request_data = {}
+        ROUND_STAGE_LOGIC.update(request_data)
         ROUND_STAGE_LOGIC.draw()
-        self.client.send({'data': 'mmm'})
-        # LOGGER.info(self.client.receive())
+
+        if request_data:
+            self.client.send(request_data)
+
+    def close_round(self):
+        if self.server_controller:
+            self.server_controller.stop_server()
+        if self.client:
+            self.client.disconnect()
+
+        self.stage_controller.set_main_menu_stage()
 
     def main_menu(self):
         MAIN_MENU_LOGIC.update()

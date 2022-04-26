@@ -4,27 +4,22 @@ from pygame import font, Surface
 from pygame.transform import rotate, smoothscale
 from constants.colors import WHITE
 from visual.main_window import MAIN_SCREEN
-# from settings.screen_size import X_SCALE, Y_SCALE
-X_SCALE, Y_SCALE = 1, 1
+from settings.screen import X_SCALE, Y_SCALE
+from visual.font_loader import custom_font_size
 
 
 class Text:
-    DEFAULT_FONT_SIZE = DEFAULT_FONT_SIZE
     CLOCK = GLOBAL_CLOCK
     MIN_Y = 7
 
     def __init__(self, text, screen=MAIN_SCREEN, x=None, y=None,
                  color=WHITE,
                  size=None,
-                 shadow=False,
-                 animation=False,
-                 font_t='Arial',
+                 font_t=None,
                  font_size=None,
                  antial=1,
                  angle=0,
                  auto_draw=True):
-        # x = int(x * X_SCALE) if x else None
-        # y = int(y * Y_SCALE) if x else None
         x = int(x) if x else None
         y = int(y) if y else None
         text = str(text)
@@ -156,10 +151,10 @@ class Text:
 
     def _render_font(self):
         try:
-            self._r_text_font = font.SysFont(self._text_font, int(self.font_size))
+            self._r_text_font = custom_font_size(font_name=self._text_font, size=int(self.font_size))
 
         except:
-            self._r_text_font = font.SysFont('Arial', int(self.font_size))
+            self._r_text_font = custom_font_size(int(self.font_size))
 
     @staticmethod
     def get_surface(size_x, size_y):

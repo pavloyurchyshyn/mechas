@@ -5,10 +5,10 @@ from constants.colors import BLACK
 from settings.UI_setings.button_settings import DEFAULT_BUTTON_X_SIZE
 
 from common.global_clock import ROUND_CLOCK
-from visual.UI_controller import UI_TREE
+from visual.UIController import UI_TREE
 from common.sprites_functions import get_surface
 from visual.main_window import SCREEN_W, SCREEN_H, MAIN_SCREEN
-from constants.game_stages import MAIN_MENU_STAGE
+from constants.game_stages import StagesConstants
 
 # SURFACE = get_surface(SCREEN_W, SCREEN_H)
 STAGES = Stages()
@@ -39,18 +39,18 @@ MENU_EXIT_ID = 'menu_exit'
 def activate_exit_warning_message():
     change_exit_warn(1)
 
-    exit_yes = UI_TREE.get_element(MAIN_MENU_STAGE, MENU_EXIT_YES_ID)
+    exit_yes = UI_TREE.get_element(StagesConstants.MAIN_MENU_STAGE, MENU_EXIT_YES_ID)
     exit_yes.make_active()
     exit_yes.make_visible()
 
-    exit_no = UI_TREE.get_element(MAIN_MENU_STAGE, MENU_EXIT_NO_ID)
+    exit_no = UI_TREE.get_element(StagesConstants.MAIN_MENU_STAGE, MENU_EXIT_NO_ID)
     exit_no.make_active()
     exit_no.make_visible()
 
-    UI_TREE.get_element(MAIN_MENU_STAGE, MENU_START_ID).make_inactive()
-    UI_TREE.get_element(MAIN_MENU_STAGE, MENU_MULTIPLAYER_ID).make_inactive()
-    UI_TREE.get_element(MAIN_MENU_STAGE, MENU_SETTINGS_ID).make_inactive()
-    UI_TREE.get_element(MAIN_MENU_STAGE, MENU_EXIT_ID).make_inactive()
+    UI_TREE.get_element(StagesConstants.MAIN_MENU_STAGE, MENU_START_ID).make_inactive()
+    UI_TREE.get_element(StagesConstants.MAIN_MENU_STAGE, MENU_MULTIPLAYER_ID).make_inactive()
+    UI_TREE.get_element(StagesConstants.MAIN_MENU_STAGE, MENU_SETTINGS_ID).make_inactive()
+    UI_TREE.get_element(StagesConstants.MAIN_MENU_STAGE, MENU_EXIT_ID).make_inactive()
     UI_TREE.drop_focused()
 
 
@@ -58,18 +58,18 @@ def deactivate_exit_warning_message():
     change_exit_warn(0)
 
     # SURFACE.fill(BLACK)
-    exit_yes = UI_TREE.get_element(MAIN_MENU_STAGE, MENU_EXIT_YES_ID)
+    exit_yes = UI_TREE.get_element(StagesConstants.MAIN_MENU_STAGE, MENU_EXIT_YES_ID)
     exit_yes.make_inactive()
     exit_yes.make_invisible()
 
-    exit_no = UI_TREE.get_element(MAIN_MENU_STAGE, MENU_EXIT_NO_ID)
+    exit_no = UI_TREE.get_element(StagesConstants.MAIN_MENU_STAGE, MENU_EXIT_NO_ID)
     exit_no.make_inactive()
     exit_no.make_invisible()
 
-    UI_TREE.get_element(MAIN_MENU_STAGE, MENU_START_ID).make_active()
-    UI_TREE.get_element(MAIN_MENU_STAGE, MENU_MULTIPLAYER_ID).make_active()
-    UI_TREE.get_element(MAIN_MENU_STAGE, MENU_SETTINGS_ID).make_active()
-    UI_TREE.get_element(MAIN_MENU_STAGE, MENU_EXIT_ID).make_active()
+    UI_TREE.get_element(StagesConstants.MAIN_MENU_STAGE, MENU_START_ID).make_active()
+    UI_TREE.get_element(StagesConstants.MAIN_MENU_STAGE, MENU_MULTIPLAYER_ID).make_active()
+    UI_TREE.get_element(StagesConstants.MAIN_MENU_STAGE, MENU_SETTINGS_ID).make_active()
+    UI_TREE.get_element(StagesConstants.MAIN_MENU_STAGE, MENU_EXIT_ID).make_active()
     UI_TREE.drop_focused()
 
 
