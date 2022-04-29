@@ -1,11 +1,14 @@
 from pygame.constants import K_F4, K_LALT
 
+from _thread import start_new_thread
+
+
 from common.global_keyboard import GLOBAL_KEYBOARD
 from common.stages import Stages
 from common.logger import Logger
 
 from constants.game_stages import StagesConstants
-from constants.network_keys import NetworkKeys, ServerConnectAnswers
+from constants.network_keys import NetworkKeys
 
 from stages.main_menu.page import MAIN_MENU_UI as MAIN_MENU_LOGIC
 from stages.round.page import ROUND_STAGE_LOGIC
@@ -40,7 +43,6 @@ class GameBody:
             response = self.client.connect()
             if self.client.connected:
                 LOGGER.info('Client connected')
-                from _thread import start_new_thread
                 start_new_thread(self.__round_recv_thread, ())
             else:
                 self.client = None
@@ -102,7 +104,6 @@ class GameBody:
             self._close_game()
 
     def _close_game(self):
-        # self.MULTIPLAYER_CLIENT_DISCONNECT()
         from pygame import quit as close_program_pygame
         import sys
 

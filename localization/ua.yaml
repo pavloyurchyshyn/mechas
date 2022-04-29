@@ -1,0 +1,8 @@
+UI:
+  main_menu:
+    start_round: Старт
+    multiplayer: Мережева гра
+    settings: Налаштування
+    exit: Вихід
+    exit_yes: Так
+    exit_no: Ні

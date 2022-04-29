@@ -5,8 +5,8 @@ from constants.world_types import DIAMOND
 from pygame.draw import lines as draw_lines
 from pygame.draw import polygon as draw_polygon
 
-from common.sprites_functions import get_surface
-from settings.UI_setings.menus_settings.round_menu.arena_window import MIN_SCALE, MAX_SCALE, HEX_SIZE
+from visual.sprites_functions import get_surface
+from settings.UI_setings.menus_settings.round_menu.arena_window import HEX_SIZE
 
 from visual.font_loader import DEFAULT_FONT
 

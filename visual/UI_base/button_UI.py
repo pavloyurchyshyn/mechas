@@ -178,9 +178,7 @@ class Button(Rectangle):
         active_button_s = self.get_surface()  # create background surface
         non_active_button_s = self.get_surface()
 
-        # active_button_s.fill(self._background_color)  # fill background surface
         draw_rect(active_button_s, self._background_color, active_button_s.get_rect(), 0, **self._border_parameters)
-        # non_active_button_s.fill(self._background_color)
         draw_rect(non_active_button_s, self._background_color, non_active_button_s.get_rect(), 0,
                   **self._border_parameters)
 
@@ -214,6 +212,7 @@ class Button(Rectangle):
 
         self._r_non_active_button = non_active_button_s  # should be created button picture
         self._r_non_active_button.convert_alpha()
+        self.define_current_pic()
 
     def make_original_size(self):
         self._make_original_size()
@@ -267,9 +266,12 @@ class Button(Rectangle):
             if self._change_after_click:
                 self.change_picture()
             else:
-                self._current_button_pic = self._r_active_button if self._active else self._r_non_active_button
+                self.define_current_pic()
 
             return 1
+
+    def define_current_pic(self):
+        self._current_button_pic = self._r_active_button if self._active else self._r_non_active_button
 
     def activate_click(self, *args, **kwargs):
         self.click(self._center, *args, **kwargs)
@@ -348,9 +350,11 @@ class Button(Rectangle):
 
     def make_active(self):
         self._active = 1
+        self.define_current_pic()
 
     def make_inactive(self):
         self._active = 0
+        self.define_current_pic()
 
     @property
     def text(self):
@@ -360,6 +364,7 @@ class Button(Rectangle):
     def text(self, message):
         self._text_text = message
         self.build()
+        # self.define_current_pic()
 
     @property
     def active(self) -> bool:

@@ -1,20 +1,15 @@
 from obj_properties.rect_form import Rectangle
 from obj_properties.hex_form import Hexagon
 
-from common.sprites_functions import get_surface
+from visual.sprites_functions import get_surface
 from common.global_mouse import GLOBAL_MOUSE
 
 from world.visual_world.visual_world import WorldMarkup
-
-from visual.UI_base.button_UI import Button
 
 from visual.main_window import MAIN_SCREEN
 from settings.UI_setings.menus_settings.round_menu.arena_window import *
 
 from pygame.draw import lines as draw_lines
-from pygame.draw import line as draw_line
-from pygame.draw import circle as draw_circle
-from pygame.draw import rect as draw_rect
 
 
 class ArenaWindow(Rectangle):

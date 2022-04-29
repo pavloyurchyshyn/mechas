@@ -8,7 +8,7 @@ from common.math_functions import get_angle_between_dots
 from constants.colors import HALF_EMPTY
 from visual.main_window import SCREEN_H, SCREEN_W, HALF_SCREEN_W, HALF_SCREEN_H, MAIN_SCREEN
 from settings.UI_setings.menus_settings.main_menu import MAIN_MENU_BUTTONS, exit_warning, \
-    activate_exit_warning_message, deactivate_exit_warning_message
+    activate_exit_warning_message, deactivate_exit_warning_message, LANG_RELOAD_WARN
 from settings.global_parameters import pause_available, pause_step
 from constants.game_stages import StagesConstants
 
@@ -16,6 +16,7 @@ from constants.game_stages import StagesConstants
 # from visual.base.diamond_effect import DiamondEffect
 # from visual.fire import FireEffect, VioletFire, GreenFire, GreenBlueFire, BlueFire
 from random import randrange, choice, randint
+
 
 # VisualEffectsController.add_effect(FireEffect(HALF_SCREEN_H / 5, 100, speed=110))
 # VisualEffectsController.add_effect(VioletFire(HALF_SCREEN_H / 5, 200, speed=110))
@@ -65,7 +66,7 @@ class MainMenu(MenuUI):
 
     def update(self):
         # VisualEffectsController.update()
-
+        LANG_RELOAD_WARN.update()
         for button in self._elements:
             button.update()
 
@@ -105,6 +106,8 @@ class MainMenu(MenuUI):
 
             self._exit_no.draw()
             self._exit_yes.draw()
+
+        LANG_RELOAD_WARN.draw()
 
     def _update(self):
         pass

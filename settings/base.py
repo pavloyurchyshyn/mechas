@@ -9,6 +9,7 @@ ROOT_OF_GAME = os.path.abspath(os.getcwd())
 
 LOGS_FOLDER = os.path.join(ROOT_OF_GAME, 'logs')
 SETTINGS_PATH = os.path.join(ROOT_OF_GAME, 'settings')
+LOCALIZATIONS_FOLDER = os.path.join(ROOT_OF_GAME, 'localization')
 
 if not os.path.exists(SETTINGS_PATH):
     os.mkdir(SETTINGS_PATH)

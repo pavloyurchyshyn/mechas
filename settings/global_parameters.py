@@ -1,6 +1,12 @@
 from time import time as current_time
 from common.save_and_load_json_config import get_param_from_cgs, save_param_to_cgs
 
+__all__ = [
+    'get_language', 'set_fps', 'get_fps', 'set_slow_motion', 'its_client_instance', 'pause_step',
+    'update_slow_motion', 'SET_CLIENT_INSTANCE', 'get_slow_motion_k', 'pause_available', 'change_test_draw_status',
+    'test_draw_status_is_on',
+]
+
 GLOBAL_SETTINGS = {
     'test_draw': 0,
     'next_pause': -1,
@@ -9,7 +15,17 @@ GLOBAL_SETTINGS = {
     'slow_motion': 0,
     'slow_motion_value': 0.05,
     'fps': get_param_from_cgs('fps_config', 60),
+    'language': get_param_from_cgs('language', 'eng'),
 }
+
+
+def get_language():
+    return GLOBAL_SETTINGS['language']
+
+
+def set_language(lang):
+    GLOBAL_SETTINGS['language'] = lang
+    save_param_to_cgs('language', lang)
 
 
 def set_fps(fps):

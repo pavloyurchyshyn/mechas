@@ -1,0 +1,12 @@
+
+UI:
+  main_menu:
+    start_round: Start
+    multiplayer: Multiplayer
+    settings: Settings
+    exit: Exit
+    exit_yes: 'Yes'
+    exit_no: 'No'
+    lang_disapp_msg: |
+      You need to restart the game
+      to accept changes

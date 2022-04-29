@@ -1,28 +1,24 @@
 from visual.main_window import MAIN_SCREEN
 from settings.screen import GAME_SCALE
-from common.save_and_load_json_config import get_param_from_cgs, save_param_to_cgs
-from common.sprites_functions import get_surface
-from settings.mouse_default import CROSSHAIR_SURFACE_SIZE_KEY, DEFAULT_CROSSHAIR_SIZE, \
-    DEFAULT_CROSSHAIR_DOT_EXISTS, DEFAULT_CROSSHAIR_DOT_SIZE, DEFAULT_CROSSHAIR_LINE_SIZE, \
+from common.save_and_load_json_config import get_param_from_cgs
+from visual.sprites_functions import get_surface
+from settings.mouse_default import CROSSHAIR_SURFACE_SIZE_KEY, DEFAULT_CROSSHAIR_DOT_EXISTS, DEFAULT_CROSSHAIR_DOT_SIZE, DEFAULT_CROSSHAIR_LINE_SIZE, \
     CROSSHAIR_DOT_EXISTS_KEY, CROSSHAIR_DOT_SIZE_KEY, CROSSHAIR_LINE_SIZE_KEY, \
     DEFAULT_CROSSHAIR_LINE_CENTER_DISTANCE, CROSSHAIR_LINE_CENTER_DISTANCE_KEY, \
     DEFAULT_CROSSHAIR_LINE_WIGHT, CROSSHAIR_LINE_WIGHT_KEY, DEFAULT_CROSSHAIR_SIZE, \
-    DEFAULT_CROSSHAIR_ROTATE, CROSSHAIR_ROTATE_KEY, DEFAULT_CROSSHAIR_COLOR, CROSSHAIR_COLOR_KEY, DELAY_TIME
+    DEFAULT_CROSSHAIR_ROTATE, CROSSHAIR_ROTATE_KEY, DEFAULT_CROSSHAIR_COLOR, CROSSHAIR_COLOR_KEY
 from pygame.draw import line as draw_line
 from pygame.draw import circle as draw_circle
 from pygame import mouse
-from pygame.transform import rotate, scale, smoothscale
+from pygame.transform import rotate, smoothscale
 
 from math import cos, sin, radians
-from time import time
 
 
 class Mouse:
     MOUSE_SIZE = (DEFAULT_CROSSHAIR_SIZE,
                   DEFAULT_CROSSHAIR_SIZE)
     MAIN_SCREEN = MAIN_SCREEN
-
-    LMB_DELAY = DELAY_TIME
 
     def __init__(self, rel=None, pos=None, pressed=None):
         self.mouse = mouse
@@ -49,12 +45,11 @@ class Mouse:
 
         self.mouse.set_visible(False)
 
-        self.lbm_delay = 0
-
     def update(self):
         self._rel = self.mouse.get_rel()
         self._pos = [*self.mouse.get_pos()]
         self._pressed = list(self.mouse.get_pressed())
+        self._pressed[0] = False
         self._scroll_top = 0
         self._scroll_bot = 0
 
@@ -104,15 +99,6 @@ class Mouse:
     def draw(self):
         Mouse.MAIN_SCREEN.blit(self._picture, (self._pos[0] - self._picture.get_width() // 2,
                                                self._pos[1] - self._picture.get_height() // 2))
-
-    @property
-    def delayed_lmb(self):
-        if time() > self.lbm_delay:
-            self.lbm_delay = time() + self.LMB_DELAY
-
-            return self.lmb
-        else:
-            return False
 
     @property
     def lmb(self):

@@ -1,2 +1,0 @@
-class ExitRound:
-    exit = 'Exit'

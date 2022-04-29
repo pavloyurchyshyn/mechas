@@ -25,7 +25,7 @@ class TopBar(Rectangle):
         self.update_time()
 
     def update(self):
-        if GLOBAL_MOUSE.delayed_lmb:
+        if GLOBAL_MOUSE.lmb:
             self.exit.click(GLOBAL_MOUSE.pos)
 
         self.update_time()

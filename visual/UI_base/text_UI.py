@@ -1,6 +1,6 @@
 from visual.font_loader import DEFAULT_FONT_SIZE
 from common.global_clock import GLOBAL_CLOCK
-from pygame import font, Surface
+from pygame import Surface
 from pygame.transform import rotate, smoothscale
 from constants.colors import WHITE
 from visual.main_window import MAIN_SCREEN
@@ -10,7 +10,7 @@ from visual.font_loader import custom_font_size
 
 class Text:
     CLOCK = GLOBAL_CLOCK
-    MIN_Y = 7
+    MIN_Y = 1
 
     def __init__(self, text, screen=MAIN_SCREEN, x=None, y=None,
                  color=WHITE,
@@ -93,7 +93,7 @@ class Text:
 
             else:
                 pos = screen_mid_y - y_t_s * len(self._text.split('\n'))
-                self._y = pos + 5 if pos > -screen_mid_y + text_mid_y else Text.MIN_Y
+                self._y = pos if pos > -screen_mid_y + text_mid_y else Text.MIN_Y
 
         else:
             self._y = int(y)
@@ -130,7 +130,7 @@ class Text:
             self._size = [0, 0]
             for i, text in enumerate(self._text.split('\n')):
                 t_surf = self._r_text_font.render(text, self._antialias, self._color)
-                self._screen.blit(t_surf, (self._x + dx, self._y + dy + (i + 1) * t_surf.get_height()))
+                self._screen.blit(t_surf, (self._x + dx, self._y + dy + self._size[1]))
                 self._size[0] += t_surf.get_width()
                 self._size[1] += t_surf.get_height()
         else:

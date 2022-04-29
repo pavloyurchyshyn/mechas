@@ -2,7 +2,7 @@ from pygame.draw import rect as draw_rect
 
 from obj_properties.rect_form import Rectangle
 
-from common.sprites_functions import get_surface
+from visual.sprites_functions import get_surface
 from common.singletone import Singleton
 from common.global_mouse import GLOBAL_MOUSE
 
@@ -13,8 +13,6 @@ from visual.main_window import MAIN_SCREEN
 from visual.UIController import UI_TREE
 
 from constants.UI_names import RoundUINames
-
-from time import time
 
 
 class ExitPopUp(Rectangle, metaclass=Singleton):
@@ -39,7 +37,7 @@ class ExitPopUp(Rectangle, metaclass=Singleton):
         self.surface.blit(EXIT_MESSAGE_SURF, (self.size_x/2 - x_size/2, y_size/2))
 
     def update(self):
-        if GLOBAL_MOUSE.delayed_lmb:
+        if GLOBAL_MOUSE.lmb:
             if self.collide_point(GLOBAL_MOUSE.pos):
                 for b in (self.exit_no, self.exit_yes):
                     if b.click(GLOBAL_MOUSE.pos):

@@ -27,8 +27,8 @@ class GameRunner:
 
         from pygame.time import Clock
         from pygame import event as EVENT
-        from pygame import MOUSEBUTTONDOWN
-        EVENT.set_allowed([MOUSEBUTTONDOWN, ])
+        from pygame import MOUSEBUTTONDOWN, MOUSEBUTTONUP
+        # EVENT.set_allowed([MOUSEBUTTONDOWN, MOUSEBUTTONUP])
 
         from pygame import display, draw, Surface, constants
 
@@ -93,6 +93,9 @@ class GameRunner:
 
                     elif event.button == 5:
                         G_Mouse.scroll_bot = -1
+                if event.type == MOUSEBUTTONUP:
+                    if event.button == 1:
+                        G_Mouse._pressed[0] = 1
 
             GAME_BODY.game_loop()
 

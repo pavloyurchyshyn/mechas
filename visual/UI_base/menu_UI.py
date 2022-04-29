@@ -167,7 +167,7 @@ class MenuUI(Rectangle):
 
     @classmethod
     def click(cls) -> bool or int:
-        if cls.GLOBAL_MOUSE.delayed_lmb:
+        if cls.GLOBAL_MOUSE.lmb:
             UI_TREE.drop_focused()
             return 1
 
