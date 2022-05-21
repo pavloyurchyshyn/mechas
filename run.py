@@ -36,7 +36,7 @@ class GameRunner:
         from constants.game_stages import StagesConstants
 
         from settings.global_parameters import get_slow_motion_k, update_slow_motion, get_fps
-        from settings.base import VERSION, FPS
+        from settings.base import VERSION
 
         from visual.font_loader import DEFAULT_FONT
         from visual.main_window import MAIN_SCREEN, MAIN_SCREEN_RECT
@@ -171,8 +171,7 @@ if __name__ == '__main__':
         game = GameRunner()
         game.run()
     except Exception as e:
-        GameRunner.logger.error('Final fail')
-        GameRunner.logger.error(e)
+        GameRunner.logger.error(f'Final fail {e}')
         GameRunner.logger.error(traceback.format_exc())
         GameRunner.logger.error(sys.exc_info()[2])
         # exit(1)

@@ -1,6 +1,6 @@
 import json
 from os.path import exists
-from settings.base import COMMON_GAME_SETTINGS_JSON_PATH
+from settings.base import COMMON_CONFIG_PATH
 from common.logger import Logger
 
 LOGGER = Logger().LOGGER
@@ -30,13 +30,13 @@ def save_json_config(data: dict, path: str) -> None:
         json.dump(data, k_conf)
 
 
-def save_param_to_cgs(key, value):
-    change_parameter_in_json_config(key, value, COMMON_GAME_SETTINGS_JSON_PATH)
+def save_to_common_config(key, value):
+    change_parameter_in_json_config(key, value, COMMON_CONFIG_PATH)
 
 
-def get_param_from_cgs(key, def_value=None):
-    return get_parameter_from_json_config(key=key, def_value=def_value, path=COMMON_GAME_SETTINGS_JSON_PATH)
+def get_from_common_config(key, def_value=None):
+    return get_parameter_from_json_config(key=key, def_value=def_value, path=COMMON_CONFIG_PATH)
 
 
 def get_cgs_config():
-    return load_json_config(COMMON_GAME_SETTINGS_JSON_PATH)
+    return load_json_config(COMMON_CONFIG_PATH)

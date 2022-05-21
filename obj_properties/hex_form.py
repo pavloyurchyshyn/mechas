@@ -3,11 +3,16 @@ from math import cos, sin, sqrt, dist, radians
 from constants.properties import CIRCLE_TYPE, RECT_TYPE, LINE_TYPE, POINT_TYPE, HEXAGON_TYPE
 
 
+# https://www.redblobgames.com/grids/hexagons/#basics
 class Hexagon(CollideInterface):
-    DOT_NUM = 6
     FORM_TYPE = HEXAGON_TYPE
 
     def __init__(self, x, y, size):
+        """
+        :param x: left top value
+        :param y: left top value
+        :param size:
+        """
         self._original_pos = x, y
         self._original_size = size
         self._size = self._width = self._height = self._inner_circle_r = self._lt = self._distance = self._center = None
@@ -17,9 +22,13 @@ class Hexagon(CollideInterface):
         self._collide_able = 1
 
     def scale(self, scale_value):
-        # self._center = self._original_pos[0]*scale_value, self._original_pos[1]*scale_value
         self.build(self._original_pos[0] * scale_value, self._original_pos[1] * scale_value,
                    self._original_size * scale_value)
+
+    def move_and_scale(self, x, y, scale_value):
+        self.build(x=self._original_pos[0] * scale_value + x,
+                   y=self._original_pos[1] * scale_value + y,
+                   size=self._original_size * scale_value)
 
     def _change_position(self, xy: list, *args, **kwargs) -> None:
         self.build(*xy, self._size)
@@ -27,14 +36,38 @@ class Hexagon(CollideInterface):
     def build(self, x, y, size):
         self._lt = x, y
         self._size = size
-        self._width = self._size * 2
-        self._height = sqrt(3) * self._size
-        self._inner_circle_r = self._height / 2
-        self._distance = self._width * 3 / 4
+        self._width = self.get_tile_width(self._size)
+        self._height = self.get_tile_height(self._size)
+        self._inner_circle_r = self.get_tile_inner_circle_r(self._size)
+        self._distance = self.get_tile_distance(self._size)
 
-        self._center = x + self._size, y + self._height / 2
+        self._center = self.get_tile_center(x, y, size)
 
         self.__make_dots()
+
+    @staticmethod
+    def get_tile_width(size):
+        return size + size
+
+    @staticmethod
+    def get_tile_height(size):
+        return sqrt(3) * size
+
+    @staticmethod
+    def get_tile_inner_circle_r(size):
+        return Hexagon.get_tile_height(size) / 2
+
+    @staticmethod
+    def get_tile_distance(size):
+        return Hexagon.get_tile_width(size) * 0.75
+
+    @staticmethod
+    def get_tile_center(x, y, size):
+        return [x + size, y + Hexagon.get_tile_inner_circle_r(size)]
+
+    @property
+    def rect(self):
+        return self._lt, (self._width, self._height)
 
     @property
     def left_top(self):

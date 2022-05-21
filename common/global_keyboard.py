@@ -1,11 +1,15 @@
+import os
+
 from pygame import key as KEY
 from pygame import constants, locals
 from pygame.key import name as get_key_name
 from pygame import KEYDOWN, KEYUP, TEXTINPUT
+
 from common.logger import Logger
-from settings.default_keys import DEFAULT_COMMAND_KEY, KEYS_CONFIG_FILE, TEST_MESSAGE
 from common.save_and_load_json_config import load_json_config, save_json_config
-import os
+
+from settings.default_keys import DEFAULT_COMMAND_KEY, TEST_MESSAGE
+from settings.base import KEYS_CONFIG_FILE
 
 LOGGER = Logger().LOGGER
 

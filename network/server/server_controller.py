@@ -4,7 +4,7 @@ from settings.base import ROOT_OF_GAME
 from settings.network import *
 from constants.network_keys import NetworkKeys, PlayerAttrs
 import time
-from common.save_and_load_json_config import get_param_from_cgs
+from common.save_and_load_json_config import get_from_common_config
 from _thread import start_new_thread
 from common.logger import Logger
 LOGGER = Logger().LOGGER
@@ -43,7 +43,7 @@ class ServerController:
         arguments = [f'--{NetworkKeys.Port}', str(NETWORK_DATA[NetworkKeys.Port]),
                      f'--{NetworkKeys.PlayerNumber}', str(NETWORK_DATA[NetworkKeys.PlayerNumber]),
                      f'--{NetworkKeys.Password}', str(NETWORK_DATA[NetworkKeys.Password]),
-                     f'--{NetworkKeys.AdminToken}', str(get_param_from_cgs(PlayerAttrs.Token, def_value='None')),
+                     f'--{NetworkKeys.AdminToken}', str(get_from_common_config(PlayerAttrs.Token, def_value='None')),
                      ]
 
         for key, values in SERVER_ARGUMENTS.items():

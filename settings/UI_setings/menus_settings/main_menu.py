@@ -12,7 +12,6 @@ from visual.UIController import UI_TREE
 from visual.main_window import SCREEN_W
 from visual.UI_base.disappearing_message import DisappMessage
 
-# SURFACE = get_surface(SCREEN_W, SCREEN_H)
 STAGES = Stages()
 EXIT_WARNING = {'ex_warn': 0}
 
@@ -220,10 +219,6 @@ for lang in localization.available_langs:
             'id': LANG_BUTTON_ID_PATTERN.format(lang),
             'on_click_action_args': (lang.upper(),),
             'on_click_action': lang_chosen,
-            # 'border_non_active_color': (255, 255, 255),
-            # 'border_active_color': (255, 255, 255),
-            # 'text_color': (255, 255, 255),
-            # 'text_non_active_color': (255, 255, 255),
         }
     }
 

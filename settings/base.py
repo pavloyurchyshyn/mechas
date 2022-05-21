@@ -3,8 +3,6 @@ import datetime
 
 VERSION = '0.0.01'
 
-FPS = 60
-
 ROOT_OF_GAME = os.path.abspath(os.getcwd())
 
 LOGS_FOLDER = os.path.join(ROOT_OF_GAME, 'logs')
@@ -17,9 +15,8 @@ if not os.path.exists(SETTINGS_PATH):
 SOUNDS_FOLDER = os.path.join(ROOT_OF_GAME, 'sounds')
 SERVER_FOLDER = os.path.join(ROOT_OF_GAME, 'network')
 
-COMMON_GAME_SETTINGS_JSON_PATH = 'common_game_settings.json'  # os.path.join(SETTINGS_PATH, 'common_game_settings.json')
-
-PLAYER_NICKNAME_KEY = 'player_nickname'
+COMMON_CONFIG_PATH = os.path.join(SETTINGS_PATH, 'common_config.json')
+KEYS_CONFIG_FILE = os.path.join(SETTINGS_PATH, 'keyboard_config.json')
 
 # patterns
 LOG_FILE_PATTERN = os.path.join(LOGS_FOLDER, '{}_.txt')

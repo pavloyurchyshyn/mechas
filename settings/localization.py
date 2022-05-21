@@ -9,6 +9,8 @@ LOGGER = Logger().LOGGER
 
 NO_TEXT_MSG = 'no text'
 
+__all__ = ['LocalizationLoader', 'LOCAL']
+
 
 class TextValue:
     def __init__(self, value):
@@ -54,22 +56,25 @@ class LocalizationLoader(metaclass=Singleton):
         self.available_langs = [l.replace('.yaml', '') for l in listdir(LOCALIZATIONS_FOLDER) if l.endswith('.yaml')]
         self._current_language = get_language()
         self.load_lang('eng')
-        self.load()
+        self.load_current_lang()
 
     @property
     def text(self):
         return getattr(self, self._current_language)
 
     def load_lang(self, lang):
-        setattr(self, self._current_language, LocalizationConfig(lang))
+        LOGGER.info(f'Loading {lang} language')
+        setattr(self, lang, LocalizationConfig(lang))
+        LOGGER.info(f'Language {lang} successfully loaded.')
 
-    def load(self, force=False):
-        if not hasattr(self, self._current_language) or force:
-            self.load_lang(self._current_language)
+    def load_current_lang(self):
+        self.load_lang(self._current_language)
 
     def __getattr__(self, name):
         return NO_TEXT_MSG
 
+
+LOCAL = LocalizationLoader()
 
 if __name__ == '__main__':
     l = LocalizationLoader()

@@ -75,7 +75,7 @@ class Server:
                 self.alive = False
                 LOGGER.info(f'Timeout')
             sl = update_delay - (time() - t)
-            LOGGER.info(f'Time spent for calculation {time() - t}, sleep {sl}')
+            # LOGGER.info(f'Time spent for calculation {time() - t}, sleep {sl}')
             if sl > 0:
                 sleep(sl)
         LOGGER.info('Stopped')

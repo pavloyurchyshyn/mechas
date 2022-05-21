@@ -141,13 +141,13 @@ class Rectangle(CollideInterface):
                 return self.collide_dots(other)
 
             elif other_type == CIRCLE_TYPE:
-                return self.collide_circle(other._center, other.h_size)
+                return self.collide_circle(other.center, other.h_size)
 
             elif other_type == LINE_TYPE:
                 return other.collide_rect(self)
 
             elif other_type == POINT_TYPE:
-                return self.collide_point(other._center)
+                return self.collide_point(other.center)
 
         return 0
 
@@ -171,4 +171,4 @@ class Rectangle(CollideInterface):
         return self._center
 
     def get_rect(self):
-        return (self.x0, self.y0, self.size_x, self.size_y)
+        return self.x0, self.y0, self.size_x, self.size_y

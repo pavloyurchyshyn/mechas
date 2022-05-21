@@ -1,3 +1,8 @@
+common:
+  'yes': 'Так'
+  'no': 'Ні'
+
+
 UI:
   main_menu:
     start_round: Старт
@@ -6,3 +11,10 @@ UI:
     exit: Вихід
     exit_yes: Так
     exit_no: Ні
+    lang_disapp_msg: |
+      Потрібно перезайти в гру
+      для зміни мови
+  # ----------------------------------
+  round:
+    exit_pop_up:
+      exit_pop_text: 'Вийти з гри?'

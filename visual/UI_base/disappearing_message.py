@@ -16,7 +16,6 @@ class DisappMessage(Rectangle):
         self.disappearing_time = 0
 
         self.text_value = text
-        print('TEXT', text)
         self.surface = get_surface(self.size_x, self.size_y, 1, color=(0, 0, 0, 200))
         self.text = Text(text, self.surface, x=0, y=0)
         self._visible = True

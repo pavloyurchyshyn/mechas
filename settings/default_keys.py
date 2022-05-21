@@ -1,4 +1,4 @@
-KEYS_CONFIG_FILE = 'keyboard_config.json'
+
 
 UP_C = 'up'
 DOWN_C = 'down'

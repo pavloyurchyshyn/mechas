@@ -1,4 +1,4 @@
-from common.save_and_load_json_config import get_param_from_cgs
+from common.save_and_load_json_config import get_from_common_config
 import socket
 from constants.network_keys import NetworkKeys, PlayerAttrs
 
@@ -19,7 +19,7 @@ SERVER_PYTHON_FILE_NAME = 'server.py'
 NETWORK_DATA = {
     NetworkKeys.Address: socket.gethostbyname(socket.gethostname()),
     NetworkKeys.Port: DEFAULT_PORT,
-    PlayerAttrs.Nickname: get_param_from_cgs("player_nickname", 'DefaultNickname'),
+    PlayerAttrs.Nickname: get_from_common_config("player_nickname", 'DefaultNickname'),
     NetworkKeys.Password: '.',
     NetworkKeys.PlayerNumber: 2,
 }

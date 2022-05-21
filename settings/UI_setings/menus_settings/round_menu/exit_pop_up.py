@@ -3,7 +3,10 @@ from common.stages import Stages
 from visual.UIController import UI_TREE
 from constants.UI_names import RoundUINames, RoundButtonsId
 from visual.font_loader import DEFAULT_FONT, custom_font_size
+from settings.localization import LocalizationLoader
 
+
+local = LocalizationLoader().text
 stage_controller = Stages()
 
 POP_X_SIZE = 500
@@ -22,7 +25,7 @@ no_x_pos = X_POS + POP_X_SIZE - step_from_border - DES_BUTT_SIZE_X
 
 des_y_pos = Y_POS + (POP_Y_SIZE / 2)
 
-EXIT_MESSAGE_SURF = custom_font_size(25).render('Слава Україні?', 1, (255, 255, 255))
+EXIT_MESSAGE_SURF = custom_font_size(25).render(local.UI.round.exit_pop_up.exit_pop_text, 1, (255, 255, 255))
 
 
 def no_button():
@@ -39,7 +42,7 @@ EXIT_YES = {
     'y': des_y_pos,
     'x_size': DES_BUTT_SIZE_X,
     'y_size': DES_BUTT_SIZE_Y,
-    'text': 'Yes',
+    'text': local.common.yes,
     'on_click_action': yes_button,
     'id': RoundButtonsId.EXIT_YES,
 }
@@ -49,7 +52,7 @@ EXIT_NO = {
     'y': des_y_pos,
     'x_size': DES_BUTT_SIZE_X,
     'y_size': DES_BUTT_SIZE_Y,
-    'text': 'No',
+    'text': local.common.no,
     'on_click_action': no_button,
     'id': RoundButtonsId.EXIT_NO,
 }

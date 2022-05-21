@@ -1,6 +1,6 @@
 from visual.main_window import MAIN_SCREEN
 from settings.screen import GAME_SCALE
-from common.save_and_load_json_config import get_param_from_cgs
+from common.save_and_load_json_config import get_from_common_config
 from visual.sprites_functions import get_surface
 from settings.mouse_default import CROSSHAIR_SURFACE_SIZE_KEY, DEFAULT_CROSSHAIR_DOT_EXISTS, DEFAULT_CROSSHAIR_DOT_SIZE, DEFAULT_CROSSHAIR_LINE_SIZE, \
     CROSSHAIR_DOT_EXISTS_KEY, CROSSHAIR_DOT_SIZE_KEY, CROSSHAIR_LINE_SIZE_KEY, \
@@ -28,15 +28,15 @@ class Mouse:
         self._scroll_top = 0
         self._scroll_bot = 0
 
-        self._size = get_param_from_cgs(CROSSHAIR_SURFACE_SIZE_KEY, DEFAULT_CROSSHAIR_SIZE)
-        self._line_size = get_param_from_cgs(CROSSHAIR_LINE_SIZE_KEY, DEFAULT_CROSSHAIR_LINE_SIZE)
-        self._dot_exists = get_param_from_cgs(CROSSHAIR_DOT_EXISTS_KEY, DEFAULT_CROSSHAIR_DOT_EXISTS)
-        self._dot_size = get_param_from_cgs(CROSSHAIR_DOT_SIZE_KEY, DEFAULT_CROSSHAIR_DOT_SIZE)
-        self._line_center_distance = get_param_from_cgs(CROSSHAIR_LINE_CENTER_DISTANCE_KEY,
-                                                        DEFAULT_CROSSHAIR_LINE_CENTER_DISTANCE)
-        self._line_wight = get_param_from_cgs(CROSSHAIR_LINE_WIGHT_KEY, DEFAULT_CROSSHAIR_LINE_WIGHT)
-        self._rotate = get_param_from_cgs(CROSSHAIR_ROTATE_KEY, DEFAULT_CROSSHAIR_ROTATE)
-        self._color = get_param_from_cgs(CROSSHAIR_COLOR_KEY, DEFAULT_CROSSHAIR_COLOR)
+        self._size = get_from_common_config(CROSSHAIR_SURFACE_SIZE_KEY, DEFAULT_CROSSHAIR_SIZE)
+        self._line_size = get_from_common_config(CROSSHAIR_LINE_SIZE_KEY, DEFAULT_CROSSHAIR_LINE_SIZE)
+        self._dot_exists = get_from_common_config(CROSSHAIR_DOT_EXISTS_KEY, DEFAULT_CROSSHAIR_DOT_EXISTS)
+        self._dot_size = get_from_common_config(CROSSHAIR_DOT_SIZE_KEY, DEFAULT_CROSSHAIR_DOT_SIZE)
+        self._line_center_distance = get_from_common_config(CROSSHAIR_LINE_CENTER_DISTANCE_KEY,
+                                                            DEFAULT_CROSSHAIR_LINE_CENTER_DISTANCE)
+        self._line_wight = get_from_common_config(CROSSHAIR_LINE_WIGHT_KEY, DEFAULT_CROSSHAIR_LINE_WIGHT)
+        self._rotate = get_from_common_config(CROSSHAIR_ROTATE_KEY, DEFAULT_CROSSHAIR_ROTATE)
+        self._color = get_from_common_config(CROSSHAIR_COLOR_KEY, DEFAULT_CROSSHAIR_COLOR)
 
         self._picture = None
 
@@ -68,7 +68,7 @@ class Mouse:
                 )
 
         for self_parametr, key, default_value in data:
-            new_value = get_param_from_cgs(key)
+            new_value = get_from_common_config(key)
             if new_value:
                 setattr(self, self_parametr, new_value)
             else:

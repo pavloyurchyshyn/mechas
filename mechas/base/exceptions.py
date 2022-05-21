@@ -6,6 +6,33 @@ class NotUniqueId(Exception):
         return f'No unique_id in {self.detail.name}: {self.detail.unique_id}'
 
 
+class SlotIsFullError(Exception):
+    def __init__(self, slot):
+        self.slot = slot
+
+    def __str__(self):
+        return f'Slot is full: {self.slot.parent}'
+
+
+class SlotDoesntExistsError(Exception):
+    pass
+
+
+class NotEnoughEnergyError(Exception):
+    pass
+
+class SlotClosed(Exception):
+    pass
+
+class WrongDetailType(Exception):
+    def __init__(self, detail, needed_types):
+        self.detail = detail
+        self.needed_types = needed_types
+
+    def __str__(self):
+        return f'{self.detail.name} has bad detail type, {self.detail.detail_type} not in {self.needed_types}'
+
+
 class DetailAlreadyConnected(Exception):
     def __init__(self, part, detail):
         self.part = part
@@ -13,15 +40,6 @@ class DetailAlreadyConnected(Exception):
 
     def __str__(self):
         return f'Detail {self.detail} {self.detail.unique_id} already connected to {self.part.name}'
-
-
-class WrongDetailType(Exception):
-    def __init__(self, detail, needed_type):
-        self.detail = detail
-        self.needed_type = needed_type
-
-    def __str__(self):
-        return f'{self.detail.name} has bad detail type, {self.detail.detail_type} != {self.needed_type}'
 
 
 class NoSlotsForMods(Exception):

@@ -1,7 +1,7 @@
 import socket
 import json
 from constants.network_keys import NetworkKeys, ServerConnectAnswers, PlayerAttrs
-from common.save_and_load_json_config import save_param_to_cgs, get_param_from_cgs
+from common.save_and_load_json_config import save_to_common_config, get_from_common_config
 from common.logger import Logger
 from settings.network import DEFAULT_PORT, NETWORK_DATA, RECV_SIZE
 LOGGER = Logger().LOGGER
@@ -18,7 +18,7 @@ class Network:
         self.connected = False
         self.credentials = {}
 
-        self.token = get_param_from_cgs(PlayerAttrs.Token, def_value=None)
+        self.token = get_from_common_config(PlayerAttrs.Token, def_value=None)
 
     def update_network_data(self):
         self.server = NETWORK_DATA[NetworkKeys.Address]
@@ -30,7 +30,7 @@ class Network:
         self.credentials.clear()
         self.credentials[PlayerAttrs.Nickname] = self.nickname
         self.credentials[NetworkKeys.Password] = self.password
-        self.credentials[PlayerAttrs.Token] = get_param_from_cgs(PlayerAttrs.Token, def_value=self.token)
+        self.credentials[PlayerAttrs.Token] = get_from_common_config(PlayerAttrs.Token, def_value=self.token)
 
     def connect(self):
         if self.connection:
@@ -49,7 +49,7 @@ class Network:
             if conn_sts == ServerConnectAnswers.Connected:
                 self.connected = True
                 self.token = response.get(PlayerAttrs.Token)
-                save_param_to_cgs(key=PlayerAttrs.Token, value=self.token)
+                save_to_common_config(key=PlayerAttrs.Token, value=self.token)
 
                 return response
             else:

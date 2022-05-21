@@ -1,3 +1,6 @@
+common:
+  'yes': 'Yes'
+  'no': 'No'
 
 UI:
   main_menu:
@@ -10,3 +13,8 @@ UI:
     lang_disapp_msg: |
       You need to restart the game
       to accept changes
+
+  # ----------------------------------
+  round:
+    exit_pop_up:
+      exit_pop_text: 'You want to close game?'

@@ -2,7 +2,6 @@ from pygame.constants import K_F4, K_LALT
 
 from _thread import start_new_thread
 
-
 from common.global_keyboard import GLOBAL_KEYBOARD
 from common.stages import Stages
 from common.logger import Logger
@@ -39,19 +38,24 @@ class GameBody:
     def loading_to_round(self):
         try:
             self.server_controller.run_server()
-            self.client = Network()
-            response = self.client.connect()
-            if self.client.connected:
-                LOGGER.info('Client connected')
-                start_new_thread(self.__round_recv_thread, ())
-            else:
-                self.client = None
-                raise ConnectionError(response.get(NetworkKeys.ServerMessages, ''))
-
+            self.connect_to_server()
         except Exception as e:
             LOGGER.error(e)
             self.client = None
             self.stage_controller.set_main_menu_stage()
+
+        else:
+            self.stage_controller.set_round_stage()
+
+    def connect_to_server(self):
+        self.client = Network()
+        response = self.client.connect()
+        if self.client.connected:
+            LOGGER.info('Client connected')
+        #  start_new_thread(self.__round_recv_thread, ())
+        else:
+            self.client = None
+            raise ConnectionError(response.get(NetworkKeys.ServerMessages, ''))
 
     def host_menu(self):
         pass
@@ -75,7 +79,6 @@ class GameBody:
                 LOGGER.info(f'Thread {recv}')
             except Exception as e:
                 LOGGER.error(e)
-                self.stage_controller.set_main_menu_stage()
 
     def round(self):
         request_data = {}

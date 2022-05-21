@@ -1,5 +1,5 @@
 from time import time as current_time
-from common.save_and_load_json_config import get_param_from_cgs, save_param_to_cgs
+from common.save_and_load_json_config import get_from_common_config, save_to_common_config
 
 __all__ = [
     'get_language', 'set_fps', 'get_fps', 'set_slow_motion', 'its_client_instance', 'pause_step',
@@ -14,8 +14,8 @@ GLOBAL_SETTINGS = {
     'client_instance': 0,
     'slow_motion': 0,
     'slow_motion_value': 0.05,
-    'fps': get_param_from_cgs('fps_config', 60),
-    'language': get_param_from_cgs('language', 'eng'),
+    'fps': get_from_common_config('fps_config', 60),
+    'language': get_from_common_config('language', 'eng'),
 }
 
 
@@ -25,12 +25,12 @@ def get_language():
 
 def set_language(lang):
     GLOBAL_SETTINGS['language'] = lang
-    save_param_to_cgs('language', lang)
+    save_to_common_config('language', lang)
 
 
 def set_fps(fps):
     GLOBAL_SETTINGS['fps'] = fps
-    save_param_to_cgs('fps_config', fps)
+    save_to_common_config('fps_config', fps)
 
 
 def get_fps():
