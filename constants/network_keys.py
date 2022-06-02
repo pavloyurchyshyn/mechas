@@ -16,8 +16,7 @@ class NetworkKeys:
 
 class PlayerActions:
     DISCONNECT = 'disconnect'
-    GLOBAL_MESSAGE = 'global_message'
-    MESSAGE_TO = 'message_to'
+    MESSAGE = 'message'
 
 
 class ServerConnectAnswers:
@@ -31,9 +30,7 @@ class ServerConnectAnswers:
     FAILED_ANSWERS = WrongPassword, Banned, ServerFull, FailedToConnect
 
 
-class PlayerUpdatesCategories:
-    Messages = 'messages'
-
+class PlayerUpdates:
     Position = 'position'
     Energy = 'energy'
 
@@ -44,9 +41,9 @@ class PlayerUpdatesCategories:
 class ServerResponseCategories:
     MatchTime = 'time'
     MessagesToAll = 'global_messages'
+
     PlayersUpdates = 'players_updates'
     CurrentPlayerActions = 'current_player_actions'
-
     DisconnectAll = 'disconnects_all'
 
     DeletePlayers = 'delete_players'
@@ -55,4 +52,3 @@ class ServerResponseCategories:
 class ServerActions:
     DELETE_PLAYER = 'delete_player'
     DISCONNECT = 'disconnect'
-    MESSAGES = 'messages'

@@ -48,5 +48,5 @@ class RoundSizes:
     class ChatWindow:
         X = scaled_w(0.69)
         Y = scaled_h(0.68)
-        X_SIZE = scaled_w(0.33)
+        X_SIZE = scaled_w(0.31)
         Y_SIZE = scaled_h(0.32)

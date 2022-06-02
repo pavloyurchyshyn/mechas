@@ -22,11 +22,15 @@ LANG_BUTTON_ID_PATTERN = 'lang_{}'
 MENU_EXIT_YES_ID = 'menu_exit_yes'
 MENU_EXIT_NO_ID = 'menu_exit_no'
 MENU_START_ID = 'menu_start'
-MENU_MULTIPLAYER_ID = 'menu_multiplayer'
+CONNECT_MULTIPLAYER_ID = 'menu_connect_multiplayer'
+HOST_MULTIPLAYER_ID = 'menu_host_multiplayer'
 MENU_SETTINGS_ID = 'menu_settings'
 MENU_EXIT_ID = 'menu_exit'
 CHOSEN_LANG_ID = 'chosen_lang'
 LANG_WARN_MESG = 'lang_wan_message'
+
+on_exit_changes_ids = [MENU_START_ID, CONNECT_MULTIPLAYER_ID, HOST_MULTIPLAYER_ID,
+                       CHOSEN_LANG_ID, MENU_SETTINGS_ID, MENU_EXIT_ID]
 
 
 def choose_lang():
@@ -75,11 +79,9 @@ def activate_exit_warning_message():
     exit_no.make_active()
     exit_no.make_visible()
 
-    UI_TREE.get_element(StagesConstants.MAIN_MENU_STAGE, CHOSEN_LANG_ID).make_inactive()
-    UI_TREE.get_element(StagesConstants.MAIN_MENU_STAGE, MENU_START_ID).make_inactive()
-    UI_TREE.get_element(StagesConstants.MAIN_MENU_STAGE, MENU_MULTIPLAYER_ID).make_inactive()
-    UI_TREE.get_element(StagesConstants.MAIN_MENU_STAGE, MENU_SETTINGS_ID).make_inactive()
-    UI_TREE.get_element(StagesConstants.MAIN_MENU_STAGE, MENU_EXIT_ID).make_inactive()
+    for el in on_exit_changes_ids:
+        UI_TREE.get_element(StagesConstants.MAIN_MENU_STAGE, el).make_inactive()
+
     UI_TREE.drop_focused()
     deactivate_lang_buttons()
 
@@ -96,11 +98,9 @@ def deactivate_exit_warning_message():
     exit_no.make_inactive()
     exit_no.make_invisible()
 
-    UI_TREE.get_element(StagesConstants.MAIN_MENU_STAGE, CHOSEN_LANG_ID).make_active()
-    UI_TREE.get_element(StagesConstants.MAIN_MENU_STAGE, MENU_START_ID).make_active()
-    UI_TREE.get_element(StagesConstants.MAIN_MENU_STAGE, MENU_MULTIPLAYER_ID).make_active()
-    UI_TREE.get_element(StagesConstants.MAIN_MENU_STAGE, MENU_SETTINGS_ID).make_active()
-    UI_TREE.get_element(StagesConstants.MAIN_MENU_STAGE, MENU_EXIT_ID).make_active()
+    for el in on_exit_changes_ids:
+        UI_TREE.get_element(StagesConstants.MAIN_MENU_STAGE, el).make_active()
+
     UI_TREE.drop_focused()
 
 
@@ -108,22 +108,31 @@ MAIN_MENU_BUTTONS = {
     'start': {
         'kwargs': {
             'x': HALF_SCREEN_W - DEFAULT_BUTTON_X_SIZE // 2,
-            'p_y_pos': 0.455,
+            'p_y_pos': 0.450,
             'active': 1,
             'text': menu_text.start_round,
             'on_click_action': start_game,
             'id': MENU_START_ID,
         },
     },
-
+    'host_game': {
+        'kwargs': {
+            'x': HALF_SCREEN_W - DEFAULT_BUTTON_X_SIZE // 2,
+            'p_y_pos': 0.510,
+            'text': menu_text.host_game,
+            # 'active': False,
+            # 'on_click_action': STAGES.set_multiplayer_menu_stage,
+            'id': HOST_MULTIPLAYER_ID,
+        }
+    },
     'multiplayer': {
         'kwargs': {
             'x': HALF_SCREEN_W - DEFAULT_BUTTON_X_SIZE // 2,
-            'p_y_pos': 0.555,
+            'p_y_pos': 0.570,
             'text': menu_text.multiplayer,
             # 'active': False,
             # 'on_click_action': STAGES.set_multiplayer_menu_stage,
-            'id': MENU_MULTIPLAYER_ID,
+            'id': CONNECT_MULTIPLAYER_ID,
 
         }
     },
@@ -132,7 +141,7 @@ MAIN_MENU_BUTTONS = {
         'args': (),
         'kwargs': {
             'x': HALF_SCREEN_W - DEFAULT_BUTTON_X_SIZE // 2,
-            'p_y_pos': 0.648,
+            'p_y_pos': 0.630,
             'text': menu_text.settings,
             'on_click_action': STAGES.set_main_menu_settings_stage,
             'id': MENU_SETTINGS_ID,
@@ -143,7 +152,7 @@ MAIN_MENU_BUTTONS = {
         'args': (),
         'kwargs': {
             'x': HALF_SCREEN_W - DEFAULT_BUTTON_X_SIZE // 2,
-            'p_y_pos': 0.74,
+            'p_y_pos': 0.690,
             'text': menu_text.exit,
             'id': MENU_EXIT_ID,
             'on_click_action': activate_exit_warning_message,

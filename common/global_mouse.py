@@ -2,7 +2,8 @@ from visual.main_window import MAIN_SCREEN
 from settings.screen import GAME_SCALE
 from common.save_and_load_json_config import get_from_common_config
 from visual.sprites_functions import get_surface
-from settings.mouse_default import CROSSHAIR_SURFACE_SIZE_KEY, DEFAULT_CROSSHAIR_DOT_EXISTS, DEFAULT_CROSSHAIR_DOT_SIZE, DEFAULT_CROSSHAIR_LINE_SIZE, \
+from settings.mouse_default import CROSSHAIR_SURFACE_SIZE_KEY, DEFAULT_CROSSHAIR_DOT_EXISTS, DEFAULT_CROSSHAIR_DOT_SIZE, \
+    DEFAULT_CROSSHAIR_LINE_SIZE, \
     CROSSHAIR_DOT_EXISTS_KEY, CROSSHAIR_DOT_SIZE_KEY, CROSSHAIR_LINE_SIZE_KEY, \
     DEFAULT_CROSSHAIR_LINE_CENTER_DISTANCE, CROSSHAIR_LINE_CENTER_DISTANCE_KEY, \
     DEFAULT_CROSSHAIR_LINE_WIGHT, CROSSHAIR_LINE_WIGHT_KEY, DEFAULT_CROSSHAIR_SIZE, \
@@ -50,8 +51,7 @@ class Mouse:
         self._pos = [*self.mouse.get_pos()]
         self._pressed = list(self.mouse.get_pressed())
         self._pressed[0] = False
-        self._scroll_top = 0
-        self._scroll_bot = 0
+        self._scroll = 0
 
     def set_position(self, pos):
         self.mouse.set_pos(pos)
@@ -122,27 +122,15 @@ class Mouse:
 
     @property
     def data(self):
-        return self._pressed, self._scroll_top, self._scroll_bot, self._pos, self._rel
-
-    @property
-    def scroll_top(self):
-        return self._scroll_top
-
-    @scroll_top.setter
-    def scroll_top(self, value):
-        self._scroll_top = value
-
-    @property
-    def scroll_bot(self):
-        return self._scroll_bot
-
-    @scroll_bot.setter
-    def scroll_bot(self, value):
-        self._scroll_bot = value
+        return self._pressed, self._scroll, self._pos, self._rel
 
     @property
     def scroll(self):
-        return self._scroll_top, self._scroll_bot
+        return self._scroll
+
+    @scroll.setter
+    def scroll(self, value):
+        self._scroll = value
 
     @property
     def rel(self):

@@ -43,14 +43,21 @@ class InputElement(Rectangle):
                  non_active_border_width=DEFAULT_BORDER_WIDTH,
                  non_active_border_color=GREY,
                  on_change_action=None,
+                 on_enter_action=None,
                  id=None,
                  last_raw_input=0,
                  one_input=0,
+                 place_text_left=False,
+                 border_radius=0,
+                 max_letters_num=None
                  ):
         x = int(x)
         y = int(y)
         self.id = id
         self.TREE = UI_TREE
+
+        self.border_radius = border_radius
+
         size_x = int(size_x * X_SCALE) if size_x else self.DEF_X_SIZE
         size_y = int(size_y * Y_SCALE) if size_y else self.DEF_Y_SIZE
         super().__init__(x, y, size_x, size_y)
@@ -60,6 +67,8 @@ class InputElement(Rectangle):
         self._default_text = default_text
         self._first_enter = 1
 
+        self.max_letters_num = max_letters_num
+
         self._text_text = text if text else default_text
         self._r_text_active = None
         self._text_active_color = text_active_color
@@ -67,6 +76,7 @@ class InputElement(Rectangle):
         self._text_non_active_color = text_non_active_color
 
         self._text_size = text_size
+        self.place_text_left = place_text_left
 
         self._focused = 0
 
@@ -97,12 +107,15 @@ class InputElement(Rectangle):
         self._border = self._surface_to_draw.get_rect()
 
         self._on_change_action = on_change_action
+        self._on_enter_action = on_enter_action
 
         if autobuild:
             self.build()
 
         self.last_raw_input = last_raw_input
         self.one_input = one_input
+
+        self.__last_message = None
 
     def click(self, xy):
         self._focused = self.collide_point(xy)
@@ -118,9 +131,13 @@ class InputElement(Rectangle):
                     self.build()
 
         if self._focused:
-            if (self._key.ENTER and self.TREE.enter_possible) or self._key.ESC:
+
+            if self._key.ENTER or self._key.ESC:
                 self._focused = 0
                 self.set_default_text()
+                self.__last_message = self._text_text
+                if self._on_enter_action:
+                    self._on_enter_action(self)
                 return
 
             prev_text = self._text_text
@@ -140,11 +157,12 @@ class InputElement(Rectangle):
                         self._first_enter = 0
 
                     if add_text and prev_text.endswith(add_text[:0]):
-                        if self._clock.time > self._next_input:
-                            self._next_input = self._clock.time + self.INPUT_DELAY
-                            self._text_text = f'{self._text_text}{add_text}'
+                        self._text_text = f'{self._text_text}{add_text}'
                     else:
                         self._text_text = f'{self._text_text}{add_text}'
+
+                if self.max_letters_num:
+                    self._text_text = self._text_text[:self.max_letters_num]
 
             if self._key.BACKSPACE:
                 if self._clock.time > self._next_input:
@@ -169,9 +187,9 @@ class InputElement(Rectangle):
             self._surface_to_draw.blit(self._non_active_text_surface, (0, 0))
 
         if self._focused:
-            draw.rect(self._surface_to_draw, self._active_border_color, self._border, self._active_border_w)
+            draw.rect(self._surface_to_draw, self._active_border_color, self._border, self._active_border_w, self.border_radius)
         else:
-            draw.rect(self._surface_to_draw, self._non_active_border_color, self._border, self._non_active_border_w)
+            draw.rect(self._surface_to_draw, self._non_active_border_color, self._border, self._non_active_border_w, self.border_radius)
 
         MAIN_SCREEN.blit(self._surface_to_draw, (self.x0, self.y0))
 
@@ -186,14 +204,22 @@ class InputElement(Rectangle):
         self._r_text_active = Text(text=self._text_text,
                                    screen=self._active_text_surface,
                                    color=self._text_active_color,
-                                   size=self._text_size)
+                                   size=self._text_size, place_left=self.place_text_left, auto_draw=False)
+
         self._r_text_non_active = Text(text=self._text_text,
                                        screen=self._non_active_text_surface,
                                        color=self._text_non_active_color,
-                                       size=self._text_size)
+                                       size=self._text_size, place_left=self.place_text_left, auto_draw=False)
 
-        self._r_text_active.draw()
-        self._r_text_non_active.draw()
+        dx = 0
+        if self.place_text_left and self.size_x < self._r_text_active.size[0]:
+            dx = self.size_x - self._r_text_active.size[0] - 3
+
+        self._r_text_active.draw(dx=dx)
+        self._r_text_non_active.draw(dx=dx)
+
+    def focus(self):
+        self._focused = 1
 
     def unfocus(self):
         self._focused = 0
@@ -214,6 +240,19 @@ class InputElement(Rectangle):
     def width(self):
         return self.size_x
 
+    def clear(self):
+        self.text = ''
+        
+    @property
+    def last_message(self):
+        if self.__last_message:
+            m = self.__last_message
+            self.__last_message = None
+            self.text = ''
+        else:
+            m = ''
+        return m
+
     @property
     def text(self):
         if self._text_text == self._default_text:
@@ -223,6 +262,8 @@ class InputElement(Rectangle):
 
     @text.setter
     def text(self, new_text):
+        if self.max_letters_num:
+            new_text = new_text[:self.max_letters_num]
         self._text_text = new_text
         self.build()
 

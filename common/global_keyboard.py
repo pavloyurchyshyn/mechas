@@ -1,6 +1,6 @@
 import os
 
-from pygame import key as KEY
+from pygame import key as KEYS
 from pygame import constants, locals
 from pygame.key import name as get_key_name
 from pygame import KEYDOWN, KEYUP, TEXTINPUT
@@ -30,6 +30,9 @@ class Keyboard:
 
         self._keys_to_command = {}
         self.make_key_to_command_dict()
+
+        self._esc = False
+        self._enter = False
 
         self._pressed = ()
         self._only_commands = set()
@@ -90,21 +93,36 @@ class Keyboard:
     def update(self, events):
         self._text.clear()
         self._last_raw_inp = None
-        self._pressed = KEY.get_pressed()
+        self._pressed = KEYS.get_pressed()
+        self._esc = False
+        self._enter = False
+
         for event in events:
             if event.type == KEYDOWN:
-                command = self._keys_to_command.get(get_key_name(event.key))
-                if command:
-                    self._only_commands.add(command)
-                self._last_raw_inp = get_key_name(event.key)
+                self.add_command(event)
 
             elif event.type == KEYUP:
-                command = self._keys_to_command.get(get_key_name(event.key))
-                if command in self._only_commands:
-                    self._only_commands.remove(command)
-
+                self.delete_command(event)
+                self.check_for_special_keys(event)
             elif event.type == TEXTINPUT:
                 self._text.append(event.text)
+
+    def check_for_special_keys(self, event):
+        if get_key_name(event.key) == 'return':
+            self._enter = True
+        elif get_key_name(event.key) == 'escape':
+            self._esc = True
+
+    def add_command(self, event):
+        command = self._keys_to_command.get(get_key_name(event.key))
+        if command:
+            self._only_commands.add(command)
+        self._last_raw_inp = get_key_name(event.key)
+
+    def delete_command(self, event):
+        command = self._keys_to_command.get(get_key_name(event.key))
+        if command in self._only_commands:
+            self._only_commands.remove(command)
 
     def get_commands_by_key(self, key):
         return (command for command, key_ in self._command_to_key.items() if key_ == key)
@@ -130,11 +148,11 @@ class Keyboard:
 
     @property
     def ESC(self):
-        return self._pressed[constants.K_ESCAPE]
+        return self._esc
 
     @property
     def ENTER(self):
-        return self._pressed[constants.K_RETURN]
+        return self._enter
 
     @property
     def BACKSPACE(self):

@@ -8,7 +8,7 @@ LOGGER = Logger().LOGGER
 class Stages(metaclass=Singleton):
     def __init__(self):
         self.current_stage = 'main_menu'
-        self.set_load_round_stage()
+        # self.set_load_round_stage()
 
     def get_current_stage(self) -> str:
         return self.current_stage

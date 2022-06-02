@@ -10,12 +10,13 @@ from constants.game_stages import StagesConstants
 from constants.network_keys import NetworkKeys
 
 from stages.main_menu.page import MAIN_MENU_UI as MAIN_MENU_LOGIC
-from stages.round.page import ROUND_STAGE_LOGIC
+from stages.round.page import Round
 
 from visual.UIController import UI_TREE
 
 from network.server.server_controller import ServerController
 from network.client.client_network import Network
+from constants.network_keys import ServerResponseCategories
 
 LOGGER = Logger().LOGGER
 
@@ -32,11 +33,13 @@ class GameBody:
             StagesConstants.EXIT_STAGE: self._close_game,
         }
 
+        self.round_logic: Round = None
         self.server_controller: ServerController = ServerController()
         self.client: Network = None
 
     def loading_to_round(self):
         try:
+            self.round_logic = Round()
             self.server_controller.run_server()
             self.connect_to_server()
         except Exception as e:
@@ -52,7 +55,9 @@ class GameBody:
         response = self.client.connect()
         if self.client.connected:
             LOGGER.info('Client connected')
-        #  start_new_thread(self.__round_recv_thread, ())
+            start_new_thread(self.__round_recv_thread, ())
+            self.stage_controller.set_round_stage()
+
         else:
             self.client = None
             raise ConnectionError(response.get(NetworkKeys.ServerMessages, ''))
@@ -71,24 +76,32 @@ class GameBody:
 
     def __round_recv_thread(self):
         LOGGER.info(f'Started RECV thread.')
-        self.stage_controller.set_round_stage()
 
         while self.client.connected:
             try:
-                recv = self.client.receive()
-                LOGGER.info(f'Thread {recv}')
+                recv = self.client.get_data()
+                if len(recv) > 1:
+                    LOGGER.info(f"Server response: {recv}")
+
+                self.round_logic.chat_window.add_messages(recv.get(ServerResponseCategories.MessagesToAll, {}))
             except Exception as e:
                 LOGGER.error(e)
+                self.client.disconnect()
 
     def round(self):
-        request_data = {}
-        ROUND_STAGE_LOGIC.update(request_data)
-        ROUND_STAGE_LOGIC.draw()
+        self.round_logic.update()
+        self.round_logic.draw()
 
-        if request_data:
-            self.client.send(request_data)
+        if self.round_logic.player_response:
+            LOGGER.info(f"Player response: {self.round_logic.player_response}")
+            self.client.send(self.round_logic.player_response)
+            self.round_logic.player_response.clear()
+
+        if not self.client.connected:
+            self.stage_controller.set_close_round_stage()
 
     def close_round(self):
+        self.round_logic = None
         if self.server_controller:
             self.server_controller.stop_server()
         if self.client:

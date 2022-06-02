@@ -1,5 +1,4 @@
-import time
-
+import sys
 from common.logger import Logger
 
 LOGGER = Logger('server_logs', 0, std_handler=0).LOGGER
@@ -17,7 +16,7 @@ import json
 from constants.network_keys import *
 from network.server.player_connection_handler import ConnectionHandler
 from time import sleep, time
-import sys
+from game_logic.game_logic import GameLogic
 
 
 class Server:
@@ -41,11 +40,14 @@ class Server:
         self.ban_list = []
         self.addresses_ban_list = []
 
+        self.GAME_LOGIC = GameLogic(self)
+
         self.alive = 1
+        self.game_thread_id = None
 
         self.open_connection()
         self.start_connection_handling()
-        # self.start_game_logic()
+        self.start_game_logic()
         self.start_game_logic_status_check()
 
     def start_game_logic(self):
@@ -58,26 +60,9 @@ class Server:
 
     def start_game_logic_status_check(self):
         LOGGER.info('Alive check started')
-        LOGGER.info('Sever Game loop started.')
-        update_delay = 1 / 64
-        LOGGER.info(f'Tick rate {64}. Time per frame: {update_delay}')
-
-        finish = time() + 10
         while self.alive:
-            t = time()
-            for token, conn in self.players_connections.items():
-                response = conn.recv()
-                if response:
-                    LOGGER.info(f'{token}: {response}')
-                conn.send(self.json_to_str({'all_ok': True}))
-
-            if time() > finish:
-                self.alive = False
-                LOGGER.info(f'Timeout')
-            sl = update_delay - (time() - t)
-            # LOGGER.info(f'Time spent for calculation {time() - t}, sleep {sl}')
-            if sl > 0:
-                sleep(sl)
+            self.alive = self.GAME_LOGIC.alive
+            sleep(10)
         LOGGER.info('Stopped')
 
     def start_connection_handling(self):
@@ -107,7 +92,7 @@ class Server:
                     player_token = client_data.get(PlayerAttrs.Token)
 
                     # if key was`t connected -> send new key
-                    if player_token not in self.player_connected_in_past:
+                    if player_token not in self.player_connected_in_past or player_token in self.players_connections:
                         pre_player_id = player_token
                         player_token = str(hash(str((addr, port))))
                         # if player was admin add new token as admin
@@ -177,7 +162,7 @@ class Server:
         server_response_data[ServerConnectAnswers.CONNECTION_ANSWER] = ServerConnectAnswers.Connected
         server_response_data[PlayerAttrs.Token] = player_token
 
-        LOGGER.info(f'Sending')
+        LOGGER.info(f'Sending response: {server_response_data}')
         player_connection.send(self.json_to_str(server_response_data))
         LOGGER.info(f'Successfully sent {server_response_data}')
 
@@ -185,6 +170,7 @@ class Server:
                     f' Player #{self.number_of_connected_players}.'
                     f' Nickname {nickname}.')
         self.number_of_connected_players += 1
+        self.GAME_LOGIC.start_player_handling(player_token)
 
     def reconnect_player(self, server_response_data, player_connection, player_token, client_data):
         LOGGER.info(f'Player {player_token} is reconnecting.')
@@ -208,6 +194,7 @@ class Server:
         }
         self.players_connections[player_token] = player_connection
         self.player_connected_in_past.add(player_token)
+        self.GAME_LOGIC.start_player_handling(player_token)
 
     def send_bad_password(self, server_response_data, player_connection, client_data, addr):
         server_response_data[NetworkKeys.ServerAnswer] = 'Failed to connect, bad password.'
@@ -328,6 +315,9 @@ class Server:
         #     LOGGER.error(e)
         # else:
         #     LOGGER.info('Game logic stopped.')
+
+    def get_connection(self, player_token):
+        return self.players_connections.get(player_token)
 
 
 if __name__ == '__main__':

@@ -11,6 +11,7 @@ UI:
     exit: Вихід
     exit_yes: Так
     exit_no: Ні
+    host_game: Захостити
     lang_disapp_msg: |
       Потрібно перезайти в гру
       для зміни мови

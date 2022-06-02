@@ -10,6 +10,7 @@ UI:
     exit: Exit
     exit_yes: 'Yes'
     exit_no: 'No'
+    host_game: Host Game
     lang_disapp_msg: |
       You need to restart the game
       to accept changes

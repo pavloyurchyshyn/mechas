@@ -19,12 +19,19 @@ class Text:
                  font_size=None,
                  antial=1,
                  angle=0,
-                 auto_draw=True):
+                 auto_draw=True,
+                 place_left=False,
+                 place_bot=False,
+                 place_inside=True,
+                 ):
         x = int(x) if x else None
         y = int(y) if y else None
         text = str(text)
         self.y0 = y
         self.x0 = x
+
+        self.place_inside = place_inside
+
         self.font_size = font_size if font_size is not None else DEFAULT_FONT_SIZE
         self._text = text.replace('\t', '    ')
         self._text_font = font_t
@@ -46,6 +53,8 @@ class Text:
         self._color = color
         self._antialias = antial
 
+        self.place_left = place_left
+        self.place_bot = place_bot
         self.render()
 
         self.set_x(x)
@@ -56,26 +65,20 @@ class Text:
 
     def set_x(self, x=None):
         if x is None:
-            if '\n' not in self._text:
-                x_s_s = self._screen.get_width()  # s_s -> screen size
-                x_t_s = self._r_text_img.get_width()  # t_s -> text size
-
-                screen_mid_x = x_s_s // 2
-                text_mid_x = x_t_s // 2
-
-                self._x = screen_mid_x - text_mid_x
+            if self.place_left:
+                self._x = 1
             else:
-                x_s_s = self._screen.get_width()  # s_s -> screen size
+                screen_x_size = self._screen.get_width()
+                text_x_size = self._r_text_img.get_width()
+                if '\n' in self._text:
+                    l_string = max(self._text.split('\n'), key=len)
+                    l_str_surf = self._r_text_font.render(l_string, self._antialias, self._color)
+                    text_x_size = l_str_surf.get_width()
 
-                l_string = max(self._text.split('\n'), key=len)
-                l_str_surf = self._r_text_font.render(l_string, self._antialias, self._color)
-
-                x_t_s = l_str_surf.get_width()  # t_s -> text size
-                screen_mid_x = x_s_s // 2
-                text_mid_x = x_t_s // 2
-
-                pos = screen_mid_x - text_mid_x
-                self._x = pos if pos > 0 else 5
+                if text_x_size > screen_x_size:
+                    self._x = 1
+                else:
+                    self._x = screen_x_size // 2 - text_x_size // 2
 
         else:
             self._x = int(x)
@@ -85,15 +88,15 @@ class Text:
             y_s_s = self._screen.get_height()  # s_s -> screen size
             y_t_s = self._r_text_img.get_height()  # t_s -> text size
 
-            screen_mid_y = y_s_s // 2
-            text_mid_y = y_t_s // 2
+            text_size = y_t_s if '\n' not in self._text else y_t_s * len(self._text.split('\n'))
 
-            if '\n' not in self._text:
-                self._y = screen_mid_y - text_mid_y
-
+            if self.place_bot:
+                self._y = y_s_s - text_size
             else:
-                pos = screen_mid_y - y_t_s * len(self._text.split('\n'))
-                self._y = pos if pos > -screen_mid_y + text_mid_y else Text.MIN_Y
+                if text_size > y_s_s:
+                    self._y = 0
+                else:
+                    self._y = y_s_s // 2 - text_size // 2
 
         else:
             self._y = int(y)
@@ -131,7 +134,7 @@ class Text:
             for i, text in enumerate(self._text.split('\n')):
                 t_surf = self._r_text_font.render(text, self._antialias, self._color)
                 self._screen.blit(t_surf, (self._x + dx, self._y + dy + self._size[1]))
-                self._size[0] += t_surf.get_width()
+                self._size[0] = t_surf.get_width() if t_surf.get_width() > self._size[0] else self._size[0]
                 self._size[1] += t_surf.get_height()
         else:
             self._screen.blit(self._r_text_img, (self._x + dx, self._y + dy))
@@ -140,13 +143,20 @@ class Text:
         self._render_font()
 
         self._r_text_img_original = self._r_text_font.render(self._text, self._antialias, self._color).convert_alpha()
+        x_size = self._r_text_img_original.get_width()
+        y_size = self._r_text_img_original.get_height()
+        self._r_text_img = self._r_text_img_original.copy()
 
-        x_size = self._screen_x_size if self._r_text_img_original.get_width() > self._screen_x_size else self._r_text_img_original.get_width()
-        y_size = self._screen_y_size if self._r_text_img_original.get_height() > self._screen_y_size else self._r_text_img_original.get_height()
+        if self.place_inside and not self.place_left:
+            x_size = self._screen_x_size if self._r_text_img_original.get_width() > self._screen_x_size else self._r_text_img_original.get_width()
+            y_size = self._screen_y_size if self._r_text_img_original.get_height() > self._screen_y_size else self._r_text_img_original.get_height()
 
-        self._r_text_img = smoothscale(self._r_text_img_original.copy(), (int(x_size * X_SCALE), int(y_size * Y_SCALE)))
+        if (x_size, y_size) != self._r_text_img_original.get_size():
+            self._r_text_img = smoothscale(self._r_text_img_original.copy(), (x_size, y_size))
 
-        self._r_text_img = rotate(self._r_text_img, self._angle)  # .convert()
+        if self._angle != 0:
+            self._r_text_img = rotate(self._r_text_img, self._angle)
+
         self._size = self._r_text_img.get_size()
 
     def _render_font(self):

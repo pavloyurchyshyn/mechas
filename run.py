@@ -89,10 +89,11 @@ class GameRunner:
             for event in events:
                 if event.type == MOUSEBUTTONDOWN:
                     if event.button == 4:
-                        G_Mouse.scroll_top = 1
+                        G_Mouse.scroll = 1
 
                     elif event.button == 5:
-                        G_Mouse.scroll_bot = -1
+                        G_Mouse.scroll = -1
+
                 if event.type == MOUSEBUTTONUP:
                     if event.button == 1:
                         G_Mouse._pressed[0] = 1
