@@ -1,11 +1,11 @@
 # from settings.screen_size import X_SCALE, Y_SCALE
 X_SCALE, Y_SCALE = 1, 1
 
-from UI.UI_base.button_UI import Button
-from common_things.sound_loader import GLOBAL_MUSIC_PLAYER
-from settings.colors import WHITE, GREY_DARK_2
-from settings.window_settings import MAIN_SCREEN
-from UI.UI_buttons.music_volume_progress_bar import VOLUME_PROGRESS_BAR
+from visual.UI_base.button_UI import Button
+from common.sound_loader import GLOBAL_MUSIC_PLAYER
+from constants.colors import WHITE, GREY_DARK_2
+from visual.main_window import MAIN_SCREEN
+from visual.UI_buttons.music_volume_progress_bar import VOLUME_PROGRESS_BAR
 
 MUTE_MUSIC_ID = 'music_mute'
 

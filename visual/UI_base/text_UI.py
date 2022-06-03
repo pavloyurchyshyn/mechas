@@ -3,9 +3,8 @@ from common.global_clock import GLOBAL_CLOCK
 from pygame import Surface
 from pygame.transform import rotate, smoothscale
 from constants.colors import WHITE
-from visual.main_window import MAIN_SCREEN
-from settings.screen import X_SCALE, Y_SCALE
 from visual.font_loader import custom_font_size
+from visual.main_window import MAIN_SCREEN, SCREEN_W, SCREEN_H
 
 
 class Text:
@@ -15,6 +14,8 @@ class Text:
     def __init__(self, text, screen=MAIN_SCREEN, x=None, y=None,
                  color=WHITE,
                  size=None,
+                 p_x_pos=None,
+                 p_y_pos=None,
                  font_t=None,
                  font_size=None,
                  antial=1,
@@ -24,8 +25,11 @@ class Text:
                  place_bot=False,
                  place_inside=True,
                  ):
-        x = int(x) if x else None
-        y = int(y) if y else None
+
+        print(p_x_pos)
+        x = int(x) if x is not None else int(p_x_pos * SCREEN_W) if p_x_pos else None
+        y = int(y) if y is not None else int(p_y_pos * SCREEN_H) if p_y_pos else None
+
         text = str(text)
         self.y0 = y
         self.x0 = x

@@ -11,12 +11,14 @@ from constants.network_keys import NetworkKeys
 
 from stages.main_menu.page import MAIN_MENU_UI as MAIN_MENU_LOGIC
 from stages.round.page import Round
+from stages.settings.page import SettingsMenu
 
 from visual.UIController import UI_TREE
 
 from network.server.server_controller import ServerController
 from network.client.client_network import Network
 from constants.network_keys import ServerResponseCategories
+from common.sound_loader import GLOBAL_MUSIC_PLAYER
 
 LOGGER = Logger().LOGGER
 
@@ -27,6 +29,8 @@ class GameBody:
         self.stage_controller = Stages()
         self._stages = {
             StagesConstants.MAIN_MENU_STAGE: self.main_menu,
+            StagesConstants.MAIN_MENU_SETTINGS_STAGE: self.setting,
+
             StagesConstants.LOADING_STAGE: self.loading_to_round,
             StagesConstants.ROUND_STAGE: self.round,
             StagesConstants.ROUND_CLOSE: self.close_round,
@@ -36,6 +40,16 @@ class GameBody:
         self.round_logic: Round = None
         self.server_controller: ServerController = ServerController()
         self.client: Network = None
+        self.settings_in_menu = SettingsMenu()
+        self._music_player = GLOBAL_MUSIC_PLAYER
+        self._music_player.play_back_music()
+
+    def game_loop(self):
+        self._music_player.update()
+        self._stages[self.stage_controller.get_current_stage()]()
+        UI_TREE.update()
+        UI_TREE.draw()
+        self._check_alt_and_f4()
 
     def loading_to_round(self):
         try:
@@ -68,11 +82,9 @@ class GameBody:
     def client_menu(self):
         pass
 
-    def game_loop(self):
-        self._stages[self.stage_controller.get_current_stage()]()
-        UI_TREE.update()
-        UI_TREE.draw()
-        self._check_alt_and_f4()
+    def setting(self):
+        self.settings_in_menu.update()
+        self.settings_in_menu.draw()
 
     def __round_recv_thread(self):
         LOGGER.info(f'Started RECV thread.')

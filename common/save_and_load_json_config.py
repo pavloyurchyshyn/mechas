@@ -38,5 +38,8 @@ def get_from_common_config(key, def_value=None):
     return get_parameter_from_json_config(key=key, def_value=def_value, path=COMMON_CONFIG_PATH)
 
 
-def get_cgs_config():
+def get_common_config():
     return load_json_config(COMMON_CONFIG_PATH)
+
+def save_common_config(data):
+    save_json_config(data=data, path=COMMON_CONFIG_PATH)

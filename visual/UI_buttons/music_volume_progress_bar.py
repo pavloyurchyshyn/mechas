@@ -1,10 +1,10 @@
-from common_things.sound_loader import GLOBAL_MUSIC_PLAYER
-from UI.UI_base.progress_bar_UI import ProgressBar
-from settings.window_settings import MAIN_SCREEN
-from settings.screen_size import X_SCALE, Y_SCALE
+from common.sound_loader import GLOBAL_MUSIC_PLAYER
+from visual.UI_base.progress_bar_UI import ProgressBar
+from visual.main_window import MAIN_SCREEN
+from settings.screen import X_SCALE, Y_SCALE
 
 
-from settings.colors import WHITE, GREY_DARK_2
+from constants.colors import WHITE, GREY_DARK_2
 
 VOLUME_PROGRESS_BAR = ProgressBar(screen=MAIN_SCREEN,
                                   stage=GLOBAL_MUSIC_PLAYER.volume_stage,

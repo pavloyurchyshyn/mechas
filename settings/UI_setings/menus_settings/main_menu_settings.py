@@ -1,19 +1,18 @@
-from settings.window_settings import SCREEN_W, SCREEN_H, HALF_SCREEN_W, X_SCALE, Y_SCALE
-from settings.window_settings import MAIN_SCREEN
-from settings.colors import WHITE, GREY_DARK_2
-from settings.screen_size import X_SCALE, Y_SCALE
+from settings.screen import SCREEN_W, SCREEN_H, HALF_SCREEN_W, X_SCALE, Y_SCALE, GAME_SCALE
+from visual.main_window import MAIN_SCREEN
+from constants.colors import WHITE, GREY_DARK_2
 from settings.global_parameters import set_fps
 
-from common_things.sound_loader import GLOBAL_MUSIC_PLAYER
-from common_things.stages import Stages
-from common_things.global_keyboard import GLOBAL_KEYBOARD
+from common.sound_loader import GLOBAL_MUSIC_PLAYER
+from common.stages import Stages
+from common.global_keyboard import GLOBAL_KEYBOARD
 
-from UI.UI_buttons.music_volume_progress_bar import VOLUME_PROGRESS_BAR
-from UI.UI_buttons.mute_music_button import MUTE_MUSIC_BUTTON
-from UI.UI_base.button_UI import Button
-from UI.UI_base.text_UI import Text
-from UI.UI_base.input_element_UI import InputElement
-from UI.UI_controller import UI_TREE
+from visual.UI_buttons.music_volume_progress_bar import VOLUME_PROGRESS_BAR
+from visual.UI_buttons.mute_music_button import MUTE_MUSIC_BUTTON
+from visual.UI_base.button_UI import Button
+from visual.UI_base.text_UI import Text
+from visual.UI_base.input_element_UI import InputElement
+from visual.UIController import UI_TREE
 
 MAIN_MENU_SETTINGS_BUTTONS = {}
 
@@ -22,65 +21,9 @@ SOUND_MINUS_ID = 'sound_minus'
 EXIT_ID = 'exit'
 RELOAD_COLOR_ID = 'change_color'
 
-# ------- KEYBOARD SETTINGS -----------
-KEYBOARD_SETTINGS_TEXT = Text('Key settings', x=HALF_SCREEN_W + HALF_SCREEN_W // 4, y=10 * Y_SCALE, font_size=30)
-
 KEYBOARD_TEXT_DATA = {}
 KEYBOARD_TEXT_OBJS = []
 INPUT_ELEMENTS = []
-
-x_pos_command = HALF_SCREEN_W + 100 * X_SCALE
-x_pos_key = HALF_SCREEN_W + 100 * X_SCALE + 300 * X_SCALE
-x_pos_warn = x_pos_key + 130 * X_SCALE
-y_pos = 20 * Y_SCALE + KEYBOARD_SETTINGS_TEXT.size[1]
-y_size = 50 * Y_SCALE
-x_size = 100 * X_SCALE
-y_step = 10 * Y_SCALE
-
-COMMANDS_WHICH_USING_KEY = []
-
-for key, command in GLOBAL_KEYBOARD.get_key_command_values():
-    KEYBOARD_TEXT_DATA[command] = {'kwargs': {
-        'size': (x_size, y_size),
-        'x': x_pos_command,
-        'y': y_pos,
-        'text': command.lower().capitalize().replace('_', ' '),
-        'font_size': 25,
-    }}
-
-
-    def on_input_action(self):
-        command_ = self.id
-        new_key = self._text_text if self._text_text else None
-
-        if not new_key:
-            GLOBAL_KEYBOARD.change(command=command_, new_key=new_key)
-            self._text_text = None
-            return
-
-        for comm in GLOBAL_KEYBOARD.get_commands_by_key(new_key):
-            if comm != command_:
-                UI_TREE.get_element('main_menu_settings', comm).text = '!'
-
-        GLOBAL_KEYBOARD.change(command=command_, new_key=new_key)
-        self._text_text = new_key.upper()
-
-
-    inp_el = InputElement(x=x_pos_key, y=y_pos,
-                          size_x=x_size, size_y=y_size,
-                          text=key.upper() if key else '_',
-                          id=command,
-                          on_change_action=on_input_action,
-                          active_border_width=1,
-                          non_active_border_width=1,
-                          last_raw_input=1,
-                          one_input=1,
-                          default_text='!'
-                          )
-
-    INPUT_ELEMENTS.append(inp_el)
-
-    y_pos += y_size + y_step
 
 
 # ------- SOUND SETTINGS --------------
@@ -98,11 +41,9 @@ def add_music_volume():
     MUTE_MUSIC_BUTTON.change_picture(active=1)
 
 
-MUSIC_VOLUME_VALUE = Button(x=50 * X_SCALE, y=100 * Y_SCALE,
-                            text=f'Music Volume:',
-                            screen=MAIN_SCREEN,
-                            border_width=0,
-                            transparent=1)
+MUSIC_VOLUME_VALUE = Text(p_x_pos=0.01, p_y_pos=0.01,
+                          text=f'Music Volume:',
+                          screen=MAIN_SCREEN)
 
 KEYBOARD_TEXT_DATA['_FPS'] = {'kwargs': {
     'size': (50, 50),
@@ -162,7 +103,7 @@ SOUND_BUTTONS = {
             'y': 150 * Y_SCALE,
             'text': '60',
             'on_click_action': set_fps,
-            'on_click_action_args': (60, ),
+            'on_click_action_args': (60,),
             'id': 'fps_60',
             'border_width': 1,
 
@@ -177,7 +118,7 @@ SOUND_BUTTONS = {
             'y': 150 * Y_SCALE,
             'text': '120',
             'on_click_action': set_fps,
-            'on_click_action_args': (120, ),
+            'on_click_action_args': (120,),
             'border_width': 1,
 
             'id': 'fps_120',
@@ -192,7 +133,7 @@ SOUND_BUTTONS = {
             'y': 150 * Y_SCALE,
             'text': 'No limit',
             'on_click_action': set_fps,
-            'on_click_action_args': (0, ),
+            'on_click_action_args': (0,),
             'id': 'fps_0',
             'border_width': 1,
 

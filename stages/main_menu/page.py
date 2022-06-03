@@ -12,8 +12,6 @@ from settings.UI_setings.menus_settings.main_menu import MAIN_MENU_BUTTONS, exit
 from settings.global_parameters import pause_available, pause_step
 from constants.game_stages import StagesConstants
 
-from random import randrange, choice, randint
-
 
 class MainMenu(MenuUI):
     def __init__(self):
@@ -25,7 +23,6 @@ class MainMenu(MenuUI):
         self._fade_surface.fill(HALF_EMPTY)
         self._fade_surface.convert_alpha()
         self.add_elements_to_controller(*self._elements, enter_focus=self.start)
-        self.last_spawn = 1
 
     def update(self):
         # VisualEffectsController.update()
