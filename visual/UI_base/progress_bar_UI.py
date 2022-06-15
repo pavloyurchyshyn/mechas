@@ -38,7 +38,7 @@ class ProgressBar:
 
         self._message = text
 
-        self.border_color = simple_colors['white']
+        self.border_color = simple_colors.white
         self.bar_color = bar_inner_color
         self.x_size = bar_x_size
         self.y_size = bar_y_size

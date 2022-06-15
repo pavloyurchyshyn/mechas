@@ -24,29 +24,42 @@ class RoundSizes:
     class MechWindow:
         X = 0
         Y = scaled_h(0.03) - 1
-        X_SIZE = scaled_w(0.33)
+        X_SIZE = scaled_w(0.25)
         Y_SIZE = scaled_h(0.65)
 
     class WorldWindow:
-        X_SIZE = scaled_w(0.36)
-        Y_SIZE = scaled_h(0.65)
-        X = scaled_w(0.33) - 1
-        Y = scaled_h(0.03) - 1
+        X_SIZE = scaled_w(0.44)
+        Y_SIZE = scaled_h(0.7)
+        X = scaled_w(0.25) - 1
+        Y = scaled_h(0.03)
 
     class SkillsCards:
-        X = scaled_w(0.33) - 1
-        Y = scaled_h(0.68)
+        X = scaled_w(0.25) - 1
+        Y = scaled_h(0.76)
         X_SIZE = scaled_w(0.36)
-        Y_SIZE = scaled_h(0.16)
+        Y_SIZE = scaled_h(0.12)
 
     class UsedSkillsCards:
-        X = scaled_w(0.33) - 1
-        Y = scaled_h(0.84)
+        X = scaled_w(0.25) - 1
+        Y = scaled_h(0.88)
         X_SIZE = scaled_w(0.36)
-        Y_SIZE = scaled_h(0.16)
+        Y_SIZE = scaled_h(0.12)
 
     class ChatWindow:
         X = scaled_w(0.69)
         Y = scaled_h(0.68)
         X_SIZE = scaled_w(0.31)
         Y_SIZE = scaled_h(0.32)
+
+    class ReadyBody:
+        X = scaled_w(0.61)
+        Y = scaled_h(0.88)
+        X_SIZE = scaled_w(0.08)
+        Y_SIZE = scaled_h(0.12)
+
+        class ReadyButton:
+            X = scaled_w(0.61) + 2
+            Y = scaled_h(0.97) + 1
+            X_SIZE = scaled_w(0.08)
+            Y_SIZE = scaled_h(0.03)
+            border_parameters = {'border_radius': 5}

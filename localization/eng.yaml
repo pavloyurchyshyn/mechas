@@ -19,3 +19,6 @@ UI:
   round:
     exit_pop_up:
       exit_pop_text: 'You want to close game?'
+
+    ready_body:
+      ready_button: 'Ready'

@@ -66,6 +66,10 @@ class BaseMech:
     def position(self):
         return self._position
 
+    @position.setter
+    def position(self, position):
+        self._position = position
+
     @property
     def health_points(self):
         return self._current_hp

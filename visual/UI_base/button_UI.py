@@ -10,8 +10,7 @@ from visual.UIController import UI_TREE
 from common.global_clock import GLOBAL_CLOCK
 from visual.font_loader import DEFAULT_FONT_SIZE
 
-from settings.UI_setings.button_settings import DEFAULT_BUTTON_X_SIZE, \
-    DEFAULT_BUTTON_Y_SIZE, DEFAULT_CLICK_DELAY, DEFAULT_BORDER_WIDTH, CLICK_ANIMATION_DURATION
+from settings.UI_setings.button_settings import ButtonsConst
 from constants.colors import simple_colors
 from settings.global_parameters import test_draw_status_is_on
 from visual.main_window import MAIN_SCREEN, SCREEN_W, SCREEN_H
@@ -21,13 +20,13 @@ from settings.screen import Y_SCALE, X_SCALE
 
 class Button(Rectangle):
     HELP_TEXT_TIME = 3
-    BUTTON_X_SIZE = DEFAULT_BUTTON_X_SIZE
-    BUTTON_Y_SIZE = DEFAULT_BUTTON_Y_SIZE
-    CLICK_DELAY = DEFAULT_CLICK_DELAY
+    BUTTON_X_SIZE = ButtonsConst.DEFAULT_BUTTON_X_SIZE
+    BUTTON_Y_SIZE = ButtonsConst.DEFAULT_BUTTON_Y_SIZE
+    CLICK_DELAY = ButtonsConst.DEFAULT_CLICK_DELAY
     CLOCK = GLOBAL_CLOCK
     MAIN_SCREEN = MAIN_SCREEN
     UI_TREE = UI_TREE
-    CLICK_ANIMATION_DUR = CLICK_ANIMATION_DURATION
+    CLICK_ANIMATION_DUR = ButtonsConst.CLICK_ANIMATION_DURATION
     UI_TYPE = 'button'
 
     def __init__(self, x: int = None, y: int = None,
@@ -40,8 +39,8 @@ class Button(Rectangle):
                  non_active_text=None,
                  text_x=None, text_y=None,
                  change_after_click=0,
-                 text_color=simple_colors['white'],
-                 text_non_active_color=simple_colors['grey'],
+                 text_color=simple_colors.white,
+                 text_non_active_color=simple_colors.grey,
                  text_size=None,
 
                  active=True,
@@ -59,9 +58,9 @@ class Button(Rectangle):
                  picture=None,
                  pic_x=0, pic_y=0,
 
-                 border_color=simple_colors['white'],
-                 border_width=DEFAULT_BORDER_WIDTH,
-                 border_non_active_color=simple_colors['grey'],
+                 border_color=simple_colors.white,
+                 border_width=ButtonsConst.DEFAULT_BORDER_WIDTH,
+                 border_non_active_color=simple_colors.grey,
                  border_parameters={},
 
                  background_color=(0, 0, 0, 120),  # r, g, b, t
@@ -75,7 +74,6 @@ class Button(Rectangle):
                  **kwargs):
 
         self.id = id
-
         x = int(x) if x is not None else int(p_x_pos * SCREEN_W)
         if x is None:
             raise Exception(f'{text} X position not defined')
@@ -170,7 +168,7 @@ class Button(Rectangle):
 
         self._click_anim_dur = click_anim_dur if click_anim_dur else self.CLICK_ANIMATION_DUR
 
-    def build(self, k=1):
+    def build(self, scale_k=1):
         self._button_surface = self.get_surface()  # surface of button for drawing
 
         self._border = self._button_surface.get_rect()
@@ -182,7 +180,7 @@ class Button(Rectangle):
         draw_rect(non_active_button_s, self._background_color, non_active_button_s.get_rect(), 0,
                   **self._border_parameters)
 
-        self._text_size = self._text_size * k if self._text_size * k >= 1 else self._text_size
+        self._text_size = self._text_size * scale_k if self._text_size * scale_k >= 1 else self._text_size
 
         if len(self._text_text) > 0:
             # render text
@@ -297,13 +295,8 @@ class Button(Rectangle):
             if self.CLOCK.time < self._animation_finish_time:
                 self._screen.blit(self._clicked_border, (self.x0 + dx, self.y0 + dy))
 
-            # if self._active:
-            #     self._screen.blit(self._r_active_button, (self.x0 + dx, self.y0 + dy))
-            # else:
-            #     self._screen.blit(self._r_non_active_button, (self.x0 + dx, self.y0 + dy))
-
             if test_draw_status_is_on():
-                color = simple_colors['yellow']
+                color = simple_colors.yellow
                 for dotx, doty in self._dots[1:]:
                     draw.circle(Button.MAIN_SCREEN, color, (dotx + dx, doty + dy), 2)
 
@@ -372,7 +365,7 @@ class Button(Rectangle):
 
     @active.setter
     def active(self, value: bool) -> None:
-        self._active = value
+        self._active = 1 if value else 0
 
         if self._change_after_click:
             self._current_button_pic = self._r_active_button if self._current_button_pic == self._r_non_active_button else self._r_non_active_button

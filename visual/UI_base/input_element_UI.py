@@ -12,7 +12,7 @@ from constants.colors import YELLOW, WHITE, GREY
 from settings.global_parameters import test_draw_status_is_on
 
 from settings.screen import X_SCALE, Y_SCALE
-from settings.UI_setings.button_settings import DEFAULT_BUTTON_X_SIZE, DEFAULT_BUTTON_Y_SIZE, DEFAULT_BORDER_WIDTH
+from settings.UI_setings.button_settings import ButtonsConst
 
 from pygame import draw, Surface
 from pygame.constants import SRCALPHA
@@ -20,8 +20,8 @@ from pygame.constants import SRCALPHA
 
 class InputElement(Rectangle):
     INPUT_DELAY = 0.1
-    DEF_X_SIZE = DEFAULT_BUTTON_X_SIZE
-    DEF_Y_SIZE = DEFAULT_BUTTON_Y_SIZE
+    DEF_X_SIZE = ButtonsConst.DEFAULT_BUTTON_X_SIZE
+    DEF_Y_SIZE = ButtonsConst.DEFAULT_BUTTON_Y_SIZE
     UI_TYPE = 'input'
 
     def __init__(self, x, y, size_x=None, size_y=None,
@@ -38,9 +38,9 @@ class InputElement(Rectangle):
                  text_active_color=WHITE,
                  text_non_active_color=GREY,
                  text_size=DEFAULT_FONT_SIZE,
-                 active_border_width=DEFAULT_BORDER_WIDTH,
+                 active_border_width=ButtonsConst.DEFAULT_BORDER_WIDTH,
                  active_border_color=WHITE,
-                 non_active_border_width=DEFAULT_BORDER_WIDTH,
+                 non_active_border_width=ButtonsConst.DEFAULT_BORDER_WIDTH,
                  non_active_border_color=GREY,
                  on_change_action=None,
                  on_enter_action=None,

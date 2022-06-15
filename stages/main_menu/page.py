@@ -2,12 +2,10 @@ from visual.UI_base.menu_UI import MenuUI
 from visual.UI_buttons.test_draw import TEST_DRAW_BUTTON
 
 from common.global_keyboard import GLOBAL_KEYBOARD
-from common.global_clock import GLOBAL_CLOCK
-from common.math_functions import get_angle_between_dots
 
 from constants.colors import HALF_EMPTY
-from visual.main_window import SCREEN_H, SCREEN_W, HALF_SCREEN_W, HALF_SCREEN_H, MAIN_SCREEN
-from settings.UI_setings.menus_settings.main_menu import MAIN_MENU_BUTTONS, exit_warning, \
+from visual.main_window import MAIN_SCREEN
+from stages.main_menu.settings.menus_settings.main_menu import MAIN_MENU_BUTTONS, exit_warning, \
     activate_exit_warning_message, deactivate_exit_warning_message, LANG_RELOAD_WARN
 from settings.global_parameters import pause_available, pause_step
 from constants.game_stages import StagesConstants

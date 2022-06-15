@@ -11,4 +11,4 @@ VOLUME_PROGRESS_BAR = ProgressBar(screen=MAIN_SCREEN,
                                   stages_num=GLOBAL_MUSIC_PLAYER.volume_stages,
                                   bar_pos=(300*X_SCALE, 125*Y_SCALE),
                                   bar_inner_color=GREY_DARK_2 if GLOBAL_MUSIC_PLAYER.muted else WHITE,
-                                  bar_x_size=200)
+                                  bar_x_size=200, bar_y_size=10)

@@ -1,6 +1,6 @@
 from UI.UI_base.button_UI import Button
 from settings.window_settings import MAIN_SCREEN, SCREEN_W
-from settings.UI_setings.menus_settings.round_pause import PAUSE_MAIN_SCREEN_COPY
+from stages.main_menu.settings.menus_settings import PAUSE_MAIN_SCREEN_COPY
 from UI.UI_menus.round_pause import ROUND_PAUSE_UI
 from common_things.stages import Stages
 

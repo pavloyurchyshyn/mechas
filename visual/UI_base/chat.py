@@ -53,14 +53,6 @@ class Chat(Rectangle):
         category = Chat.ALL if category is not None else category
 
         text_ = Text(text=text, screen=self.surface, x=1, place_left=True, place_bot=True, place_inside=False)
-        if text_.size[0] > self.size_x:
-            letter_size = text_.size[0] / len(text)
-            bigger_for = self.size_x - text_.size[0]
-
-            last_symbols = bigger_for//letter_size + 1
-
-
-            print(text_.size[0] / len(text), self.size_x, text_.size[0], len(text))
 
         self.elements.append(text_)
 

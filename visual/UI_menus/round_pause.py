@@ -3,7 +3,7 @@ from visual.UI_buttons.test_draw import TEST_DRAW_BUTTON
 
 from common.global_keyboard import GLOBAL_KEYBOARD
 
-from settings.UI_setings.menus_settings.round_pause import ROUND_PAUSE_BUTTONS, \
+from stages.main_menu.settings.menus_settings import ROUND_PAUSE_BUTTONS, \
     PAUSE_MAIN_SCREEN_COPY
 
 from common.stages import StagesConstants

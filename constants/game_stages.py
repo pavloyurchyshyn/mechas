@@ -1,9 +1,11 @@
 
 class StagesConstants:
-    MAIN_MENU_SETTINGS_STAGE = 'main_menu_settings'
+    MAIN_MENU_SETTINGS_STAGE = 'settings'
     MAIN_MENU_STAGE = 'main_menu'
+    HOST = 'host'
 
     ROUND_PAUSE_STAGE = 'round_pause'
+    CONNECT = 'connect'
     ROUND_STAGE = 'round'
     ROUND_CLOSE = 'round_close'
 

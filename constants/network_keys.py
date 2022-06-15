@@ -17,6 +17,7 @@ class NetworkKeys:
 class PlayerActions:
     DISCONNECT = 'disconnect'
     MESSAGE = 'message'
+    READY_STATUS = 'ready_status'
 
 
 class ServerConnectAnswers:
@@ -36,6 +37,7 @@ class PlayerUpdates:
 
     UseCard = 'use_card'
     MechActions = 'mech_actions'
+    ReadyStatus = 'ready_status'
 
 
 class ServerResponseCategories:
@@ -48,7 +50,14 @@ class ServerResponseCategories:
 
     DeletePlayers = 'delete_players'
 
+    ReadyState = 'ready_state'
+
 
 class ServerActions:
     DELETE_PLAYER = 'delete_player'
     DISCONNECT = 'disconnect'
+
+
+class CheckRegex:
+    # re to understand that is not few recv stacked
+    good_recv_re = '^{"(' + PlayerActions.MESSAGE + ')|(' + ServerResponseCategories.MessagesToAll + ')":\s.*}{.*}$'

@@ -3,7 +3,7 @@ from common.global_clock import GLOBAL_CLOCK
 from pygame import Surface
 from pygame.transform import rotate, smoothscale
 from constants.colors import WHITE
-from visual.font_loader import custom_font_size
+from visual.font_loader import custom_font
 from visual.main_window import MAIN_SCREEN, SCREEN_W, SCREEN_H
 
 
@@ -24,9 +24,11 @@ class Text:
                  place_left=False,
                  place_bot=False,
                  place_inside=True,
+                 id=None,
                  ):
 
-        print(p_x_pos)
+        self.id = id
+
         x = int(x) if x is not None else int(p_x_pos * SCREEN_W) if p_x_pos else None
         y = int(y) if y is not None else int(p_y_pos * SCREEN_H) if p_y_pos else None
 
@@ -165,10 +167,10 @@ class Text:
 
     def _render_font(self):
         try:
-            self._r_text_font = custom_font_size(font_name=self._text_font, size=int(self.font_size))
+            self._r_text_font = custom_font(font_name=self._text_font, size=int(self.font_size))
 
         except:
-            self._r_text_font = custom_font_size(int(self.font_size))
+            self._r_text_font = custom_font(int(self.font_size))
 
     @staticmethod
     def get_surface(size_x, size_y):

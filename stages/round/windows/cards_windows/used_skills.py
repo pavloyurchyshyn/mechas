@@ -1,7 +1,7 @@
 from obj_properties.rect_form import Rectangle
 from visual.main_window import MAIN_SCREEN
 from pygame.draw import rect as draw_rect
-from settings.UI_setings.menus_settings.round_menu.windows_sizes import RoundSizes
+from stages.round.settings.windows_sizes import RoundSizes
 
 
 class UsedSkillsCards(Rectangle):

@@ -1,23 +1,17 @@
 from pygame.constants import K_F4, K_LALT
 
-from _thread import start_new_thread
-
 from common.global_keyboard import GLOBAL_KEYBOARD
 from common.stages import Stages
 from common.logger import Logger
 
 from constants.game_stages import StagesConstants
-from constants.network_keys import NetworkKeys
 
 from stages.main_menu.page import MAIN_MENU_UI as MAIN_MENU_LOGIC
-from stages.round.page import Round
+from stages.round.round_logic import RoundRelatedLogic
 from stages.settings.page import SettingsMenu
 
 from visual.UIController import UI_TREE
 
-from network.server.server_controller import ServerController
-from network.client.client_network import Network
-from constants.network_keys import ServerResponseCategories
 from common.sound_loader import GLOBAL_MUSIC_PLAYER
 
 LOGGER = Logger().LOGGER
@@ -31,15 +25,14 @@ class GameBody:
             StagesConstants.MAIN_MENU_STAGE: self.main_menu,
             StagesConstants.MAIN_MENU_SETTINGS_STAGE: self.setting,
 
-            StagesConstants.LOADING_STAGE: self.loading_to_round,
+            StagesConstants.CONNECT: self.connect_as_player,
+            StagesConstants.HOST: self.host,
             StagesConstants.ROUND_STAGE: self.round,
             StagesConstants.ROUND_CLOSE: self.close_round,
             StagesConstants.EXIT_STAGE: self._close_game,
         }
 
-        self.round_logic: Round = None
-        self.server_controller: ServerController = ServerController()
-        self.client: Network = None
+        self.round_logic: RoundRelatedLogic = RoundRelatedLogic()
         self.settings_in_menu = SettingsMenu()
         self._music_player = GLOBAL_MUSIC_PLAYER
         self._music_player.play_back_music()
@@ -51,30 +44,17 @@ class GameBody:
         UI_TREE.draw()
         self._check_alt_and_f4()
 
-    def loading_to_round(self):
-        try:
-            self.round_logic = Round()
-            self.server_controller.run_server()
-            self.connect_to_server()
-        except Exception as e:
-            LOGGER.error(e)
-            self.client = None
-            self.stage_controller.set_main_menu_stage()
+    def host(self):
+        self.round_logic.host_and_connect()
 
-        else:
-            self.stage_controller.set_round_stage()
+    def connect_as_player(self):
+        self.round_logic.connect_to_server()
 
-    def connect_to_server(self):
-        self.client = Network()
-        response = self.client.connect()
-        if self.client.connected:
-            LOGGER.info('Client connected')
-            start_new_thread(self.__round_recv_thread, ())
-            self.stage_controller.set_round_stage()
+    def round(self):
+        self.round_logic.round()
 
-        else:
-            self.client = None
-            raise ConnectionError(response.get(NetworkKeys.ServerMessages, ''))
+    def close_round(self):
+        self.round_logic.close_round()
 
     def host_menu(self):
         pass
@@ -85,41 +65,6 @@ class GameBody:
     def setting(self):
         self.settings_in_menu.update()
         self.settings_in_menu.draw()
-
-    def __round_recv_thread(self):
-        LOGGER.info(f'Started RECV thread.')
-
-        while self.client.connected:
-            try:
-                recv = self.client.get_data()
-                if len(recv) > 1:
-                    LOGGER.info(f"Server response: {recv}")
-
-                self.round_logic.chat_window.add_messages(recv.get(ServerResponseCategories.MessagesToAll, {}))
-            except Exception as e:
-                LOGGER.error(e)
-                self.client.disconnect()
-
-    def round(self):
-        self.round_logic.update()
-        self.round_logic.draw()
-
-        if self.round_logic.player_response:
-            LOGGER.info(f"Player response: {self.round_logic.player_response}")
-            self.client.send(self.round_logic.player_response)
-            self.round_logic.player_response.clear()
-
-        if not self.client.connected:
-            self.stage_controller.set_close_round_stage()
-
-    def close_round(self):
-        self.round_logic = None
-        if self.server_controller:
-            self.server_controller.stop_server()
-        if self.client:
-            self.client.disconnect()
-
-        self.stage_controller.set_main_menu_stage()
 
     def main_menu(self):
         MAIN_MENU_LOGIC.update()

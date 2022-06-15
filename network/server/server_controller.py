@@ -7,6 +7,7 @@ import time
 from common.save_and_load_json_config import get_from_common_config
 from _thread import start_new_thread
 from common.logger import Logger
+
 LOGGER = Logger().LOGGER
 
 
@@ -34,9 +35,11 @@ class ServerController:
         start_new_thread(self.__terminate, ())
 
     def __terminate(self):
+        LOGGER.info(f'Terminating server')
         if self._server_process:
             time.sleep(5)
             self._server_process.terminate()
+            LOGGER.info(f'Successfully terminated server')
         self._server_process = None
 
     def get_arguments(self) -> list:
@@ -60,4 +63,3 @@ class ServerController:
 
     def __del__(self):
         self.stop_server()
-

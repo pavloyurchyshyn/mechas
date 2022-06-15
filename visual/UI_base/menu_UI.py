@@ -98,11 +98,9 @@ class MenuUI(Rectangle):
 
     def create_text(self):
         for text in self._text_values:
-            if 'screen' in text:
-                screen = text.pop('screen')
-            else:
-                screen = self._surface
             text_data = self._text_values[text]
+
+            screen = text_data.pop('screen') if 'screen' in text_data.get('kwargs', {}) else self._surface
             t = Text(*text_data.get('args', ()),
                      **text_data.get('kwargs', {}),
                      screen=screen)
@@ -119,13 +117,14 @@ class MenuUI(Rectangle):
 
     def create_buttons(self):
         for button in self._buttons_values:
-            if 'screen' in button:
-                screen = button.pop('screen')
+            data = self._buttons_values[button]
+            if 'screen' in data.get('kwargs', {}):
+                screen = data['kwargs'].pop('screen')
             else:
                 screen = self._surface
 
-            b = Button(*self._buttons_values[button].get('args', ()),
-                       **self._buttons_values[button].get('kwargs', {}),
+            b = Button(*data.get('args', ()),
+                       **data.get('kwargs', {}),
                        screen=screen)
             self._elements.append(b)
             self._buttons.append(b)

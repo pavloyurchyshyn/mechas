@@ -2,12 +2,11 @@ from obj_properties.rect_form import Rectangle
 
 from pygame.draw import rect as draw_rect
 
-from settings.UI_setings.menus_settings.round_menu.windows_sizes import RoundSizes
+from stages.round.settings.windows_sizes import RoundSizes
 
 from visual.UI_base.input_element_UI import InputElement
 from visual.UI_base.chat import Chat
 from visual.UI_base.button_UI import Button
-from visual.UI_base.text_UI import Text
 from visual.main_window import MAIN_SCREEN
 from visual.UIController import UI_TREE
 
@@ -43,7 +42,7 @@ class ChatWindow(Rectangle):
         UI_TREE.add_menu(self, self.messages)
 
     def send_message(self, inp):
-        print(inp.__dict__)
+        # print(inp.__dict__)
         self.player_response[PlayerActions.MESSAGE] = self.input.last_message
 
         # message = self.input.last_message

@@ -2,7 +2,7 @@ from settings.screen import SCREEN_W, SCREEN_H, X_SCALE
 from common.stages import Stages
 from visual.UIController import UI_TREE
 from constants.UI_names import RoundUINames, RoundButtonsId
-from visual.font_loader import DEFAULT_FONT, custom_font_size
+from visual.font_loader import DEFAULT_FONT, custom_font
 from settings.localization import LocalizationLoader
 
 
@@ -25,7 +25,7 @@ no_x_pos = X_POS + POP_X_SIZE - step_from_border - DES_BUTT_SIZE_X
 
 des_y_pos = Y_POS + (POP_Y_SIZE / 2)
 
-EXIT_MESSAGE_SURF = custom_font_size(25).render(local.UI.round.exit_pop_up.exit_pop_text, 1, (255, 255, 255))
+EXIT_MESSAGE_SURF = custom_font(25).render(local.UI.round.exit_pop_up.exit_pop_text, 1, (255, 255, 255))
 
 
 def no_button():

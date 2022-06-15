@@ -33,7 +33,7 @@ class Clock:
         self._time, self._d_time = time, d_time
 
     @property
-    def timer_format(self):
+    def str_time(self):
         minute = str(abs(self._time) // 60).split('.')[0]
         sec = str(abs(self._time) % 60).split('.')[0]
 

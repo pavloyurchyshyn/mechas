@@ -6,13 +6,12 @@ from visual.sprites_functions import get_surface
 from common.singletone import Singleton
 from common.global_mouse import GLOBAL_MOUSE
 
-from settings.UI_setings.menus_settings.round_menu.exit_pop_up import *
-
 from visual.UI_base.button_UI import Button
 from visual.main_window import MAIN_SCREEN
 from visual.UIController import UI_TREE
 
 from constants.UI_names import RoundUINames
+from stages.round.settings.exit_pop_up import *
 
 
 class ExitPopUp(Rectangle, metaclass=Singleton):

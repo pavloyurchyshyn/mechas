@@ -19,3 +19,6 @@ UI:
   round:
     exit_pop_up:
       exit_pop_text: 'Вийти з гри?'
+
+    ready_body:
+      ready_button: 'Готовий'

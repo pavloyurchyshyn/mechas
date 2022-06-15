@@ -28,7 +28,7 @@ class Scroll(Rectangle):
                  transparent=0, background_color=(0, 0, 0, 120),  # r, g, b, t
                  ui_elements=[],
                  h_step=None, v_step=None,
-                 border=0, border_color=simple_colors['white'],
+                 border=0, border_color=simple_colors.white,
                  id=None,
                  ):
         size_x = size_x if size_x else Scroll.BUTTON_X_SIZE

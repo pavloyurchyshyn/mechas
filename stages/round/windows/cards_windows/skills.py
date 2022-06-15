@@ -1,6 +1,6 @@
 from obj_properties.rect_form import Rectangle
 from pygame.draw import rect as draw_rect
-from settings.UI_setings.menus_settings.round_menu.windows_sizes import RoundSizes
+from stages.round.settings.windows_sizes import RoundSizes
 from visual.main_window import MAIN_SCREEN
 from visual.skill_card import SkillCard
 
@@ -69,7 +69,7 @@ class UnsedSkillCards(Rectangle):
     def add_card(self, card):
         self.cards.append(card)
         self.calculate_cards_positions()
-        print(len(self.cards))
+        # print(len(self.cards))
 
     def remove_card(self, card):
         self.cards.remove(card)

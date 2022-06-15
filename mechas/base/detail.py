@@ -18,7 +18,8 @@ class BaseDetail:
     def __init__(self, unique_id=None, **kwargs):
         self.__unique_id = unique_id
         if self.__unique_id is None:
-            raise NotUniqueId(self)
+            pass
+            # raise NotUniqueId(self)
 
         self._damage = kwargs.get(DetailsAttrs.Damage, 0)
         self._armor = kwargs.get(DetailsAttrs.Armor, 0)

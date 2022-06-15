@@ -9,6 +9,7 @@ class Stages(metaclass=Singleton):
     def __init__(self):
         self.current_stage = 'main_menu'
         # self.set_load_round_stage()
+        # self.set_main_menu_settings_stage()
 
     def get_current_stage(self) -> str:
         return self.current_stage
@@ -17,14 +18,20 @@ class Stages(metaclass=Singleton):
         LOGGER.info(f'Stage {self.current_stage} changed to {stage}')
         self.current_stage = stage
 
+    def set_host_stage(self):
+        self.change_current_stage(StagesConstants.HOST)
+
+    def set_connect_stage(self):
+        self.change_current_stage(StagesConstants.CONNECT)
+
     def set_main_menu_stage(self):
         self.change_current_stage(StagesConstants.MAIN_MENU_STAGE)
 
     def set_main_menu_settings_stage(self):
         self.change_current_stage(StagesConstants.MAIN_MENU_SETTINGS_STAGE)
 
-    def set_load_round_stage(self):
-        self.change_current_stage(StagesConstants.LOADING_STAGE)
+    # def set_load_round_stage(self):
+    #     self.change_current_stage(StagesConstants.LOADING_STAGE)
 
     def set_round_stage(self):
         self.change_current_stage(StagesConstants.ROUND_STAGE)

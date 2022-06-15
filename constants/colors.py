@@ -28,19 +28,20 @@ SILVER = [192, 192, 192]
 
 BULLET_COLOR = [155, 125, 0]
 
-COLORS_DICT = {
-    'blue': BLUE,
-    'red': RED,
-    'green': GREEN,
-    'white': WHITE,
-    'black': BLACK,
-    'grey': GREY_DARK,
-    'grey2': GREY_DARK_2,
-    'grey3': GREY_DARK_3,
-    'yellow': YELLOW
 
-}
-simple_colors = COLORS_DICT
+class CommonColors:
+    blue = BLUE
+    red = RED
+    green = GREEN
+    white = WHITE
+    black = BLACK
+    grey = GREY_DARK
+    grey2 = GREY_DARK_2
+    grey3 = GREY_DARK_3
+    yellow = YELLOW
+
+
+simple_colors = CommonColors
 
 BLOOD_COLOR = (75, 0, 0)
 

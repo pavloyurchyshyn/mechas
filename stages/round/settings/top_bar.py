@@ -1,6 +1,6 @@
 from visual.UIController import UI_TREE
 from constants.UI_names import RoundUINames
-from settings.UI_setings.menus_settings.round_menu.windows_sizes import RoundSizes
+from stages.round.settings.windows_sizes import RoundSizes
 
 
 def activate_exit_buttons():

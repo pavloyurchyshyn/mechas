@@ -1,19 +1,14 @@
+from pygame.draw import rect as draw_rect
 from obj_properties.rect_form import Rectangle
-from obj_properties.hex_form import Hexagon
 
 from visual.sprites_functions import get_surface
 from common.global_mouse import GLOBAL_MOUSE
 
-from stages.round.windows.world_window.visual_world import VisualWorld
-
 from visual.main_window import MAIN_SCREEN
-from settings.UI_setings.menus_settings.round_menu.arena_window import *
-from settings.UI_setings.menus_settings.round_menu.windows_sizes import RoundSizes
 
-from pygame.draw import lines as draw_lines
-from pygame.draw import rect as draw_rect
-
-from math import dist
+from stages.round.windows.world_window.visual_world import VisualWorld
+from stages.round.settings.windows_sizes import RoundSizes
+from stages.round.settings.arena_window import *
 
 
 class ArenaWindow(Rectangle):
@@ -52,5 +47,5 @@ class ArenaWindow(Rectangle):
         # MAIN_SCREEN.blit(self._world_surface, self.left_top)
 
         self.visual_world.draw_markup()
-        draw_rect(MAIN_SCREEN, (255, 255, 255), self.get_rect(), 1)
+        draw_rect(MAIN_SCREEN, (255, 255, 255), self.get_rect(), 1, 5)
         # MAIN_SCREEN.blit(self.visual_world.image, self.left_top)

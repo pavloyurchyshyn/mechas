@@ -1,22 +1,16 @@
 from obj_properties.hex_form import Hexagon
 
-from settings.UI_setings.menus_settings.round_menu.arena_window import HEX_SIZE
-from settings.logic_world.tile import HEX_SIZE
-
 from visual.font_loader import DEFAULT_FONT
 from visual.main_window import MAIN_SCREEN
-from visual.sprites_functions import get_surface
 
 from pygame.draw import circle as draw_circle
-from pygame.draw import rect as draw_rect
-from pygame.draw import polygon as draw_polygon
 from pygame.draw import line as draw_line
 from pygame.draw import lines as draw_lines
 
 from world.logic_world.tile import WorldTile
 from world.logic_world.abstract_world import AbstractWorld
 
-from constants.world_types import WorldsConstants, WorldsNames
+from constants.world_types import WorldsNames
 
 
 class VisualWorld(AbstractWorld):
@@ -88,7 +82,7 @@ class VisualWorld(AbstractWorld):
             draw_circle(MAIN_SCREEN, (255, 0, 0), h._center, h._inner_circle_r, 1)
             # draw_rect(MAIN_SCREEN, (100, 100, 100), h.rect, 1)
             c = DEFAULT_FONT.render(str(h.indexes), 1, (255, 255, 255), 1)
-            MAIN_SCREEN.blit(c, h._dots[5])
+            MAIN_SCREEN.blit(c, (h._dots[5][0], h._dots[5][1] + 15))
 
         # ====================================================================
 

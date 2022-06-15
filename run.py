@@ -38,7 +38,7 @@ class GameRunner:
         from settings.global_parameters import get_slow_motion_k, update_slow_motion, get_fps
         from settings.base import VERSION
 
-        from visual.font_loader import DEFAULT_FONT
+        from visual.font_loader import custom_font
         from visual.main_window import MAIN_SCREEN, MAIN_SCREEN_RECT
 
         from common.global_clock import GLOBAL_CLOCK, ROUND_CLOCK
@@ -52,7 +52,7 @@ class GameRunner:
 
         clock = Clock()
         self.clock = clock
-        self.font = DEFAULT_FONT
+        self.font = custom_font(12)
         self.white = WHITE
         self.main_screen = MAIN_SCREEN
 

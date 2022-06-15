@@ -69,7 +69,7 @@ class UIController(metaclass=Singleton):
                 self.update_color()
                 self.move()
 
-                if GLOBAL_KEYBOARD.ENTER and self.next_enter >= 0:
+                if GLOBAL_KEYBOARD.ENTER:# and self.next_enter >= 0:
                     self.next_enter = -0.5
                     self.last_interacted = self.focused_element
                     self.focused_element.click(xy=self.focused_element.center)

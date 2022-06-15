@@ -5,7 +5,7 @@ DEFAULT_FONT_TYPE = 'Arial'
 DEFAULT_FONT_SIZE = int(15 * X_SCALE)
 
 
-def custom_font_size(size: int, font_name=None):
+def custom_font(size: int, font_name=None):
     font_name = font_name if font_name else DEFAULT_FONT_TYPE
     return font.SysFont(font_name, size)
 
