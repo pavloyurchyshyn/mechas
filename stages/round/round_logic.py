@@ -76,10 +76,10 @@ class RoundRelatedLogic:
 
     def close_round(self):
         self.round_ui = None
-        if self.server_controller:
-            self.server_controller.stop_server()
         if self.client:
             self.client.disconnect()
+        if self.server_controller:
+            self.server_controller.stop_server()
 
         self.stage_controller.set_main_menu_stage()
 

@@ -2,7 +2,7 @@ from pygame.draw import lines
 from pygame import constants
 from math import dist, cos
 
-from common.singletone import Singleton
+from common.singleton import Singleton
 from common.stages import Stages
 from common.img_loader import normalize_color
 from common.logger import Logger

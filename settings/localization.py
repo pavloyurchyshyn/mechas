@@ -3,7 +3,7 @@ from os import listdir
 from settings.global_parameters import get_language
 from settings.base import LOCALIZATIONS_FOLDER
 from common.logger import Logger
-from common.singletone import Singleton
+from common.singleton import Singleton
 
 LOGGER = Logger().LOGGER
 

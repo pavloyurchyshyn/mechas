@@ -2,7 +2,7 @@ import os
 import logging
 import sys
 
-from common.singletone import Singleton
+from common.singleton import Singleton
 from settings.base import LOG_FILE_PATTERN, LOGS_FOLDER
 
 

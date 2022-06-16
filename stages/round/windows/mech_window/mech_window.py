@@ -16,6 +16,8 @@ class MechWindow(Rectangle):
 
         self.mech_body: BaseMech = None
         self.mech_parts = []
+
+        self.body_ui_slot = None
         self.build_mech_UI()
 
     def build_mech_UI(self):
@@ -44,6 +46,7 @@ class MechWindow(Rectangle):
 
         for parts_ in parts:
             for part in parts_:
+                # TODO add part ui element
                 r = Rectangle(x=x, y=y, size_x=50)
                 self.mech_parts.append(r)
                 y += 55

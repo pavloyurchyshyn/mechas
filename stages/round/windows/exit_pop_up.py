@@ -3,7 +3,7 @@ from pygame.draw import rect as draw_rect
 from obj_properties.rect_form import Rectangle
 
 from visual.sprites_functions import get_surface
-from common.singletone import Singleton
+from common.singleton import Singleton
 from common.global_mouse import GLOBAL_MOUSE
 
 from visual.UI_base.button_UI import Button

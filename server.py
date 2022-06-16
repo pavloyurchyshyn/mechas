@@ -309,12 +309,12 @@ class Server:
         except Exception as e:
             LOGGER.error(f'Failed to stop server. {e}')
 
-        # try:
-        #     self.GAME_LOGIC.alive = 0
-        # except Exception as e:
-        #     LOGGER.error(e)
-        # else:
-        #     LOGGER.info('Game logic stopped.')
+        try:
+            self.GAME_LOGIC.alive = 0
+        except Exception as e:
+            LOGGER.error(e)
+        else:
+            LOGGER.info('Game logic stopped.')
 
     def get_connection(self, player_token):
         return self.players_connections.get(player_token)

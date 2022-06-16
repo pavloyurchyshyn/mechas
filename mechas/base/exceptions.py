@@ -21,8 +21,10 @@ class SlotDoesntExistsError(Exception):
 class NotEnoughEnergyError(Exception):
     pass
 
+
 class SlotClosed(Exception):
     pass
+
 
 class WrongDetailType(Exception):
     def __init__(self, detail, needed_types):
