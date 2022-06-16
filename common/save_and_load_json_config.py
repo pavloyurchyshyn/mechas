@@ -3,7 +3,7 @@ from os.path import exists
 from settings.base import COMMON_CONFIG_PATH
 from common.logger import Logger
 
-LOGGER = Logger().LOGGER
+LOGGER = Logger()
 
 
 def load_json_config(path: str) -> dict:

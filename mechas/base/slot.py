@@ -7,7 +7,7 @@ __all__ = ['BaseSlot', 'ArmSlot', 'LegSlot']
 
 
 class BaseSlot:
-    logger = Logger().LOGGER
+    logger = Logger()
 
     def __init__(self, parent, num: int, detail=None, detail_types: list[DetailsTypes: str, ] = None, open=True):
         self.__open = open

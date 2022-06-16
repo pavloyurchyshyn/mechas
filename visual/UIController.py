@@ -16,7 +16,7 @@ from settings.default_keys import *
 
 
 class UIController(metaclass=Singleton):
-    logger = Logger().LOGGER
+    logger = Logger()
 
     def __init__(self, ):
         self.tree = {}

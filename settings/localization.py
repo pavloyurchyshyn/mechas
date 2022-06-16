@@ -5,7 +5,7 @@ from settings.base import LOCALIZATIONS_FOLDER
 from common.logger import Logger
 from common.singleton import Singleton
 
-LOGGER = Logger().LOGGER
+LOGGER = Logger()
 
 NO_TEXT_MSG = 'no text'
 

@@ -9,7 +9,7 @@ from settings.base import LOG_FILE_PATTERN, LOGS_FOLDER
 class Logger(metaclass=Singleton):
     default_file_name = LOG_FILE_PATTERN.format('last_logs')
 
-    def __init__(self, filename=None, client_instance=1, std_handler=1):
+    def __init__(self, filename=None, client_instance=1, std_handler=1, level=0):
         filename = LOG_FILE_PATTERN.format(filename) if filename else self.default_file_name
 
         if not os.path.exists(LOGS_FOLDER):
@@ -25,8 +25,12 @@ class Logger(metaclass=Singleton):
             handlers.append(logging.StreamHandler(sys.stdout))
             
         logging.basicConfig(handlers=handlers,
-                            format='%(asctime)s|%(levelname)s %(filename)s %(lineno)d: %(message)s', datefmt='%H:%M:%S',
-                            level=0)
+                            format='%(asctime)s|%(levelname)s %(filename)s %(lineno)d: %(message)s',
+                            datefmt='%H:%M:%S',
+                            level=level)
         self.LOGGER = logging.getLogger(filename)
         # self.LOGGER.addHandler(logging.StreamHandler(sys.stdout))
         self.LOGGER.info(f'Client started' if client_instance else "Server started")
+
+    def __getattr__(self, item):
+        return getattr(self.LOGGER, item)

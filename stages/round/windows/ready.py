@@ -9,7 +9,7 @@ from settings.localization import LocalizationLoader
 from constants.network_keys import PlayerActions, PlayerUpdates, ServerResponseCategories
 from common.logger import Logger
 
-LOGGER = Logger().LOGGER
+LOGGER = Logger()
 
 localization = LocalizationLoader()
 menu_text = localization.text.UI.round.ready_body

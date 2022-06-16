@@ -4,7 +4,7 @@ import sys
 
 
 class GameRunner:
-    logger = Logger().LOGGER
+    logger = Logger()
 
     def __init__(self):
         self.clock = None

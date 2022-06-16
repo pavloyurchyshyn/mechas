@@ -2,7 +2,7 @@ from common.singleton import Singleton
 from constants.game_stages import StagesConstants
 from common.logger import Logger
 
-LOGGER = Logger().LOGGER
+LOGGER = Logger()
 
 
 class Stages(metaclass=Singleton):

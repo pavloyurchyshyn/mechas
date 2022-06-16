@@ -15,7 +15,7 @@ from constants.network_keys import ServerResponseCategories, CheckRegex
 
 from game_logic.player_object import Player
 from mechas.base.mech import BaseMech
-LOGGER = Logger().LOGGER
+LOGGER = Logger()
 
 
 class RoundRelatedLogic:

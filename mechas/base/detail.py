@@ -6,7 +6,7 @@ __all__ = ['BaseDetail', ]
 
 
 class BaseDetail:
-    logger = Logger().LOGGER
+    logger = Logger()
 
     name = None
 

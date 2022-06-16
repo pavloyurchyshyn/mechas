@@ -1,7 +1,7 @@
 from pygame import image, error, transform, Color
 from common.logger import Logger
 
-LOGGER = Logger().LOGGER
+LOGGER = Logger()
 from sys import exit
 import os
 

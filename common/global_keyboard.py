@@ -11,7 +11,7 @@ from common.save_and_load_json_config import load_json_config, save_json_config
 from settings.default_keys import DEFAULT_COMMAND_KEY, TEST_MESSAGE
 from settings.base import KEYS_CONFIG_FILE
 
-LOGGER = Logger().LOGGER
+LOGGER = Logger()
 
 
 class Keyboard:

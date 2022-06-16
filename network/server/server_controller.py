@@ -8,7 +8,7 @@ from common.save_and_load_json_config import get_from_common_config
 from _thread import start_new_thread
 from common.logger import Logger
 
-LOGGER = Logger().LOGGER
+LOGGER = Logger()
 
 
 class ServerController:

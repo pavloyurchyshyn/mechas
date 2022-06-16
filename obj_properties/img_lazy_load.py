@@ -2,7 +2,7 @@ from visual.base.visual_effects_controller import VisualEffectsController
 from settings.global_parameters import its_client_instance
 from common_things.loggers import Logger
 
-LOGGER = Logger().LOGGER
+LOGGER = Logger()
 
 CLIENT_INST = its_client_instance()
 

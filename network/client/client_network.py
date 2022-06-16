@@ -4,7 +4,7 @@ from constants.network_keys import NetworkKeys, ServerConnectAnswers, PlayerAttr
 from common.save_and_load_json_config import save_to_common_config, get_from_common_config
 from common.logger import Logger
 from settings.network import DEFAULT_PORT, NETWORK_DATA, RECV_SIZE
-LOGGER = Logger().LOGGER
+LOGGER = Logger()
 
 
 class Network:

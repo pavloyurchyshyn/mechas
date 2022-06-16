@@ -14,7 +14,7 @@ from visual.UIController import UI_TREE
 
 from common.sound_loader import GLOBAL_MUSIC_PLAYER
 
-LOGGER = Logger().LOGGER
+LOGGER = Logger()
 
 
 class GameBody:
