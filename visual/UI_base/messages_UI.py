@@ -1,6 +1,6 @@
 from visual.UI_base.text_UI import Text
 from obj_properties.rect_form import Rectangle
-from settings.UI_setings.button_settings import DEFAULT_BUTTON_Y_SIZE, DEFAULT_BUTTON_X_SIZE
+from settings.UI_setings.button_settings import ButtonsConst
 from pygame.constants import SRCALPHA
 from pygame import Surface
 from pygame.draw import lines
@@ -25,10 +25,10 @@ class Messager(Rectangle):
                  ):
         x = int(x)
         y = int(y)
-        size_x = int(size_x * X_SCALE) if size_x else DEFAULT_BUTTON_X_SIZE
-        size_y = int(size_y * Y_SCALE) if size_y else DEFAULT_BUTTON_Y_SIZE
-        message_width = int(message_width * X_SCALE) if message_width else DEFAULT_BUTTON_X_SIZE
-        message_height = int(message_height * Y_SCALE) if message_height else DEFAULT_BUTTON_Y_SIZE
+        size_x = int(size_x * X_SCALE) if size_x else ButtonsConst.DEFAULT_BUTTON_X_SIZE
+        size_y = int(size_y * Y_SCALE) if size_y else ButtonsConst.DEFAULT_BUTTON_Y_SIZE
+        message_width = int(message_width * X_SCALE) if message_width else ButtonsConst.DEFAULT_BUTTON_X_SIZE
+        message_height = int(message_height * Y_SCALE) if message_height else ButtonsConst.DEFAULT_BUTTON_Y_SIZE
 
         super().__init__(x, y, size_x, size_y)
         # --------- BACKGROUND ------------------

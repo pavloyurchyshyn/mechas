@@ -63,3 +63,9 @@ class RoundSizes:
             X_SIZE = scaled_w(0.08)
             Y_SIZE = scaled_h(0.03)
             border_parameters = {'border_radius': 5}
+
+    class Dice:
+        X = scaled_w(0.61) + 1
+        Y = scaled_h(0.76) + 1
+        X_SIZE = scaled_w(0.08) - 1
+        Y_SIZE = scaled_h(0.12)

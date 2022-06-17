@@ -9,15 +9,13 @@ from visual.UI_base.text_UI import Text
 from common.global_clock import GLOBAL_CLOCK
 from common.global_mouse import GLOBAL_MOUSE
 
-from settings.UI_setings.button_settings import DEFAULT_BUTTON_X_SIZE, \
-    DEFAULT_BUTTON_Y_SIZE, DEFAULT_CLICK_DELAY
+from settings.UI_setings.button_settings import ButtonsConst
 from constants.colors import simple_colors
 
 
 class Scroll(Rectangle):
-    BUTTON_X_SIZE = DEFAULT_BUTTON_X_SIZE
-    BUTTON_Y_SIZE = DEFAULT_BUTTON_Y_SIZE
-    CLICK_DELAY = DEFAULT_CLICK_DELAY
+    BUTTON_X_SIZE = ButtonsConst.DEFAULT_BUTTON_X_SIZE
+    BUTTON_Y_SIZE = ButtonsConst.DEFAULT_BUTTON_Y_SIZE
     CLOCK = GLOBAL_CLOCK
     MOUSE = GLOBAL_MOUSE
     STEP_BETWEEN_EL = 5  # pixels
@@ -69,7 +67,7 @@ class Scroll(Rectangle):
 
 
     def update(self):
-        ts, bs = Scroll.MOUSE.scroll
+        scroll = Scroll.MOUSE.scroll
 
     def click(self, xy):
 

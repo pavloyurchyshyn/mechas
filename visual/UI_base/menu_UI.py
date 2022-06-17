@@ -12,14 +12,7 @@ from common.global_mouse import GLOBAL_MOUSE
 
 
 class MenuUI(Rectangle):
-    CLICK_DELAY = 0.2  # -------------->||
-    NEXT_CLICK = 1
-
-    # SCREEN_W = SCREEN_W
-    # SCREEN_H = SCREEN_H
-
     GLOBAL_MOUSE = GLOBAL_MOUSE
-
     UI_CONTROLLER = UI_TREE
 
     def __init__(self,

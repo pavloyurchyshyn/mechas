@@ -31,7 +31,7 @@ class ExitPopUp(Rectangle, metaclass=Singleton):
 
     def update_surface(self):
         self.surface = get_surface(self.size_x, self.size_y, transparent=1, color=(0, 0, 0, 200))
-        draw_rect(self.surface, (255, 255, 255), ((0, 0), (self.size_x, self.size_y)), 5)
+        draw_rect(self.surface, (255, 255, 255), ((0, 0), (self.size_x, self.size_y)), 5, 5)
         x_size, y_size = EXIT_MESSAGE_SURF.get_size()
         self.surface.blit(EXIT_MESSAGE_SURF, (self.size_x/2 - x_size/2, y_size/2))
 

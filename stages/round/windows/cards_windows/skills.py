@@ -98,6 +98,6 @@ class UnsedSkillCards(Rectangle):
         pass
 
     def draw(self):
-        draw_rect(MAIN_SCREEN, (0, 255, 0), self.get_rect(), 1)
+        draw_rect(MAIN_SCREEN, (0, 255, 0), self.get_rect(), 1, 5)
         for card in self.cards:
             card.draw()

@@ -6,7 +6,11 @@ from stages.round.windows.cards_windows.cards_window import CardsWindow
 from stages.round.windows.mech_window.mech_window import MechWindow
 from stages.round.windows.chat import ChatWindow
 from stages.round.windows.ready import ReadyWindow
+from stages.round.windows.dice import DiceWindow
+
 from constants.network_keys import ServerResponseCategories
+
+from common.global_keyboard import GLOBAL_KEYBOARD
 
 
 class Round:
@@ -21,12 +25,16 @@ class Round:
         self.cards_window = CardsWindow()
         self.mech_window = MechWindow()
         self.chat_window = ChatWindow(self.player_response)
+        self.dice = DiceWindow()
 
         self.round_ui = RoundUI()
 
         self.ready = ReadyWindow(self.player_response)
 
     def update(self):
+        if GLOBAL_KEYBOARD.ESC:
+            self.exit_pop_up.switch()
+
         if self.exit_pop_up.active:
             self.exit_pop_up.update()
         else:
@@ -56,6 +64,7 @@ class Round:
         self.chat_window.draw()
 
         self.ready.draw()
+        self.dice.draw()
 
     def set_player(self, player):
         self.player = player

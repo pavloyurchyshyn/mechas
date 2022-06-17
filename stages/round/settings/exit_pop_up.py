@@ -45,6 +45,9 @@ EXIT_YES = {
     'text': local.common.yes,
     'on_click_action': yes_button,
     'id': RoundButtonsId.EXIT_YES,
+    'border_parameters': {
+        'border_radius': 5,
+    },
 }
 
 EXIT_NO = {
@@ -55,4 +58,7 @@ EXIT_NO = {
     'text': local.common.no,
     'on_click_action': no_button,
     'id': RoundButtonsId.EXIT_NO,
+    'border_parameters': {
+        'border_radius': 5,
+    },
 }
