@@ -6,7 +6,7 @@ from common.logger import Logger
 
 from constants.game_stages import StagesConstants
 
-from stages.main_menu.page import MAIN_MENU_UI as MAIN_MENU_LOGIC
+from stages.main_menu.page import MainMenu
 from stages.round.round_logic import RoundRelatedLogic
 from stages.settings.page import SettingsMenu
 
@@ -32,10 +32,15 @@ class GameBody:
             StagesConstants.EXIT_STAGE: self._close_game,
         }
 
-        self.round_logic: RoundRelatedLogic = RoundRelatedLogic()
         self.settings_in_menu = SettingsMenu()
         self._music_player = GLOBAL_MUSIC_PLAYER
         self._music_player.play_back_music()
+
+        self.round_logic: RoundRelatedLogic = RoundRelatedLogic()
+        self.main_menu = MainMenu()
+
+    def reload_ui(self):
+        self.round_logic
 
     def game_loop(self):
         self._music_player.update()
@@ -67,8 +72,8 @@ class GameBody:
         self.settings_in_menu.draw()
 
     def main_menu(self):
-        MAIN_MENU_LOGIC.update()
-        MAIN_MENU_LOGIC.draw()
+        self.main_menu.update()
+        self.main_menu.draw()
 
     def _check_alt_and_f4(self):
         # TODO if in round -> save game

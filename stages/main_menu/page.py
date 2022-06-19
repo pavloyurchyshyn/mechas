@@ -7,7 +7,7 @@ from constants.colors import HALF_EMPTY
 from visual.main_window import MAIN_SCREEN
 from stages.main_menu.settings.menus_settings.main_menu import MAIN_MENU_BUTTONS, exit_warning, \
     activate_exit_warning_message, deactivate_exit_warning_message, LANG_RELOAD_WARN
-from settings.global_parameters import pause_available, pause_step
+
 from constants.game_stages import StagesConstants
 
 
@@ -23,18 +23,15 @@ class MainMenu(MenuUI):
         self.add_elements_to_controller(*self._elements, enter_focus=self.start)
 
     def update(self):
-        # VisualEffectsController.update()
         LANG_RELOAD_WARN.update()
         for button in self._elements:
             button.update()
 
-        if GLOBAL_KEYBOARD.ESC and pause_available() and not exit_warning():
-            pause_step()
+        if GLOBAL_KEYBOARD.ESC and not exit_warning():
             activate_exit_warning_message()
             self.drop_focused()
 
-        elif GLOBAL_KEYBOARD.ESC and pause_available() and exit_warning():
-            pause_step()
+        elif GLOBAL_KEYBOARD.ESC and exit_warning():
             deactivate_exit_warning_message()
             self.drop_focused()
 
@@ -69,6 +66,3 @@ class MainMenu(MenuUI):
 
     def _update(self):
         pass
-
-
-MAIN_MENU_UI = MainMenu()

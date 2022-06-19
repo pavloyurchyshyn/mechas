@@ -3,6 +3,9 @@ from obj_properties.rect_form import Rectangle
 from visual.sprites_functions import get_surface
 from visual.main_window import MAIN_SCREEN
 from visual.font_loader import DEFAULT_FONT
+from settings.global_parameters import test_draw_status_is_on
+from constants.colors import simple_colors
+from pygame import draw
 
 
 class SkillCard(Rectangle):
@@ -28,3 +31,7 @@ class SkillCard(Rectangle):
 
     def draw(self):
         MAIN_SCREEN.blit(self.surface, self.left_top)
+        if test_draw_status_is_on():
+            color = simple_colors.yellow
+            for dotx, doty in self._dots[1:]:
+                draw.circle(MAIN_SCREEN, color, (dotx, doty), 2)

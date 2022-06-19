@@ -9,8 +9,6 @@ __all__ = [
 
 GLOBAL_SETTINGS = {
     'test_draw': 0,
-    'next_pause': -1,
-    'pause_delay': 0.25,
     'client_instance': 0,
     'slow_motion': 0,
     'slow_motion_value': 0.05,
@@ -62,10 +60,6 @@ def SET_CLIENT_INSTANCE(v=1):
 
 def its_client_instance():
     return GLOBAL_SETTINGS['client_instance']
-
-
-def pause_available() -> bool:
-    return GLOBAL_SETTINGS['next_pause'] < current_time()
 
 
 def pause_step():

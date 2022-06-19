@@ -1,6 +1,37 @@
-from common.logger import Logger
 import traceback
 import sys
+from time import time
+
+from settings.base import VERSION
+from settings.global_parameters import SET_CLIENT_INSTANCE
+
+SET_CLIENT_INSTANCE(1)
+from settings.global_parameters import get_slow_motion_k, update_slow_motion, get_fps
+
+from common.logger import Logger
+from common.global_clock import GLOBAL_CLOCK, ROUND_CLOCK
+from common.global_mouse import GLOBAL_MOUSE
+from common.global_keyboard import GLOBAL_KEYBOARD
+from common.stages import Stages
+
+from common.init_pygame import init_pygame  # do not remove its ok
+
+init_pygame()
+
+from constants.colors import WHITE
+from constants.game_stages import StagesConstants
+
+from pygame.time import Clock
+from pygame import event as EVENT
+from pygame import MOUSEBUTTONDOWN, MOUSEBUTTONUP
+
+from pygame import display, draw, Surface, constants
+from visual.font_loader import custom_font
+from visual.main_window import MAIN_SCREEN, MAIN_SCREEN_RECT
+
+from game_body import GameBody
+
+display.set_caption(f'V{VERSION}')
 
 
 class GameRunner:
@@ -18,38 +49,6 @@ class GameRunner:
         self.draw_min_fps = self.draw_min_fps()
 
     def run(self):
-        from settings.global_parameters import SET_CLIENT_INSTANCE
-
-        SET_CLIENT_INSTANCE(1)
-
-        from common.init_pygame import init_pygame  # do not remove its ok
-        init_pygame()
-
-        from pygame.time import Clock
-        from pygame import event as EVENT
-        from pygame import MOUSEBUTTONDOWN, MOUSEBUTTONUP
-        # EVENT.set_allowed([MOUSEBUTTONDOWN, MOUSEBUTTONUP])
-
-        from pygame import display, draw, Surface, constants
-
-        from constants.colors import WHITE
-        from constants.game_stages import StagesConstants
-
-        from settings.global_parameters import get_slow_motion_k, update_slow_motion, get_fps
-        from settings.base import VERSION
-
-        from visual.font_loader import custom_font
-        from visual.main_window import MAIN_SCREEN, MAIN_SCREEN_RECT
-
-        from common.global_clock import GLOBAL_CLOCK, ROUND_CLOCK
-        from common.global_mouse import GLOBAL_MOUSE
-        from common.global_keyboard import GLOBAL_KEYBOARD
-        from common.stages import Stages
-
-        from game_body import GameBody
-        from time import time
-        display.set_caption(f'V{VERSION}')
-
         clock = Clock()
         self.clock = clock
         self.font = custom_font(12)

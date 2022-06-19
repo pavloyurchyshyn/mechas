@@ -64,6 +64,14 @@ class RoundSizes:
             Y_SIZE = scaled_h(0.03)
             border_parameters = {'border_radius': 5}
 
+        class TimerText:
+            X = scaled_w(0.635)
+            Y = scaled_h(0.88)
+
+        class ReadyCount:
+            X = scaled_w(0.635)
+            Y = scaled_h(0.92)
+
     class Dice:
         X = scaled_w(0.61) + 1
         Y = scaled_h(0.76) + 1

@@ -117,6 +117,11 @@ class Text:
         if self.auto_draw:
             self.draw()
 
+    def change_color(self, color):
+        if self._color != color:
+            self._color = color
+            self.render()
+
     def add_text(self, text):
         self._text = ' '.join((self._text, text))
         self.render()
