@@ -6,6 +6,8 @@ from settings.base import VERSION
 from settings.global_parameters import SET_CLIENT_INSTANCE
 
 SET_CLIENT_INSTANCE(1)
+from common.init_pygame import init_pygame  # do not remove its ok
+init_pygame()
 from settings.global_parameters import get_slow_motion_k, update_slow_motion, get_fps
 
 from common.logger import Logger
@@ -14,9 +16,7 @@ from common.global_mouse import GLOBAL_MOUSE
 from common.global_keyboard import GLOBAL_KEYBOARD
 from common.stages import Stages
 
-from common.init_pygame import init_pygame  # do not remove its ok
 
-init_pygame()
 
 from constants.colors import WHITE
 from constants.game_stages import StagesConstants

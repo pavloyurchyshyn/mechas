@@ -2,7 +2,6 @@ common:
   'yes': 'Так'
   'no': 'Ні'
 
-
 UI:
   main_menu:
     start_round: Старт

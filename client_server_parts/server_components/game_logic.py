@@ -13,6 +13,8 @@ class GameLogic:
     def __init__(self, server):
         self.server = server
         self.players_connections = server.players_connections
+        self.players_data = server.players_data
+
         self.json_to_str = server.json_to_str
         self.str_to_json = server.str_to_json
         self.alive = True
@@ -31,9 +33,9 @@ class GameLogic:
                 t = time()
                 self.update()
 
-                # if time() > finish:
-                #     self.server.alive = False
-                #     LOGGER.info(f'Timeout')
+                if time() > finish:
+                    self.server.alive = False
+                    LOGGER.info(f'Timeout')
 
                 sl = update_delay - (time() - t)
                 # LOGGER.info(f'Time spent for calculation {time() - t}, sleep {sl}')
@@ -96,7 +98,7 @@ class GameLogic:
         if PlayerActions.MESSAGE in data:
             message = data.pop(PlayerActions.MESSAGE)
             if message:
-                name = self.server.players_names.get(token)
+                name = self.players_data.get(token).nickname
                 message = f'{name}: {message}'
                 messages = self.data_to_send.get(ServerResponseCategories.MessagesToAll, [])
                 messages.append(message)

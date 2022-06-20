@@ -1,5 +1,7 @@
 import socket
 import json
+import traceback
+
 from constants.network_keys import NetworkKeys, ServerConnectAnswers, PlayerAttrs
 from common.save_and_load_json_config import save_to_common_config, get_from_common_config
 from common.logger import Logger
@@ -59,6 +61,7 @@ class Network:
 
         except Exception as e:
             LOGGER.error(e)
+            LOGGER.error(traceback.format_exc())
             self.disconnect()
             return {ServerConnectAnswers.CONNECTION_ANSWER: ServerConnectAnswers.FailedToConnect,
                     NetworkKeys.ServerMessages: f'{e}'}

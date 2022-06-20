@@ -20,8 +20,8 @@ class UnsedSkillCards(Rectangle):
 
         self.cards = []
 
-        for i in range(1):
-            self.add_card(SkillCard(0, self.card_y_pos, self.card_x_size, self.card_y_size, text=len(self.cards) + 1))
+        # for i in range(1):
+        #     self.add_card(SkillCard(0, self.card_y_pos, self.card_x_size, self.card_y_size, text=len(self.cards) + 1))
 
     def add_card(self, card):
         self.cards.append(card)

@@ -14,7 +14,6 @@ UI:
     lang_disapp_msg: |
       You need to restart the game
       to accept changes
-
   # ----------------------------------
   round:
     exit_pop_up:

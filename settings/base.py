@@ -13,7 +13,7 @@ if not os.path.exists(SETTINGS_PATH):
     os.mkdir(SETTINGS_PATH)
 
 SOUNDS_FOLDER = os.path.join(ROOT_OF_GAME, 'sounds')
-SERVER_FOLDER = os.path.join(ROOT_OF_GAME, 'network')
+SERVER_FOLDER = os.path.join(ROOT_OF_GAME, 'client_server_parts')
 
 COMMON_CONFIG_PATH = os.path.join(SETTINGS_PATH, 'common_config.json')
 KEYS_CONFIG_FILE = os.path.join(SETTINGS_PATH, 'keyboard_config.json')

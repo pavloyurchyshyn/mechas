@@ -7,14 +7,15 @@ from stages.round.page import Round
 from common.logger import Logger
 from common.stages import Stages
 from common.global_clock import ROUND_CLOCK
-from network.client.client_network import Network
-from network.server.server_controller import ServerController
+from client_server_parts.client.client_network import Network
+from client_server_parts.server_controller import ServerController
 
 from constants.network_keys import NetworkKeys
 from constants.network_keys import ServerResponseCategories, CheckRegex
 
 from game_logic.player_object import Player
 from mechas.base.mech import BaseMech
+
 LOGGER = Logger()
 
 
@@ -48,7 +49,6 @@ class RoundRelatedLogic:
                 LOGGER.info('Client connected')
                 start_new_thread(self.__round_recv_thread, ())
                 self.stage_controller.set_round_stage()
-
             else:
                 self.client = None
                 raise ConnectionError(response.get(NetworkKeys.ServerMessages, ''))
