@@ -1,8 +1,8 @@
-from settings.screen import SCREEN_W, SCREEN_H, X_SCALE
+from settings.screen import SCREEN_W, SCREEN_H
 from common.stages import Stages
 from visual.UIController import UI_TREE
-from constants.UI_names import RoundUINames, RoundButtonsId
-from visual.font_loader import DEFAULT_FONT, custom_font
+from stages.round_stage.settings.UI_names import RoundUINames, RoundButtonsId
+from visual.font_loader import custom_font
 from settings.localization import LocalizationLoader
 
 

@@ -39,7 +39,7 @@ class VisualWorld(AbstractWorld):
             x, y = tile.indexes
             yp = self.y + dy + y * height + (height // 2 * self.get_step(x))
             xp = self.x + dx + x * distance
-            tile.build(xp, yp, size)
+            tile.render(xp, yp, size)
 
     def build(self):
         self.tiles.clear()

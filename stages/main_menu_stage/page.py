@@ -5,7 +5,7 @@ from common.global_keyboard import GLOBAL_KEYBOARD
 
 from constants.colors import HALF_EMPTY
 from visual.main_window import MAIN_SCREEN
-from stages.main_menu.settings.menus_settings.main_menu import MAIN_MENU_BUTTONS, exit_warning, \
+from stages.main_menu_stage.settings.main_menu import MAIN_MENU_BUTTONS, exit_warning, \
     activate_exit_warning_message, deactivate_exit_warning_message, LANG_RELOAD_WARN
 
 from constants.game_stages import StagesConstants

@@ -15,3 +15,6 @@ class ElementsIDsConst:
         SOUND_MINUS = 'sound_minus'
         MUTE_MUSIC = 'music_mute'
         MUSIC_VOL_TEXT = 'volume_text'
+        EXIT = 'exit'
+        NICKNAME_INPUT = 'nickname_input'
+        NICKNAME_INP_TEXT = 'nickname_inp_text'

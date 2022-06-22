@@ -2,24 +2,28 @@ from common.stages import Stages
 from common.global_clock import ROUND_CLOCK
 
 from settings.screen import HALF_SCREEN_W, GAME_SCALE
-from settings.UI_setings.button_settings import ButtonsConst
+from settings.UI_settings.button_settings import ButtonsConst
 from settings.localization import LocalizationLoader
 from settings.global_parameters import get_language, set_language
-from stages.main_menu.settings.menus_settings.ids_const import ElementsIDsConst
+from stages.ids_const import ElementsIDsConst
 from constants.game_stages import StagesConstants
 
 from visual.UIController import UI_TREE
 from visual.main_window import SCREEN_W
 from visual.UI_base.disappearing_message import DisappMessage
+from visual.UI_base.localization_mixin import LocalizationMixin
 
 STAGES = Stages()
 EXIT_WARNING = {'ex_warn': 0}
 
 localization = LocalizationLoader()
-menu_text = localization.text.UI.main_menu
+
+
+def get_menu_loc_path(*path):
+    return LocalizationMixin.build_path('UI', 'main_menu', *path)
+
 
 LANG_BUTTON_ID_PATTERN = 'lang_{}'
-
 
 on_exit_changes_ids = [ElementsIDsConst.Menu.MENU_START_ID, ElementsIDsConst.Menu.CONNECT_MULTIPLAYER_ID,
                        ElementsIDsConst.Menu.HOST_MULTIPLAYER_ID, ElementsIDsConst.Menu.CHOSEN_LANG_ID,
@@ -39,6 +43,9 @@ def lang_chosen(lang):
     c.text = lang
     set_language(lang)
     deactivate_lang_buttons()
+    localization.change_language(lang)
+    localization.load_current_lang()
+    UI_TREE.reload_ui()
 
 
 def deactivate_lang_buttons():
@@ -103,16 +110,16 @@ MAIN_MENU_BUTTONS = {
             'x': HALF_SCREEN_W - ButtonsConst.DEFAULT_BUTTON_X_SIZE // 2,
             'p_y_pos': 0.450,
             'active': 1,
-            'text': menu_text.start_round,
+            'text': get_menu_loc_path('start_round'),
             'on_click_action': start_game,
             'id': ElementsIDsConst.Menu.MENU_START_ID,
         },
     },
-    'host_game': {
+    'host_game_stage': {
         'kwargs': {
             'x': HALF_SCREEN_W - ButtonsConst.DEFAULT_BUTTON_X_SIZE // 2,
             'p_y_pos': 0.510,
-            'text': menu_text.host_game,
+            'text': get_menu_loc_path('host_game'),
             # 'active': False,
             # 'on_click_action': STAGES.set_multiplayer_menu_stage,
             'id': ElementsIDsConst.Menu.HOST_MULTIPLAYER_ID,
@@ -122,7 +129,7 @@ MAIN_MENU_BUTTONS = {
         'kwargs': {
             'x': HALF_SCREEN_W - ButtonsConst.DEFAULT_BUTTON_X_SIZE // 2,
             'p_y_pos': 0.570,
-            'text': menu_text.multiplayer,
+            'text': get_menu_loc_path('multiplayer'),
             # 'active': False,
             # 'on_click_action': STAGES.set_multiplayer_menu_stage,
             'id': ElementsIDsConst.Menu.CONNECT_MULTIPLAYER_ID,
@@ -135,7 +142,7 @@ MAIN_MENU_BUTTONS = {
         'kwargs': {
             'x': HALF_SCREEN_W - ButtonsConst.DEFAULT_BUTTON_X_SIZE // 2,
             'p_y_pos': 0.630,
-            'text': menu_text.settings,
+            'text': get_menu_loc_path('settings'),
             'on_click_action': STAGES.set_main_menu_settings_stage,
             'id': ElementsIDsConst.Menu.MENU_SETTINGS_ID,
 
@@ -146,7 +153,7 @@ MAIN_MENU_BUTTONS = {
         'kwargs': {
             'x': HALF_SCREEN_W - ButtonsConst.DEFAULT_BUTTON_X_SIZE // 2,
             'p_y_pos': 0.690,
-            'text': menu_text.exit,
+            'text': get_menu_loc_path('exit'),
             'id': ElementsIDsConst.Menu.MENU_EXIT_ID,
             'on_click_action': activate_exit_warning_message,
             'border_non_active_color': (255, 255, 255),
@@ -159,7 +166,7 @@ MAIN_MENU_BUTTONS = {
         'kwargs': {
             'x': HALF_SCREEN_W - ButtonsConst.DEFAULT_BUTTON_X_SIZE,
             'p_y_pos': 0.5,
-            'text': menu_text.exit_yes,
+            'text': get_menu_loc_path('exit_yes'),
             'active': 0,
             'visible': False,
             'on_click_action': STAGES.set_exit_stage,
@@ -176,7 +183,7 @@ MAIN_MENU_BUTTONS = {
         'kwargs': {
             'x': HALF_SCREEN_W + ButtonsConst.DEFAULT_BUTTON_X_SIZE // 2,
             'p_y_pos': 0.5,
-            'text': menu_text.exit_no,
+            'text': get_menu_loc_path('exit_no'),
             'active': 0,
             'visible': False,
             'non_visible_after_click': 1,
@@ -224,7 +231,8 @@ for lang in localization.available_langs:
         }
     }
 
-LANG_RELOAD_WARN = DisappMessage(text=menu_text.lang_disapp_msg, id=ElementsIDsConst.Menu.LANG_WARN_MESG,
+LANG_RELOAD_WARN = DisappMessage(text=get_menu_loc_path('lang_disapp_msg'),
+                                 id=ElementsIDsConst.Menu.LANG_WARN_MESG,
                                  exists_time=10,
                                  x=int(lang_x - 2 - 200 * GAME_SCALE), y=2,
                                  size_x=int(200 * GAME_SCALE), size_y=int(50 * GAME_SCALE))

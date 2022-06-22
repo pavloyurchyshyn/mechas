@@ -6,9 +6,9 @@ from common.logger import Logger
 
 from constants.game_stages import StagesConstants
 
-from stages.main_menu.page import MainMenu
-from stages.round.round_logic import RoundRelatedLogic
-from stages.settings.page import SettingsMenu
+from stages.main_menu_stage.page import MainMenu
+from stages.round_stage.round_logic import RoundRelatedLogic
+from stages.settings_stage.page import SettingsMenu
 
 from visual.UIController import UI_TREE
 
@@ -76,7 +76,7 @@ class GameBody:
         self.main_menu.draw()
 
     def _check_alt_and_f4(self):
-        # TODO if in round -> save game
+        # TODO if in round_stage -> save game
         pressed = self._keyboard.pressed
         if pressed[K_F4] and pressed[K_LALT]:
             self._close_game()

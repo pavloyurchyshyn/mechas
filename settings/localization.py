@@ -9,7 +9,8 @@ LOGGER = Logger()
 
 NO_TEXT_MSG = 'no text'
 
-__all__ = ['LocalizationLoader', 'LOCAL']
+TEXT_PATH_DELIMITER = '/./'
+__all__ = ['LocalizationLoader', 'LOCAL', 'TEXT_PATH_DELIMITER']
 
 
 class TextValue:
@@ -58,6 +59,9 @@ class LocalizationLoader(metaclass=Singleton):
         self.load_lang('eng')
         self.load_current_lang()
 
+    def change_language(self, lang):
+        self._current_language = lang
+
     @property
     def text(self):
         return getattr(self, self._current_language)
@@ -69,6 +73,14 @@ class LocalizationLoader(metaclass=Singleton):
 
     def load_current_lang(self):
         self.load_lang(self._current_language)
+
+    def get_text(self, path):
+        # LOGGER.info(f'Searching localization for {path}')
+        text = self.text
+        for attr in path.split(TEXT_PATH_DELIMITER):
+            text = getattr(text, attr)
+
+        return text
 
     def __getattr__(self, name):
         return NO_TEXT_MSG

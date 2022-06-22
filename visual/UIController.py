@@ -69,7 +69,7 @@ class UIController(metaclass=Singleton):
                 self.update_color()
                 self.move()
 
-                if GLOBAL_KEYBOARD.ENTER:# and self.next_enter >= 0:
+                if GLOBAL_KEYBOARD.ENTER:  # and self.next_enter >= 0:
                     self.next_enter = -0.5
                     self.last_interacted = self.focused_element
                     self.focused_element.click(xy=self.focused_element.center)
@@ -91,18 +91,15 @@ class UIController(metaclass=Singleton):
 
             foc_el = self.focused_element
             pressed_keys = GLOBAL_KEYBOARD.pressed
-            commands = GLOBAL_KEYBOARD.commands
-
-            focused_element_not_inp = (not self.focused_element) or self.focused_element.UI_TYPE != 'input'
             x = y = 0
-            if pressed_keys[constants.K_UP] or (UP_C in commands and focused_element_not_inp):
+            if pressed_keys[constants.K_UP]:
                 y -= 1
-            elif pressed_keys[constants.K_DOWN] or (DOWN_C in commands and focused_element_not_inp):
+            elif pressed_keys[constants.K_DOWN]:
                 y += 1
 
-            if pressed_keys[constants.K_LEFT] or (LEFT_C in commands and focused_element_not_inp):
+            if pressed_keys[constants.K_LEFT]:
                 x -= 1
-            elif pressed_keys[constants.K_RIGHT] or (RIGHT_C in commands and focused_element_not_inp):
+            elif pressed_keys[constants.K_RIGHT]:
                 x += 1
 
             if x:
@@ -197,7 +194,7 @@ class UIController(metaclass=Singleton):
             y1 = y0 + self.focused_element.height + 3
             x0 -= 4
             y0 -= 4
-            lines(MAIN_SCREEN, normalize_color(self.color), 1, ((x0, y0), (x1, y0), (x1, y1), (x0, y1)), 3)
+            lines(MAIN_SCREEN, normalize_color(self.color), 1, ((x0, y0), (x1, y0), (x1, y1), (x0, y1)), 2)
 
     def add_button_to_menu(self, menu, button):
         if button.id:
@@ -216,6 +213,19 @@ class UIController(metaclass=Singleton):
 
         if enter_focus:
             self.enter_default_focus[menu.name] = enter_focus
+
+    def delete_menu(self, menu_name):
+        if menu_name in self.tree:
+            del self.tree[menu_name]
+            self.logger.info(f'Removed {menu_name}')
+
+    def reload_ui(self):
+        self.logger.info(f'Reloading UI')
+        for menu in self.tree:
+            for el in self.tree[menu].values():
+                el.render()
+
+        self.logger.info(f'UI reloaded')
 
     def get_menu(self, name):
         return self.name_to_menu_dict.get(name)

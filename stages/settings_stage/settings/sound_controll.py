@@ -5,7 +5,7 @@ from common.sound_loader import GLOBAL_MUSIC_PLAYER
 from settings.screen import X_SCALE, Y_SCALE
 from constants.colors import WHITE, GREY_DARK_2
 from constants.game_stages import StagesConstants
-from stages.main_menu.settings.menus_settings.ids_const import ElementsIDsConst
+from stages.ids_const import ElementsIDsConst
 
 __all__ = ['MUSIC_BUTTONS_DATA', 'MUSIC_TEXTS_DATA', 'VOLUME_PROGRESS_BAR']
 MUSIC_BUTTONS_DATA = {}
@@ -94,6 +94,6 @@ MUSIC_BUTTONS_DATA[ElementsIDsConst.MenuSettings.SOUND_ADD] = {
 }
 
 # =============================================
-MUSIC_TEXTS_DATA[ElementsIDsConst.MenuSettings.MUSIC_VOL_TEXT] = {'p_x_pos': 0.01, 'p_y_pos': 0.05,
-                                                                  'text': f'Music Volume:',
-                                                                  'screen': MAIN_SCREEN}
+MUSIC_TEXTS_DATA[ElementsIDsConst.MenuSettings.MUSIC_VOL_TEXT] = {'kwargs': {'p_x_pos': 0.01, 'p_y_pos': 0.05,
+                                                                             'text': f'Music Volume:',
+                                                                             'screen': MAIN_SCREEN}}

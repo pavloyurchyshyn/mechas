@@ -1,7 +1,7 @@
 from obj_properties.rect_form import Rectangle
 from pygame.draw import rect as draw_rect
 from pygame import draw
-from stages.round.settings.windows_sizes import RoundSizes
+from stages.round_stage.settings.windows_sizes import RoundSizes
 from visual.main_window import MAIN_SCREEN
 from visual.skill_card import SkillCard
 from settings.global_parameters import test_draw_status_is_on

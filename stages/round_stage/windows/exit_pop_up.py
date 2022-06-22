@@ -8,10 +8,8 @@ from common.global_mouse import GLOBAL_MOUSE
 
 from visual.UI_base.button_UI import Button
 from visual.main_window import MAIN_SCREEN
-from visual.UIController import UI_TREE
 
-from constants.UI_names import RoundUINames
-from stages.round.settings.exit_pop_up import *
+from stages.round_stage.settings.exit_pop_up import *
 
 
 class ExitPopUp(Rectangle, metaclass=Singleton):

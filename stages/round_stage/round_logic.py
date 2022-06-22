@@ -2,7 +2,7 @@ import re
 import traceback
 from _thread import start_new_thread
 
-from stages.round.page import Round
+from stages.round_stage.page import Round
 
 from common.logger import Logger
 from common.stages import Stages
@@ -15,7 +15,7 @@ from constants.network_keys import ServerResponseCategories, CheckRegex
 
 from game_logic.player_object import Player
 from mechas.base.mech import BaseMech
-
+from visual.UIController import UI_TREE
 LOGGER = Logger()
 
 
@@ -75,6 +75,7 @@ class RoundRelatedLogic:
             self.stage_controller.set_close_round_stage()
 
     def close_round(self):
+        UI_TREE.delete_menu(self.round_ui.name)
         self.round_ui = None
         if self.client:
             self.client.disconnect()

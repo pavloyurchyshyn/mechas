@@ -6,7 +6,7 @@ from pygame import Surface
 from pygame.draw import lines
 from visual.main_window import MAIN_SCREEN
 from common.global_clock import GLOBAL_CLOCK
-# from settings.screen_size import X_SCALE, Y_SCALE
+# from settings_stage.screen_size import X_SCALE, Y_SCALE
 X_SCALE, Y_SCALE = 1, 1
 
 

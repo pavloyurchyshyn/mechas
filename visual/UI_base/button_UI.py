@@ -7,15 +7,16 @@ from pygame import draw
 
 from visual.UI_base.text_UI import Text
 from visual.UIController import UI_TREE
-from common.global_clock import GLOBAL_CLOCK
 from visual.font_loader import DEFAULT_FONT_SIZE
-
-from settings.UI_setings.button_settings import ButtonsConst
-from constants.colors import simple_colors
-from settings.global_parameters import test_draw_status_is_on
 from visual.main_window import MAIN_SCREEN, SCREEN_W, SCREEN_H
 
+from common.global_clock import GLOBAL_CLOCK
+
+from constants.colors import simple_colors
+
 from settings.screen import Y_SCALE, X_SCALE
+from settings.global_parameters import test_draw_status_is_on
+from settings.UI_settings.button_settings import ButtonsConst
 
 
 class Button(Rectangle):
@@ -146,7 +147,7 @@ class Button(Rectangle):
         self._button_surface = None  # surface of button for drawing
         self._r_active_button = None
         self._r_non_active_button = None
-        self.build()
+        self.render()
 
         if active_pic is None:
             self._current_button_pic = self._r_active_button if active else self._r_non_active_button
@@ -168,7 +169,7 @@ class Button(Rectangle):
 
         self._click_anim_dur = click_anim_dur if click_anim_dur else self.CLICK_ANIMATION_DUR
 
-    def build(self, scale_k=1):
+    def render(self, scale_k=1):
         self._button_surface = self.get_surface()  # surface of button for drawing
 
         self._border = self._button_surface.get_rect()
@@ -191,7 +192,7 @@ class Button(Rectangle):
                                      size=self._text_size)
             self._active_text.draw()  # draw on surface
 
-            self._non_active_text = Text(text=self._non_active_text_text,
+            self._non_active_text = Text(text=self._text_text,
                                          screen=non_active_button_s,
                                          x=self._text_x, y=self._text_y,
                                          color=self._inactive_text_color,
@@ -215,11 +216,11 @@ class Button(Rectangle):
     def make_original_size(self):
         self._make_original_size()
         self._text_size = self._original_text_size
-        self.build()
+        self.render()
 
     def scale(self, k):
         self._scale(k)
-        self.build(k)
+        self.render(k)
         if self._picture:
             self.__scale_picture()
 
@@ -325,15 +326,15 @@ class Button(Rectangle):
 
     def set_active_text(self, text):
         self._text_text = text
-        self.build()
+        self.render()
 
     def set_non_active_text(self, text):
         self._non_active_text_text = text
-        self.build()
+        self.render()
 
     def set_text_size(self, size):
         self._text_size = size
-        self.build()
+        self.render()
 
     def make_visible(self):
         self._visible = 1
@@ -356,7 +357,7 @@ class Button(Rectangle):
     @text.setter
     def text(self, message):
         self._text_text = message
-        self.build()
+        self.render()
         # self.define_current_pic()
 
     @property

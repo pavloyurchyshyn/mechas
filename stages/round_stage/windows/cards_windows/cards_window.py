@@ -1,5 +1,5 @@
-from stages.round.windows.cards_windows.skills import UnsedSkillCards
-from stages.round.windows.cards_windows.used_skills import UsedSkillsCards
+from stages.round_stage.windows.cards_windows.skills import UnsedSkillCards
+from stages.round_stage.windows.cards_windows.used_skills import UsedSkillsCards
 
 
 class CardsWindow:

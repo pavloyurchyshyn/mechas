@@ -8,7 +8,7 @@ from pygame import KEYDOWN, KEYUP, TEXTINPUT
 from common.logger import Logger
 from common.save_and_load_json_config import load_json_config, save_json_config
 
-from settings.default_keys import DEFAULT_COMMAND_KEY, TEST_MESSAGE
+from settings.default_keys import DEFAULT_COMMAND_KEY
 from settings.base import KEYS_CONFIG_FILE
 
 LOGGER = Logger()
@@ -157,10 +157,6 @@ class Keyboard:
     @property
     def BACKSPACE(self):
         return self._pressed[constants.K_BACKSPACE]
-
-    @property
-    def test_message(self):
-        return TEST_MESSAGE in self._only_commands
 
     def get_key_command_values(self):
         return self._keys_to_command.items()

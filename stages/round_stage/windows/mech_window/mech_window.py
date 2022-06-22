@@ -1,8 +1,8 @@
 from obj_properties.rect_form import Rectangle
 from visual.main_window import MAIN_SCREEN
 from pygame.draw import rect as draw_rect
-# from settings.UI_setings.menus_settings.settings.mech_window import *
-from stages.round.settings.windows_sizes import RoundSizes
+# from settings_stage.UI_settings.menus_settings.settings_stage.mech_window import *
+from stages.round_stage.settings.windows_sizes import RoundSizes
 from mechas.base.mech import BaseMech
 from mechas.base.body import BaseBody
 

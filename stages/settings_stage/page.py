@@ -1,5 +1,5 @@
 from visual.UI_base.menu_UI import MenuUI
-from stages.settings.settings import *
+from stages.settings_stage.settings import *
 from constants.game_stages import StagesConstants
 from common.global_mouse import GLOBAL_MOUSE
 from common.stages import Stages
@@ -10,11 +10,12 @@ from visual.main_window import MAIN_SCREEN
 class SettingsMenu(MenuUI):
     def __init__(self):
         super(SettingsMenu, self).__init__(buttons=MAIN_MENU_SETTINGS_BUTTONS_DATA,
-                                           texts=MAIN_MENU_SETTINGS_BUTTONS_DATA,
-                                           texts_objects=MAIN_MENU_SETTINGS_TEXTS_DATA,
+                                           texts=MAIN_MENU_SETTINGS_TEXTS_DATA,
                                            name=StagesConstants.MAIN_MENU_SETTINGS_STAGE,
                                            surface=MAIN_SCREEN)
+        self.add_elements_to_controller(NICKNAME_input)
         self.create_buttons()
+        self.create_text()
         # self._music_volume_value = MUSIC_VOLUME_VALUE
         self.add_elements_to_controller(*self._elements)  # , *INPUT_ELEMENTS, MUTE_MUSIC_BUTTON)
 
@@ -38,6 +39,8 @@ class SettingsMenu(MenuUI):
 
             # MUTE_MUSIC_BUTTON.click(xy=xy)
 
+        NICKNAME_input.update()
+
     def draw(self, dx=0, dy=0):
         self._screen.fill((0, 0, 0, 255))
 
@@ -47,6 +50,7 @@ class SettingsMenu(MenuUI):
         # self._music_volume_value.draw(dx, dy)
 
         VOLUME_PROGRESS_BAR.draw(dx, dy)
+        NICKNAME_input.draw()
         # MUTE_MUSIC_BUTTON.draw(dx, dy)
 
         # for inp_el in INPUT_ELEMENTS:

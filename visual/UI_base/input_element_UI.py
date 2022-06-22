@@ -12,7 +12,7 @@ from constants.colors import YELLOW, WHITE, GREY
 from settings.global_parameters import test_draw_status_is_on
 
 from settings.screen import X_SCALE, Y_SCALE
-from settings.UI_setings.button_settings import ButtonsConst
+from settings.UI_settings.button_settings import ButtonsConst
 
 from pygame import draw, Surface
 from pygame.constants import SRCALPHA
@@ -131,7 +131,6 @@ class InputElement(Rectangle):
                     self.build()
 
         if self._focused:
-
             if self._key.ENTER or self._key.ESC:
                 self._focused = 0
                 self.set_default_text()
@@ -223,6 +222,10 @@ class InputElement(Rectangle):
 
     def unfocus(self):
         self._focused = 0
+
+    @property
+    def is_focused(self):
+        return self._focused
 
     @property
     def is_active(self):

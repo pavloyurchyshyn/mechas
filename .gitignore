@@ -2,3 +2,4 @@ logs
 .idea
 keyboard_config.json
 common_config.json
+test.py

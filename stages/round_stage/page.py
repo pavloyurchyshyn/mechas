@@ -1,12 +1,12 @@
-from stages.round.UI import RoundUI
-from stages.round.windows.world_window.window import ArenaWindow
-from stages.round.windows.top_bar import TopBar
-from stages.round.windows.exit_pop_up import ExitPopUp
-from stages.round.windows.cards_windows.cards_window import CardsWindow
-from stages.round.windows.mech_window.mech_window import MechWindow
-from stages.round.windows.chat import ChatWindow
-from stages.round.windows.ready import ReadyWindow
-from stages.round.windows.dice import DiceWindow
+from stages.round_stage.UI import RoundUI
+from stages.round_stage.windows.world_window.window import ArenaWindow
+from stages.round_stage.windows.top_bar import TopBar
+from stages.round_stage.windows.exit_pop_up import ExitPopUp
+from stages.round_stage.windows.cards_windows.cards_window import CardsWindow
+from stages.round_stage.windows.mech_window.mech_window import MechWindow
+from stages.round_stage.windows.chat import ChatWindow
+from stages.round_stage.windows.ready import ReadyWindow
+from stages.round_stage.windows.dice import DiceWindow
 
 from constants.network_keys import ServerResponseCategories
 

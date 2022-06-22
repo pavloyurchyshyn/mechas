@@ -2,7 +2,7 @@ from obj_properties.rect_form import Rectangle
 
 from pygame.draw import rect as draw_rect
 
-from stages.round.settings.windows_sizes import RoundSizes
+from stages.round_stage.settings.windows_sizes import RoundSizes
 
 from visual.UI_base.input_element_UI import InputElement
 from visual.UI_base.chat import Chat
@@ -11,8 +11,10 @@ from visual.main_window import MAIN_SCREEN
 from visual.UIController import UI_TREE
 
 from common.global_mouse import GLOBAL_MOUSE
+from common.global_keyboard import GLOBAL_KEYBOARD
 
 from constants.network_keys import PlayerActions
+from settings.default_keys import Commands
 
 
 class ChatWindow(Rectangle):
@@ -37,20 +39,17 @@ class ChatWindow(Rectangle):
         self.clear_button = Button(x=self.x0 + self.size_x * 0.945, y=self.y1 - input_y_size,
                                    text='X', border_parameters={'border_radius': 5},
                                    size_x=self.size_x * 0.05, size_y=input_y_size,
-                                   on_click_action=lambda *args, **kwargs: self.input.clear(),
+                                   on_click_action=self.input.clear,
                                    )
         UI_TREE.add_menu(self, self.messages)
 
     def send_message(self, inp):
-        # print(inp.__dict__)
         self.player_response[PlayerActions.MESSAGE] = self.input.last_message
-
-        # message = self.input.last_message
-        # if message:
-        #     self.player_response[PlayerActions.MESSAGE] = message
 
     def update(self):
         self.input.update()
+        if Commands.Chat in GLOBAL_KEYBOARD.commands and not self.input.is_focused:
+            self.input.focus()
 
         if self.collide_point(GLOBAL_MOUSE.pos):
             self.messages.update()

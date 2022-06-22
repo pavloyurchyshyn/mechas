@@ -1,12 +1,4 @@
-from settings.screen import SCREEN_H, SCREEN_W, HALF_SCREEN_W, HALF_SCREEN_H, GAME_SCALE, X_SCALE, Y_SCALE
-
-
-def scaled_w(percent):
-    return SCREEN_W * percent
-
-
-def scaled_h(percent):
-    return SCREEN_H * percent
+from settings.screen import SCREEN_H, SCREEN_W, scaled_w, scaled_h, X_SCALE
 
 
 class RoundSizes:

@@ -5,9 +5,10 @@ from pygame.transform import rotate, smoothscale
 from constants.colors import WHITE
 from visual.font_loader import custom_font
 from visual.main_window import MAIN_SCREEN, SCREEN_W, SCREEN_H
+from visual.UI_base.localization_mixin import LocalizationMixin
 
 
-class Text:
+class Text(LocalizationMixin):
     CLOCK = GLOBAL_CLOCK
     MIN_Y = 1
 
@@ -76,8 +77,9 @@ class Text:
             else:
                 screen_x_size = self._screen.get_width()
                 text_x_size = self._r_text_img.get_width()
-                if '\n' in self._text:
-                    l_string = max(self._text.split('\n'), key=len)
+                text = self.get_text_with_localization(self._text)
+                if '\n' in text:
+                    l_string = max(text.split('\n'), key=len)
                     l_str_surf = self._r_text_font.render(l_string, self._antialias, self._color)
                     text_x_size = l_str_surf.get_width()
 
@@ -93,8 +95,9 @@ class Text:
         if y is None:
             y_s_s = self._screen.get_height()  # s_s -> screen size
             y_t_s = self._r_text_img.get_height()  # t_s -> text size
+            text = self.get_text_with_localization(self._text)
 
-            text_size = y_t_s if '\n' not in self._text else y_t_s * len(self._text.split('\n'))
+            text_size = y_t_s if '\n' not in text else y_t_s * len(text.split('\n'))
 
             if self.place_bot:
                 self._y = y_s_s - text_size
@@ -139,10 +142,12 @@ class Text:
             self.draw()
 
     def draw(self, dx=0, dy=0):
-        if '\n' in self._text:
-            # TODO refactor this logic
+        text = self.get_text_with_localization(self._text)
+
+        if '\n' in text:
+            # TODO refactor this logic, do render once
             self._size = [0, 0]
-            for i, text in enumerate(self._text.split('\n')):
+            for i, text in enumerate(text.split('\n')):
                 t_surf = self._r_text_font.render(text, self._antialias, self._color)
                 self._screen.blit(t_surf, (self._x + dx, self._y + dy + self._size[1]))
                 self._size[0] = t_surf.get_width() if t_surf.get_width() > self._size[0] else self._size[0]
@@ -152,8 +157,9 @@ class Text:
 
     def render(self):
         self._render_font()
+        text = self.get_text_with_localization(self._text)
 
-        self._r_text_img_original = self._r_text_font.render(self._text, self._antialias, self._color).convert_alpha()
+        self._r_text_img_original = self._r_text_font.render(text, self._antialias, self._color).convert_alpha()
         x_size = self._r_text_img_original.get_width()
         y_size = self._r_text_img_original.get_height()
         self._r_text_img = self._r_text_img_original.copy()
@@ -173,7 +179,6 @@ class Text:
     def _render_font(self):
         try:
             self._r_text_font = custom_font(font_name=self._text_font, size=int(self.font_size))
-
         except:
             self._r_text_font = custom_font(int(self.font_size))
 

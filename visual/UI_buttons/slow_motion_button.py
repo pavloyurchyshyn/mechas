@@ -1,5 +1,5 @@
 from UI.UI_base.button_UI import Button
-# from settings.global_parameters import change_test_draw_status
+# from settings_stage.global_parameters import change_test_draw_status
 from settings.colors import WHITE, GREY_GREEN, GREY_RED
 from settings.global_parameters import set_slow_motion
 from settings.window_settings import MAIN_SCREEN

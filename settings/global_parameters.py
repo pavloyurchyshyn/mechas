@@ -3,7 +3,7 @@ from common.save_and_load_json_config import get_from_common_config, save_to_com
 
 __all__ = [
     'get_language', 'set_fps', 'get_fps', 'set_slow_motion', 'its_client_instance', 'pause_step',
-    'update_slow_motion', 'SET_CLIENT_INSTANCE', 'get_slow_motion_k', 'pause_available', 'change_test_draw_status',
+    'update_slow_motion', 'SET_CLIENT_INSTANCE', 'get_slow_motion_k', 'change_test_draw_status',
     'test_draw_status_is_on',
 ]
 
