@@ -19,7 +19,7 @@ SERVER_PYTHON_FILE_NAME = 'server.py'
 NETWORK_DATA = {
     NetworkKeys.Address: socket.gethostbyname(socket.gethostname()),
     NetworkKeys.Port: DEFAULT_PORT,
-    PlayerAttrs.Nickname: get_from_common_config("player_nickname", 'DefaultNickname'),
+    PlayerAttrs.Nickname: get_from_common_config(PlayerAttrs.Nickname, 'NoNickname'),
     NetworkKeys.Password: '.',
     NetworkKeys.PlayerNumber: 2,
 }

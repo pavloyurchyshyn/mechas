@@ -3,16 +3,18 @@ from pygame.constants import K_F4, K_LALT
 from common.global_keyboard import GLOBAL_KEYBOARD
 from common.stages import Stages
 from common.logger import Logger
+from common.sound_loader import GLOBAL_MUSIC_PLAYER
 
 from constants.game_stages import StagesConstants
 
-from stages.main_menu_stage.page import MainMenu
-from stages.round_stage.round_logic import RoundRelatedLogic
-from stages.settings_stage.page import SettingsMenu
+from game_logic.stages.main_menu_stage.page import MainMenu
+from game_logic.stages.round_stage.round_logic import RoundRelatedLogic
+from game_logic.stages.settings_stage.page import SettingsMenu
+from game_logic.stages.host_game_stage.page import HostWindow
+from game_logic.stages.join_game_stage.page import JoinWindow
 
 from visual.UIController import UI_TREE
 
-from common.sound_loader import GLOBAL_MUSIC_PLAYER
 
 LOGGER = Logger()
 
@@ -26,7 +28,15 @@ class GameBody:
             StagesConstants.MAIN_MENU_SETTINGS_STAGE: self.setting,
 
             StagesConstants.CONNECT: self.connect_as_player,
+
+            StagesConstants.LOAD_HOST: self.load_host_ui,
+            StagesConstants.HOST_MENU: self.host_menu_ui,
+            StagesConstants.CLOSE_HOST: self.close_host_menu,
+
             StagesConstants.HOST: self.host,
+
+            StagesConstants.JOIN_MENU: self.join_menu,
+
             StagesConstants.ROUND_STAGE: self.round,
             StagesConstants.ROUND_CLOSE: self.close_round,
             StagesConstants.EXIT_STAGE: self._close_game,
@@ -38,9 +48,8 @@ class GameBody:
 
         self.round_logic: RoundRelatedLogic = RoundRelatedLogic()
         self.main_menu = MainMenu()
-
-    def reload_ui(self):
-        self.round_logic
+        self.host_menu: HostWindow = None
+        self.join_menu_ui = JoinWindow()
 
     def game_loop(self):
         self._music_player.update()
@@ -61,11 +70,22 @@ class GameBody:
     def close_round(self):
         self.round_logic.close_round()
 
-    def host_menu(self):
-        pass
+    def load_host_ui(self):
+        self.host_menu = HostWindow()
+        self.stage_controller.set_host_menu_stage()
 
-    def client_menu(self):
-        pass
+    def host_menu_ui(self):
+        self.host_menu.update()
+        self.host_menu.draw()
+
+    def close_host_menu(self):
+        UI_TREE.delete_menu(self.host_menu.name)
+        self.host_menu = None
+        self.stage_controller.set_main_menu_stage()
+
+    def join_menu(self):
+        self.join_menu_ui.update()
+        self.join_menu_ui.draw()
 
     def setting(self):
         self.settings_in_menu.update()

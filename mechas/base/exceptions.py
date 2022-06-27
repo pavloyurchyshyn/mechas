@@ -6,6 +6,14 @@ class NotUniqueId(Exception):
         return f'No unique_id in {self.detail.name}: {self.detail.unique_id}'
 
 
+class NoName(Exception):
+    def __init__(self, detail):
+        self.detail = detail
+
+    def __str__(self):
+        return f'No name in {type(self.detail)}: {self.detail.unique_id}'
+
+
 class SlotIsFullError(Exception):
     def __init__(self, slot):
         self.slot = slot
@@ -58,3 +66,7 @@ class NoSlotsForLimbs(Exception):
 
     def __str__(self):
         return f'No slots in {self.body.name}'
+
+
+class SpellWithoutName(Exception):
+    pass

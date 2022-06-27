@@ -4,13 +4,13 @@ common:
 
 UI:
   main_menu:
-    start_round: Start
-    multiplayer: Multiplayer
+    menu_start: Start
+    multiplayer: Join to game
     settings: Settings
     exit: Exit
     exit_yes: 'Yes'
     exit_no: 'No'
-    host_game: Host Game
+    host_game: Host game
     lang_disapp_msg: |
       You need to restart the game
       to accept changes
@@ -21,3 +21,12 @@ UI:
 
     ready_body:
       ready_button: 'Ready'
+
+  main_menu_settings:
+    nickname_text: 'Your nickname'
+
+  host_menu:
+    host: 'Host'
+
+  join_menu:
+    join: Join

@@ -58,8 +58,8 @@ class InputElement(Rectangle):
 
         self.border_radius = border_radius
 
-        size_x = int(size_x * X_SCALE) if size_x else self.DEF_X_SIZE
-        size_y = int(size_y * Y_SCALE) if size_y else self.DEF_Y_SIZE
+        size_x = size_x if size_x else self.DEF_X_SIZE
+        size_y = size_y if size_y else self.DEF_Y_SIZE
         super().__init__(x, y, size_x, size_y)
         self._mouse = GLOBAL_MOUSE
         self._key = GLOBAL_KEYBOARD
@@ -110,7 +110,7 @@ class InputElement(Rectangle):
         self._on_enter_action = on_enter_action
 
         if autobuild:
-            self.build()
+            self.render()
 
         self.last_raw_input = last_raw_input
         self.one_input = one_input
@@ -128,7 +128,7 @@ class InputElement(Rectangle):
                 self._focused = 0
                 if not self._text_text:
                     self.set_default_text()
-                    self.build()
+                    self.render()
 
         if self._focused:
             if self._key.ENTER or self._key.ESC:
@@ -171,7 +171,7 @@ class InputElement(Rectangle):
             if prev_text != self._text_text:
                 if self._on_change_action:
                     self._on_change_action(self)
-                self.build()
+                self.render()
 
     def set_default_text(self):
         if not self._text_text:
@@ -196,19 +196,21 @@ class InputElement(Rectangle):
             for dot in self._dots:
                 draw.circle(MAIN_SCREEN, YELLOW, (dot[0] + dx, dot[1] + dy), 1)
 
-    def build(self):
+    def render(self):
         self._active_text_surface.fill(self._background_color)
         self._non_active_text_surface.fill(self._background_color)
 
         self._r_text_active = Text(text=self._text_text,
                                    screen=self._active_text_surface,
                                    color=self._text_active_color,
-                                   size=self._text_size, place_left=self.place_text_left, auto_draw=False)
+                                   size=self._text_size, place_left=self.place_text_left,
+                                   auto_draw=False, raw_text=True)
 
         self._r_text_non_active = Text(text=self._text_text,
                                        screen=self._non_active_text_surface,
                                        color=self._text_non_active_color,
-                                       size=self._text_size, place_left=self.place_text_left, auto_draw=False)
+                                       size=self._text_size, place_left=self.place_text_left,
+                                       auto_draw=False, raw_text=True)
 
         dx = 0
         if self.place_text_left and self.size_x < self._r_text_active.size[0]:
@@ -268,7 +270,7 @@ class InputElement(Rectangle):
         if self.max_letters_num:
             new_text = new_text[:self.max_letters_num]
         self._text_text = new_text
-        self.build()
+        self.render()
 
     def get_surface(self):
         flags = 0

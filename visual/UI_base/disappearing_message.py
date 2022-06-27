@@ -20,6 +20,10 @@ class DisappMessage(Rectangle):
         self.text = Text(text, self.surface, x=0, y=0)
         self._visible = True
 
+    def render(self):
+        self.surface = get_surface(self.size_x, self.size_y, 1, color=(0, 0, 0, 200))
+        self.text = Text(self.text_value, self.surface, x=0, y=0)
+
     def update_surface(self):
         self.surface.fill((0, 0, 0, 200))
         self.text.draw()
@@ -36,3 +40,15 @@ class DisappMessage(Rectangle):
     def draw(self):
         if self._visible:
             self.screen.blit(self.surface, self.left_top)
+
+    @property
+    def is_active(self):
+        return False
+
+    @property
+    def is_visible(self):
+        return self._visible
+
+    @property
+    def width(self):
+        return self.surface.get_width()

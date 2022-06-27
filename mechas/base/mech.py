@@ -1,9 +1,13 @@
-from mechas.base.body import BaseBody
+from mechas.base.parts.body import BaseBody
 from mechas.base.exceptions import NotEnoughEnergyError
 from constants.mechas.detail_const import DetailsAttrs, MechAttrs
 
 
 class BaseMech:
+    """
+    This is an object which contains body and calculating attrs.
+    Body contains other parts.
+    """
     def __init__(self, position, body_class=BaseBody, body_data: dict = {}):
         self.body = body_class(**body_data)
 
@@ -18,6 +22,17 @@ class BaseMech:
 
         self._current_hp = 0
         self._current_energy = 0
+        self._skills = []
+        self.collect_abilities()
+        print(self.__dict__)
+
+    def collect_abilities(self):
+        self._skills.clear()
+        self._skills.extend(self.body.skills)
+        for slots in self.parts:
+            for slot in slots.values():
+                if slot.is_full:
+                    self._skills.extend(slot.detail.skills)
 
     def calculate_attrs(self):
         self.calculate_damage()
@@ -139,7 +154,7 @@ class BaseMech:
 
 if __name__ == '__main__':
     m = BaseMech((0, 0), body_data={'unique_id': 1})
-    m.update_attrs()
+    m.calculate_attrs()
     print(m.dict())
     m.set_attrs(data={MechAttrs.Position: (1, 0)})
     print(m.dict())

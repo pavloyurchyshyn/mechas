@@ -1,5 +1,5 @@
 from mechas.base.exceptions import *
-from mechas.base.detail import BaseDetail
+from mechas.base.parts.detail import BaseDetail
 from common.logger import Logger
 from constants.mechas.detail_const import DetailsTypes
 

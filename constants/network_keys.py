@@ -1,6 +1,6 @@
 class PlayerAttrs:
     Token = 'access_token'
-    Nickname = 'login'
+    Nickname = 'nickname'
 
 
 class NetworkKeys:
@@ -32,6 +32,8 @@ class ServerConnectAnswers:
 
 
 class PlayerUpdates:
+    Data = 'player_data'
+    MechData = 'mech_data'
     Position = 'position'
     Energy = 'energy'
 

@@ -2,12 +2,7 @@ from visual.main_window import MAIN_SCREEN
 from settings.screen import GAME_SCALE
 from common.save_and_load_json_config import get_from_common_config
 from visual.sprites_functions import get_surface
-from settings.mouse_default import CROSSHAIR_SURFACE_SIZE_KEY, DEFAULT_CROSSHAIR_DOT_EXISTS, DEFAULT_CROSSHAIR_DOT_SIZE, \
-    DEFAULT_CROSSHAIR_LINE_SIZE, \
-    CROSSHAIR_DOT_EXISTS_KEY, CROSSHAIR_DOT_SIZE_KEY, CROSSHAIR_LINE_SIZE_KEY, \
-    DEFAULT_CROSSHAIR_LINE_CENTER_DISTANCE, CROSSHAIR_LINE_CENTER_DISTANCE_KEY, \
-    DEFAULT_CROSSHAIR_LINE_WIGHT, CROSSHAIR_LINE_WIGHT_KEY, DEFAULT_CROSSHAIR_SIZE, \
-    DEFAULT_CROSSHAIR_ROTATE, CROSSHAIR_ROTATE_KEY, DEFAULT_CROSSHAIR_COLOR, CROSSHAIR_COLOR_KEY
+from settings.mouse_default import *
 from pygame.draw import line as draw_line
 from pygame.draw import circle as draw_circle
 from pygame import mouse

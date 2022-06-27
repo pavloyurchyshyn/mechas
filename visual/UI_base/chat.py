@@ -31,9 +31,9 @@ class Chat(Rectangle):
                 if self.size_y - self.elements_height > self.scroll:
                     self.scroll = self.size_y - self.elements_height
 
-                self.build()
+                self.render()
 
-    def build(self):
+    def render(self):
         self.calculate_height()
         self.surface.fill((255, 255, 255, 50))
 
@@ -52,7 +52,8 @@ class Chat(Rectangle):
     def add_message(self, text, category=None, build=True):
         category = Chat.ALL if category is not None else category
 
-        text_ = Text(text=text, screen=self.surface, x=1, place_left=True, place_bot=True, place_inside=False)
+        text_ = Text(text=text, screen=self.surface, x=1,
+                     place_left=True, place_bot=True, place_inside=False, raw_text=True)
 
         self.elements.append(text_)
 
@@ -62,7 +63,7 @@ class Chat(Rectangle):
             self.by_categories[category].append(text_)
 
         if build:
-            self.build()
+            self.render()
 
     def draw(self):
         MAIN_SCREEN.blit(self.surface, self.left_top)

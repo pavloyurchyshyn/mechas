@@ -12,7 +12,9 @@ class Text(LocalizationMixin):
     CLOCK = GLOBAL_CLOCK
     MIN_Y = 1
 
-    def __init__(self, text, screen=MAIN_SCREEN, x=None, y=None,
+    def __init__(self, text, screen=MAIN_SCREEN,
+                 raw_text=False,
+                 x=None, y=None,
                  color=WHITE,
                  size=None,
                  p_x_pos=None,
@@ -29,6 +31,8 @@ class Text(LocalizationMixin):
                  ):
 
         self.id = id
+
+        self.raw_text = raw_text
 
         x = int(x) if x is not None else int(p_x_pos * SCREEN_W) if p_x_pos else None
         y = int(y) if y is not None else int(p_y_pos * SCREEN_H) if p_y_pos else None
@@ -142,7 +146,8 @@ class Text(LocalizationMixin):
             self.draw()
 
     def draw(self, dx=0, dy=0):
-        text = self.get_text_with_localization(self._text)
+        text = self._text if self.raw_text else self.get_text_with_localization(self._text)
+        print(self.id, self.raw_text, self._text, text)
 
         if '\n' in text:
             # TODO refactor this logic, do render once
@@ -155,9 +160,9 @@ class Text(LocalizationMixin):
         else:
             self._screen.blit(self._r_text_img, (self._x + dx, self._y + dy))
 
-    def render(self):
+    def render(self, raw_text=False):
         self._render_font()
-        text = self.get_text_with_localization(self._text)
+        text = self._text if raw_text or self.raw_text else self.get_text_with_localization(self._text)
 
         self._r_text_img_original = self._r_text_font.render(text, self._antialias, self._color).convert_alpha()
         x_size = self._r_text_img_original.get_width()

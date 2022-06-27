@@ -79,6 +79,8 @@ class LocalizationLoader(metaclass=Singleton):
         text = self.text
         for attr in path.split(TEXT_PATH_DELIMITER):
             text = getattr(text, attr)
+            if text == NO_TEXT_MSG:
+                return text
 
         return text
 

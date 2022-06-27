@@ -216,8 +216,9 @@ class UIController(metaclass=Singleton):
 
     def delete_menu(self, menu_name):
         if menu_name in self.tree:
+            self.logger.info(f'Removing: {menu_name} - {self.tree[menu_name]}')
             del self.tree[menu_name]
-            self.logger.info(f'Removed {menu_name}')
+            self.logger.info(f'Removed menu: "{menu_name}"')
 
     def reload_ui(self):
         self.logger.info(f'Reloading UI')

@@ -1,4 +1,3 @@
-from mechas.base.body import BaseBody
 from mechas.base.mech import BaseMech
 
 

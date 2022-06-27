@@ -17,6 +17,12 @@ class DetailsAttrs:
     EnergyRegen = 'energy_regen'
     Skills = 'skills'
 
+
+class SpecialValues:
+    NoCD = 'NoCD'
+    NoEnergy = 'NoEnrg'
+
+
 class MechAttrs:
     Damage = 'damage'
     Armor = 'armor'

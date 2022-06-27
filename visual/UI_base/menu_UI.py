@@ -108,7 +108,7 @@ class MenuUI(Rectangle):
     def create_buttons(self):
         for button in self._buttons_values:
             data = self._buttons_values[button]
-            print(button, data)
+            # print(button, data)
             if 'screen' in data.get('kwargs', {}):
                 screen = data['kwargs'].pop('screen')
             else:

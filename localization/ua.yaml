@@ -4,13 +4,13 @@ common:
 
 UI:
   main_menu:
-    start_round: Старт
-    multiplayer: Мережева гра
+    menu_start: Старт
+    multiplayer: Приєднатись
     settings: Налаштування
     exit: Вихід
     exit_yes: Так
     exit_no: Ні
-    host_game: Захостити
+    host_game: Створити гру
     lang_disapp_msg: |
       Потрібно перезайти в гру
       для зміни мови
@@ -21,3 +21,12 @@ UI:
 
     ready_body:
       ready_button: 'Готовий'
+
+  main_menu_settings:
+    nickname_text: Ваше ім'я
+
+  host_menu:
+    host: 'Захостити'
+
+  join_menu:
+    join: Приєднатись
