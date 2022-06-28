@@ -22,6 +22,9 @@ UI:
     ready_body:
       ready_button: 'Ready'
 
+    mana_text: 'Mana'
+    hp_text: 'Health'
+
   main_menu_settings:
     nickname_text: 'Your nickname'
 

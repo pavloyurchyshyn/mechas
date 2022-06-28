@@ -12,4 +12,6 @@ class RoundLocPaths:
     ExitYes = loc_path_builder('common', 'yes')
     ExitNo = loc_path_builder('common', 'no')
 
-    ReadyBody = 'ready_button'
+    ReadyButton = 'ready_button'
+    ManaText = path_in_menu('mana_text')
+    HPText = path_in_menu('hp_text')

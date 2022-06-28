@@ -146,25 +146,30 @@ class Text(LocalizationMixin):
             self.draw()
 
     def draw(self, dx=0, dy=0):
-        text = self._text if self.raw_text else self.get_text_with_localization(self._text)
-        # print(self.id, self.raw_text, self._text, text)
-
-        if '\n' in text:
-            # TODO refactor this logic, do render once
-            self._size = [0, 0]
-            for i, text in enumerate(text.split('\n')):
-                t_surf = self._r_text_font.render(text, self._antialias, self._color)
-                self._screen.blit(t_surf, (self._x + dx, self._y + dy + self._size[1]))
-                self._size[0] = t_surf.get_width() if t_surf.get_width() > self._size[0] else self._size[0]
-                self._size[1] += t_surf.get_height()
-        else:
-            self._screen.blit(self._r_text_img, (self._x + dx, self._y + dy))
+        self._screen.blit(self._r_text_img, (self._x + dx, self._y + dy))
 
     def render(self, raw_text=False):
         self._render_font()
         text = self._text if raw_text or self.raw_text else self.get_text_with_localization(self._text)
 
-        self._r_text_img_original = self._r_text_font.render(text, self._antialias, self._color).convert_alpha()
+        if '\n' in text:
+            texts = []
+            y_size = 0
+            for t in text.split('\n'):
+                t = self._r_text_font.render(t, self._antialias, self._color).convert_alpha()
+                texts.append(t)
+                y_size += t.get_height()
+
+            x_size = max(texts, key=lambda e: e.get_width()).get_width()
+            text_surf = self.get_surface(x_size, y_size)
+            y = 0
+            for t in texts:
+                text_surf.blit(t, (0, y))
+                y += t.get_height()
+
+            self._r_text_img_original = text_surf
+        else:
+            self._r_text_img_original = self._r_text_font.render(text, self._antialias, self._color).convert_alpha()
         x_size = self._r_text_img_original.get_width()
         y_size = self._r_text_img_original.get_height()
         self._r_text_img = self._r_text_img_original.copy()

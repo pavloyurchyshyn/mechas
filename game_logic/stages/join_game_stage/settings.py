@@ -25,6 +25,6 @@ JOIN_BUTTONS_DATA['join'] = {
         'y': scaled_h(0.95),
         'text': JoinMenuLocPaths.Join,
         'id': ElementsIDsConst.Host.HOST,
-        'on_click_action': Stages().set_host_stage,
+        'on_click_action': Stages().set_connect_stage,
     }
 }

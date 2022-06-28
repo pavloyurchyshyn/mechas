@@ -8,6 +8,7 @@ from game_logic.stages.round_stage.windows.chat import ChatWindow
 from game_logic.stages.round_stage.windows.ready import ReadyWindow
 from game_logic.stages.round_stage.windows.dice import DiceWindow
 from game_logic.stages.round_stage.mech_visual.mech import MechVisual
+from game_logic.stages.round_stage.windows.hp_and_mana_bars import ManaBar, HPBar
 from constants.network_keys import ServerResponseCategories
 
 from common.global_keyboard import GLOBAL_KEYBOARD
@@ -33,6 +34,8 @@ class Round:
         self.mech_visual = MechVisual(mech=self.mech, world=self.arena_window.visual_world)
         self.round_ui = RoundUI()
 
+        self.mana_bar = ManaBar()
+        self.hp_bar = HPBar()
         self.ready = ReadyWindow(self.player_response)
         UI_TREE.add_menu(self, self.exit_pop_up)
 
@@ -71,6 +74,9 @@ class Round:
         self.ready.draw()
         self.dice.draw()
         self.mech_visual.draw()
+
+        self.mana_bar.draw()
+        self.hp_bar.draw()
 
     def set_player(self, player):
         self.player = player

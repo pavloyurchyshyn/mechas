@@ -22,6 +22,9 @@ UI:
     ready_body:
       ready_button: 'Готовий'
 
+    mana_text: 'Мaнa'
+    hp_text: Здоров'я
+
   main_menu_settings:
     nickname_text: Ваше ім'я
 

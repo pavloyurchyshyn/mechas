@@ -6,9 +6,10 @@ class LocalizationMixin:
     PathSymbol = '@//'
     __localization = LocalizationLoader()
 
-    def get_text_with_localization(self, text: str):
-        if text.startswith(self.PathSymbol):
-            return self.__localization.get_text(text.replace(self.PathSymbol, ''))
+    @staticmethod
+    def get_text_with_localization(text: str):
+        if text.startswith(LocalizationMixin.PathSymbol):
+            return LocalizationMixin.__localization.get_text(text.replace(LocalizationMixin.PathSymbol, ''))
         else:
             return text
 

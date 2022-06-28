@@ -69,3 +69,21 @@ class RoundSizes:
         Y = scaled_h(0.76) + 1
         X_SIZE = scaled_w(0.08) - 1
         Y_SIZE = scaled_h(0.12)
+
+    class Bars:
+        X_SIZE = scaled_w(0.36)
+        Y_SIZE = scaled_h(0.015)
+
+        class Mana:
+            X = scaled_w(0.25)
+            Y = scaled_h(0.73)
+
+            text_pos = scaled_w(0.612), scaled_h(0.73)
+            reg_text_pos = scaled_w(0.672), scaled_h(0.73)
+
+        class HP:
+            X = scaled_w(0.25)
+            Y = scaled_h(0.745)
+
+            text_pos = scaled_w(0.612), scaled_h(0.745)
+            reg_text_pos = scaled_w(0.672), scaled_h(0.745)
