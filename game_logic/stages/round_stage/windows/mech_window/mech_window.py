@@ -8,9 +8,12 @@ from game_logic.stages.round_stage.settings.windows_sizes import RoundSizes
 from mechas.base.mech import BaseMech
 from mechas.base.parts.body import BaseBody
 from game_logic.stages.round_stage.windows.mech_window.settings import SlotSizes
+from game_logic.stages.round_stage.windows.mech_window.slot_cell import VisualSlot, BodyVisualSlot
 from settings.screen import Y_SCALE
 
 from settings.global_parameters import test_draw_status_is_on
+
+from visual.font_loader import DEFAULT_FONT
 
 
 class MechWindow(Rectangle):
@@ -24,7 +27,7 @@ class MechWindow(Rectangle):
         self.mech_parts = []
 
         self.element_size = SlotSizes.X
-        self.body_ui_slot = None
+        self.body_ui_slot: BodyVisualSlot = None
         self.calculate_side_positions()
         self.build_mech_UI()
 
@@ -45,8 +48,8 @@ class MechWindow(Rectangle):
             self.add_left_parts(l_parts)
             self.add_right_part(r_parts)
 
-            self.mech_parts.append(
-                Rectangle(x=self.midle_column, y=self.y0 + (self.size_y - SlotSizes.X) / 2, size_x=SlotSizes.X))
+            self.body_ui_slot = BodyVisualSlot(x=self.midle_column, y=self.y0 + (self.size_y - SlotSizes.X) / 2,
+                                               size=SlotSizes.X, body=self.mech_body)
 
     def add_left_parts(self, parts: list):
         x = self.left_column
@@ -58,10 +61,9 @@ class MechWindow(Rectangle):
         if step > 20 * Y_SCALE:
             step = 20 * Y_SCALE
         y = self.y0 + (self.size_y - count * SlotSizes.X - (count + 1) * step) / 2 + step
-
         for parts_ in parts:
-            for part in parts_:
-                r = Rectangle(x=x, y=y, size_x=self.element_size)
+            for part in parts_.values():
+                r = VisualSlot(x=x, y=y, size=self.element_size, slot=part)
                 self.mech_parts.append(r)
                 y += self.element_size + step
 
@@ -78,9 +80,9 @@ class MechWindow(Rectangle):
         y = self.y0 + (self.size_y - count * SlotSizes.X - (count + 1) * step) / 2 + step
 
         for parts_ in parts:
-            for part in parts_:
-                # TODO add part ui element
-                r = Rectangle(x=x, y=y, size_x=self.element_size)
+            for part in parts_.values():
+                r = VisualSlot(x=x, y=y, size=self.element_size, slot=part)
+
                 self.mech_parts.append(r)
                 y += self.element_size + step
 
@@ -96,6 +98,14 @@ class MechWindow(Rectangle):
         draw_rect(MAIN_SCREEN, (255, 255, 255), self.get_rect(), 1, 5)
         for el in self.mech_parts:
             draw_rect(MAIN_SCREEN, (255, 255, 255), el.get_rect(), 1, 5)
+            if el.is_full:
+                text = DEFAULT_FONT.render(el.slot.detail.name, 1, (255, 255, 255))
+                MAIN_SCREEN.blit(text, el.dots[-1])
+
+        draw_rect(MAIN_SCREEN, (255, 255, 255), self.body_ui_slot.get_rect(), 1, 5)
+        if self.body_ui_slot.is_full:
+            text = DEFAULT_FONT.render(self.body_ui_slot.body.name, 1, (255, 255, 255))
+            MAIN_SCREEN.blit(text, self.body_ui_slot.dots[-1])
 
         if test_draw_status_is_on():
             draw_line(MAIN_SCREEN, (0, 255, 0), self._dots[2], self._dots[-3])

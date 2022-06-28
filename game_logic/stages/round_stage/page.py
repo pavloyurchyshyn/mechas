@@ -1,4 +1,3 @@
-from game_logic.stages.round_stage.UI import RoundUI
 from game_logic.stages.round_stage.windows.world_window.window import ArenaWindow
 from game_logic.stages.round_stage.windows.top_bar import TopBar
 from game_logic.stages.round_stage.windows.exit_pop_up import ExitPopUp
@@ -24,17 +23,17 @@ class Round:
 
         self.player = player
         self.other_players = {}
+
         self.arena_window = ArenaWindow()
         self.top_bar = TopBar()
         self.exit_pop_up = ExitPopUp()
-        self.cards_window = CardsWindow()
+        self.cards_window = CardsWindow(mech=player.mech)
         self.mech_window = MechWindow(player_mech=player.mech)
         self.chat_window = ChatWindow(self.player_response)
         self.dice = DiceWindow()
         self.mech_visual = MechVisual(mech=self.mech, world=self.arena_window.visual_world)
-        self.round_ui = RoundUI()
 
-        self.mana_bar = ManaBar()
+        self.mana_bar = ManaBar()  # TODO move bars to one object with related logic
         self.hp_bar = HPBar()
         self.ready = ReadyWindow(self.player_response)
         UI_TREE.add_menu(self, self.exit_pop_up)
@@ -59,8 +58,6 @@ class Round:
 
     def draw(self):
         self.arena_window.draw()
-
-        # self.round_ui.draw()
 
         self.top_bar.draw()
 

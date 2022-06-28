@@ -96,6 +96,7 @@ class Rectangle(CollideInterface):
     @abstractmethod
     def scale(self, k):
         self._scale(k)
+        return self
 
     def _scale(self, k):
         new_size_x = k * self.size_x

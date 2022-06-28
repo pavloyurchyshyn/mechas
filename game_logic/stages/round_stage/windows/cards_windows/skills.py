@@ -8,7 +8,8 @@ from constants.colors import simple_colors
 
 
 class UnsedSkillCards(Rectangle):
-    def __init__(self, x=RoundSizes.SkillsCards.X, y=RoundSizes.SkillsCards.Y,
+    def __init__(self,
+                 x=RoundSizes.SkillsCards.X, y=RoundSizes.SkillsCards.Y,
                  size_x=RoundSizes.SkillsCards.X_SIZE, size_y=RoundSizes.SkillsCards.Y_SIZE):
         super(UnsedSkillCards, self).__init__(x=x, y=y, size_x=size_x, size_y=size_y)
 
@@ -16,6 +17,8 @@ class UnsedSkillCards(Rectangle):
         self.orig_card_y_size = self.card_y_size = self.size_y * 0.8
         self.right_border_step = self.size_x * 0.01
         self.card_y_pos = self.y0 + (self.size_y - self.orig_card_y_size)//2
+
+        self.card_rect = self.right_border_step, self.card_y_pos, self.card_x_size, self.card_y_size
 
         self.cards = []
 
@@ -29,6 +32,9 @@ class UnsedSkillCards(Rectangle):
     def remove_card(self, card):
         self.cards.remove(card)
         self.calculate_cards_positions()
+
+    def clear(self):
+        self.cards.clear()
 
     def calculate_cards_positions(self):
         # place for cards with step from borders

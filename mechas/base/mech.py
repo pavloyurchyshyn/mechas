@@ -32,14 +32,11 @@ class BaseMech:
     def collect_abilities(self):
         self._skills.clear()
         self._skills.extend(self.body.skills)
-        ability_names = set()
+        # ability_names = set()
         for slots in self.parts:
             for slot in slots.values():
                 if slot.is_full:
-                    for skill in slot.detail.skills:
-                        if skill.name not in ability_names:
-                            ability_names.add(skill.name)
-                            self._skills.extend(slot.detail.skills)
+                    self._skills.extend(slot.detail.skills)
 
     def calculate_attrs(self):
         print('attrs', self.parts)
@@ -87,6 +84,10 @@ class BaseMech:
             raise NotEnoughEnergyError
 
         self._current_energy -= energy
+
+    @property
+    def skills(self):
+        return self._skills
 
     @property
     def position(self):
