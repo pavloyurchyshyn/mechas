@@ -36,7 +36,7 @@ class BaseSlot:
         if self.__detail:
             raise SlotIsFullError(self)
 
-        elif detail not in self.__detail_types:
+        elif detail.detail_type not in self.__detail_types:
             raise WrongDetailType(detail, self.__detail_types)
 
         else:

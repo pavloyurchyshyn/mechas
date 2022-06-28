@@ -147,7 +147,7 @@ class Text(LocalizationMixin):
 
     def draw(self, dx=0, dy=0):
         text = self._text if self.raw_text else self.get_text_with_localization(self._text)
-        print(self.id, self.raw_text, self._text, text)
+        # print(self.id, self.raw_text, self._text, text)
 
         if '\n' in text:
             # TODO refactor this logic, do render once

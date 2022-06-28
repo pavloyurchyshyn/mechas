@@ -9,6 +9,7 @@ class MaterialTypes:
 
 
 class DetailsAttrs:
+    Id = 'unique_id'
     Damage = 'damage'
     Armor = 'armor'
     AddHP = 'add_hp'
@@ -31,6 +32,17 @@ class MechAttrs:
     Energy = 'energy'
     EnergyRegen = 'energy_regen'
     Position = 'position'
+
+
+class BodyInitAttrs:
+    unique_id = DetailsAttrs.Id
+    arm_class = 'arm_slot_class'
+    leg_class = 'leg_slot_class'
+
+    LeftArmsNum = 'left_arms_num'
+    RightArmsNum = 'right_arms_num'
+    LeftLegsNum = 'left_legs_num'
+    RightLegsNum = 'right_legs_num'
 
 
 class DetailsTypes:

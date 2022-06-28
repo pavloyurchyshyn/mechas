@@ -14,7 +14,7 @@ from constants.network_keys import NetworkKeys, PlayerUpdates
 from constants.network_keys import ServerResponseCategories, CheckRegex
 
 from game_logic.player_object import Player
-from mechas.base.mech import BaseMech
+from mechas.default_mech import MetalMech
 from visual.UIController import UI_TREE
 LOGGER = Logger()
 
@@ -69,7 +69,7 @@ class RoundRelatedLogic:
         self.round_ui.mech_window.calculate_side_positions()
 
     def build_mech(self, response):
-        return BaseMech((5, 5), )
+        return MetalMech((5, 5), )
 
     def round(self):
         self.round_ui.update()
@@ -85,7 +85,6 @@ class RoundRelatedLogic:
 
     def close_round(self):
         # TODO make elements deleting
-        # UI_TREE.delete_menu(self.round_ui.name)
         if self.client:
             self.client.disconnect()
         if self.server_controller:
@@ -126,4 +125,4 @@ class RoundRelatedLogic:
 
     def __update_time(self, data: dict):
         if ServerResponseCategories.MatchTime in data:
-            ROUND_CLOCK.set_time(*data.pop(ServerResponseCategories.MatchTime))
+            ROUND_CLOCK.set_time(*data.pop(ServerResponseCategories.MatchTime, (0, 0)))

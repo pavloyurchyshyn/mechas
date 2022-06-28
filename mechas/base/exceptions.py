@@ -3,7 +3,7 @@ class NotUniqueId(Exception):
         self.detail = detail
 
     def __str__(self):
-        return f'No unique_id in {self.detail.name}: {self.detail.unique_id}'
+        return f'No unique_id in {self.detail.name}: {self.detail.get_unique_id}'
 
 
 class NoName(Exception):
@@ -11,7 +11,7 @@ class NoName(Exception):
         self.detail = detail
 
     def __str__(self):
-        return f'No name in {type(self.detail)}: {self.detail.unique_id}'
+        return f'No name in {type(self.detail)}: {self.detail.get_unique_id}'
 
 
 class SlotIsFullError(Exception):
@@ -20,6 +20,14 @@ class SlotIsFullError(Exception):
 
     def __str__(self):
         return f'Slot is full: {self.slot.parent}'
+
+
+class ThisDetailClassDoesntExists(Exception):
+    def __init__(self, class_name):
+        self.class_name = class_name
+
+    def __str__(self):
+        return f'"{self.class_name}" do not exists'
 
 
 class SlotDoesntExistsError(Exception):
@@ -40,7 +48,7 @@ class WrongDetailType(Exception):
         self.needed_types = needed_types
 
     def __str__(self):
-        return f'{self.detail.name} has bad detail type, {self.detail.detail_type} not in {self.needed_types}'
+        return f'{self.detail.name} has bad detail type, "{self.detail.detail_type}" not in {self.needed_types}'
 
 
 class DetailAlreadyConnected(Exception):
@@ -49,7 +57,7 @@ class DetailAlreadyConnected(Exception):
         self.detail = detail
 
     def __str__(self):
-        return f'Detail {self.detail} {self.detail.unique_id} already connected to {self.part.name}'
+        return f'Detail {self.detail} {self.detail.get_unique_id} already connected to {self.part.name}'
 
 
 class NoSlotsForMods(Exception):

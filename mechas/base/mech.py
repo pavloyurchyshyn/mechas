@@ -6,8 +6,9 @@ from constants.mechas.detail_const import DetailsAttrs, MechAttrs
 class BaseMech:
     """
     This is an object which contains body and calculating attrs.
-    Body contains other parts.
+    Body contains other details.
     """
+
     def __init__(self, position, body_class=BaseBody, body_data: dict = {}):
         self.body = body_class(**body_data)
 
@@ -24,17 +25,25 @@ class BaseMech:
         self._current_energy = 0
         self._skills = []
         self.collect_abilities()
-        print(self.__dict__)
+
+    def change_position(self, pos):
+        self._position = pos
 
     def collect_abilities(self):
         self._skills.clear()
         self._skills.extend(self.body.skills)
+        ability_names = set()
         for slots in self.parts:
             for slot in slots.values():
                 if slot.is_full:
-                    self._skills.extend(slot.detail.skills)
+                    for skill in slot.detail.skills:
+                        if skill.name not in ability_names:
+                            ability_names.add(skill.name)
+                            self._skills.extend(slot.detail.skills)
 
     def calculate_attrs(self):
+        print('attrs', self.parts)
+
         self.calculate_damage()
         self.calculate_armor()
         self.calculate_hp()
@@ -63,8 +72,10 @@ class BaseMech:
     def _calculate_parameter(self, part_attr):
         v = 0
         for slots in self.parts:
-            for slot in slots:
-                v += getattr(slot, part_attr, 0)
+            for slot in slots.values():
+                v += getattr(slot.detail, part_attr, 0)
+
+        v += getattr(self.body, part_attr, 0)
 
         return v
 

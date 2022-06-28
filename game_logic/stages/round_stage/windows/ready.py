@@ -6,7 +6,7 @@ from visual.main_window import MAIN_SCREEN
 from visual.UI_base.button_UI import Button
 from visual.UI_base.text_UI import Text
 from common.global_mouse import GLOBAL_MOUSE
-from common.global_clock import GLOBAL_CLOCK
+from common.global_clock import ROUND_CLOCK
 from common.logger import Logger
 
 from settings.localization import LocalizationLoader
@@ -58,10 +58,10 @@ class ReadyWindow(Rectangle):
         if GLOBAL_MOUSE.lmb:
             self.ready_button.click(GLOBAL_MOUSE.pos)
 
-        if GLOBAL_CLOCK.str_time != self.timer.text:
-            self.timer.change_text(GLOBAL_CLOCK.str_time)
+        if ROUND_CLOCK.str_time != self.timer.text:
+            self.timer.change_text(ROUND_CLOCK.str_time)
 
-        if GLOBAL_CLOCK.time < self.emergency_time:
+        if ROUND_CLOCK.time < self.emergency_time:
             self.timer.change_color(simple_colors.red)
         else:
             self.timer.change_color(simple_colors.white)

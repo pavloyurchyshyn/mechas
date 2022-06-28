@@ -28,6 +28,7 @@ class GameLogic:
         LOGGER.info(f'Tick rate {64}. Time per frame: {update_delay}')
 
         finish = time() + 30
+        ROUND_CLOCK.set_time(-30)
         try:
             while self.server.alive:
                 t = time()
