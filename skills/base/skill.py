@@ -1,4 +1,4 @@
-from game_logic.steps_clock import StepsClock
+from game_logic.components.steps_clock import StepsClock
 from mechas.base.exceptions import SpellWithoutName
 from abc import abstractmethod
 
@@ -10,9 +10,11 @@ class BaseSkill:
     Clock = StepsClock()
     name = None
 
-    def __init__(self, spell_cost: int, cooldown: int = 1):
+    def __init__(self, unique_id: str, spell_cost: int, cooldown: int = 1):
         if self.name is None:
             raise SpellWithoutName
+
+        self.unique_id = f'{unique_id}_{self.name}'
 
         self.spell_cost = spell_cost
         self.cooldown_value = cooldown

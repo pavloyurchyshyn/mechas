@@ -1,5 +1,5 @@
 from mechas.base.parts.detail import BaseDetail
-from mechas.base.slot import BaseSlot
+from mechas.base.slot import WeaponSlot
 from constants.mechas.detail_const import *
 
 __all__ = ['BaseArm', ]
@@ -12,7 +12,7 @@ class BaseArm(BaseDetail):
 
     def __init__(self, unique_id=None, weapon=None, **kwargs):
         super().__init__(unique_id=unique_id, **kwargs)
-        self.__weapon = BaseSlot(weapon, 0) if self.can_handle_weapon else None
+        self.__weapon = WeaponSlot(weapon=weapon, open=self.can_handle_weapon)
 
     def set_weapon(self, weapon):
         self.__weapon.set_detail(weapon)

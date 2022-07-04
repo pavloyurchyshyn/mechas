@@ -1,6 +1,7 @@
 from time import time as current_time
 from common.save_and_load_json_config import get_from_common_config, save_to_common_config
 
+
 __all__ = [
     'get_language', 'set_fps', 'get_fps', 'set_slow_motion', 'its_client_instance', 'pause_step',
     'update_slow_motion', 'SET_CLIENT_INSTANCE', 'get_slow_motion_k', 'change_test_draw_status',
@@ -14,7 +15,9 @@ GLOBAL_SETTINGS = {
     'slow_motion_value': 0.05,
     'fps': get_from_common_config('fps_config', 60),
     'language': get_from_common_config('language', 'eng'),
+
 }
+
 
 
 def get_language():

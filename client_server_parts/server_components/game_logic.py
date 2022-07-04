@@ -2,9 +2,13 @@ import traceback
 import re
 from _thread import start_new_thread
 from time import sleep, time
-from constants.network_keys import ServerResponseCategories, PlayerActions, CheckRegex
+from constants.network_keys import ServerResponseCategories, PlayerActions, CheckRegex, SRC
 from common.logger import Logger
 from common.global_clock import ROUND_CLOCK
+from game_logic.components.pools.skills_pool import SkillsPool
+from game_logic.components.pools.details_pool import DetailsPool
+from game_logic.components.pools.pools_generator import PoolGenerator
+from client_server_parts.server_components.config import ServerConfig
 
 LOGGER = Logger('server_logs', 0, std_handler=0).LOGGER
 
@@ -12,8 +16,12 @@ LOGGER = Logger('server_logs', 0, std_handler=0).LOGGER
 class GameLogic:
     def __init__(self, server):
         self.server = server
-        self.players_connections = server.players_connections
-        self.players_data = server.players_data
+        self.config: ServerConfig = self.server.config
+        self.skills_pool = SkillsPool()
+        self.details_pool = DetailsPool(self.skills_pool)
+        self.details_pool.load_details_list(PoolGenerator(self.config.max_players_num).get_details_list())
+        self.players_connections: dict = server.players_connections
+        self.players_data: dict = server.players_data
 
         self.json_to_str = server.json_to_str
         self.str_to_json = server.str_to_json
@@ -27,7 +35,7 @@ class GameLogic:
         update_delay = 1 / 32
         LOGGER.info(f'Tick rate {64}. Time per frame: {update_delay}')
 
-        finish = time() + 30
+        finish = time() + 45
         ROUND_CLOCK.set_time(-30)
         try:
             while self.server.alive:
@@ -35,8 +43,9 @@ class GameLogic:
                 self.update()
 
                 if time() > finish:
-                    self.server.alive = False
                     LOGGER.info(f'Timeout')
+                    self.server.disconnect_all_players()
+                    self.server.alive = False
 
                 sl = update_delay - (time() - t)
                 # LOGGER.info(f'Time spent for calculation {time() - t}, sleep {sl}')
@@ -86,11 +95,9 @@ class GameLogic:
             LOGGER.error(traceback.format_exc())
             server.disconnect_player(player_token)
 
-    p_updates = ServerResponseCategories.PlayersUpdates
-
     def process_data(self, token, data: dict):
-        self.data_to_send[self.p_updates] = self.data_to_send.get(self.p_updates, {})
-        player_update = self.data_to_send[self.p_updates][token] = self.data_to_send[self.p_updates].get(token, {})
+        self.data_to_send[SRC.PlayersUpdates] = self.data_to_send.get(SRC.PlayersUpdates, {})
+        player_update = self.data_to_send[SRC.PlayersUpdates][token] = self.data_to_send[SRC.PlayersUpdates].get(token, {})
 
         self.process_messages(token, data)
         self.process_ready_status(player_update, token, data)

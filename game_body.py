@@ -7,12 +7,12 @@ from common.sound_loader import GLOBAL_MUSIC_PLAYER
 
 from constants.game_stages import StagesConstants
 
-from game_logic.stages.main_menu_stage.page import MainMenu
-from game_logic.stages.round_stage.round_logic import RoundRelatedLogic
-from game_logic.stages.settings_stage.page import SettingsMenu
-from game_logic.stages.host_game_stage.page import HostWindow
-from game_logic.stages.join_game_stage.page import JoinWindow
-
+from stages.main_menu_stage.page import MainMenu
+from stages.round_stage.round_logic import RoundRelatedLogic
+from stages.settings_stage.page import SettingsMenu
+from stages.host_game_stage.page import HostWindow
+from stages.join_game_stage.page import JoinWindow
+from stages.round_lobby_stage.page import LobbyWindow
 from visual.UIController import UI_TREE
 
 
@@ -40,6 +40,8 @@ class GameBody:
             StagesConstants.ROUND_STAGE: self.round,
             StagesConstants.ROUND_CLOSE: self.close_round,
             StagesConstants.EXIT_STAGE: self._close_game,
+
+            StagesConstants.ROUND_LOBBY: self.lobby_logic
         }
 
         self.settings_in_menu = SettingsMenu()
@@ -50,6 +52,11 @@ class GameBody:
         self.main_menu = MainMenu()
         self.host_menu: HostWindow = None
         self.join_menu_ui = JoinWindow()
+        self.lobby = LobbyWindow({}) # TODO
+
+    def lobby_logic(self):
+        self.lobby.update()
+        self.lobby.draw()
 
     def game_loop(self):
         self._music_player.update()

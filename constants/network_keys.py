@@ -13,6 +13,8 @@ class NetworkKeys:
     ServerAnswer = 'server_answer'
     Password = 'password'
 
+    DetailsPool = 'details_pool'
+
 
 class PlayerActions:
     DISCONNECT = 'disconnect'
@@ -53,6 +55,9 @@ class ServerResponseCategories:
     DeletePlayers = 'delete_players'
 
     ReadyState = 'ready_state'
+
+
+SRC = ServerResponseCategories
 
 
 class ServerActions:

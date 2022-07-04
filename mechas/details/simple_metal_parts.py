@@ -15,15 +15,20 @@ class MetalArm(BaseArm):
     name = DetailNames.SimpleMetal.Arm
 
     def __init__(self, unique_id):
-        super(MetalArm, self).__init__(unique_id=unique_id, damage=1, armor=1)
+        super(MetalArm, self).__init__(unique_id=unique_id, damage=1, armor=1, add_hp=1, energy_regen=0.25)
 
 
 class MetalLeg(BaseLeg):
     name = DetailNames.SimpleMetal.Leg
 
     def __init__(self, unique_id):
-        skills = (SimpleStep(), )
-        super(MetalLeg, self).__init__(unique_id=unique_id, damage=1, armor=1, skills=skills)
+        skills = (SimpleStep, )
+        data = {
+            DetailsAttrs.AddEnergy: 1,
+            DetailsAttrs.HPRegen: 0.25,
+            DetailsAttrs.AddHP: 1,
+        }
+        super(MetalLeg, self).__init__(unique_id=unique_id, damage=1, armor=1, skills=skills, **data)
 
 
 class MetalBody(BaseBody):
@@ -32,6 +37,8 @@ class MetalBody(BaseBody):
     def __init__(self, unique_id):
         data = {DetailsAttrs.EnergyRegen: 1,
                 DetailsAttrs.AddEnergy: 10,
+                DetailsAttrs.AddHP: 10,
+                DetailsAttrs.HPRegen: 1,
                 BodyInitAttrs.arm_class: ArmSlot,
                 BodyInitAttrs.leg_class: LegSlot, }
         super(MetalBody, self).__init__(unique_id=unique_id, damage=1, armor=1, **data)

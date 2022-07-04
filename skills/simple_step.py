@@ -7,8 +7,9 @@ from settings.skills.simple_step import SimpleStepAttrs
 class SimpleStep(BaseSkill):
     name = SimpleStepAttrs.name
 
-    def __init__(self):
-        super(SimpleStep, self).__init__(spell_cost=SimpleStepAttrs.spell_cost,
+    def __init__(self, unique_id):
+        super(SimpleStep, self).__init__(unique_id=unique_id,
+                                         spell_cost=SimpleStepAttrs.spell_cost,
                                          cooldown=SimpleStepAttrs.cooldown)
 
     def use(self, mech, new_pos, *args, **kwargs):

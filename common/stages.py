@@ -8,6 +8,7 @@ LOGGER = Logger()
 class Stages(metaclass=Singleton):
     def __init__(self):
         self.current_stage = StagesConstants.MAIN_MENU_STAGE
+        self.set_round_lobby_stage()
         # self.set_host_stage()
         # self.set_main_menu_settings_stage()
 
@@ -55,3 +56,6 @@ class Stages(metaclass=Singleton):
 
     def set_exit_stage(self):
         self.change_current_stage(StagesConstants.EXIT_STAGE)
+
+    def set_round_lobby_stage(self):
+        self.change_current_stage(StagesConstants.ROUND_LOBBY)

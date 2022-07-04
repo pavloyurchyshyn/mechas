@@ -1,9 +1,9 @@
 from mechas.base.exceptions import *
 from mechas.base.parts.detail import BaseDetail
 from common.logger import Logger
-from constants.mechas.detail_const import DetailsTypes
+from constants.mechas.detail_const import DetailsTypes, SlotNames
 
-__all__ = ['BaseSlot', 'ArmSlot', 'LegSlot']
+__all__ = ['BaseSlot', 'ArmSlot', 'LegSlot', 'WeaponSlot']
 
 
 class BaseSlot:
@@ -95,3 +95,8 @@ class LegSlot(BaseSlot):
     def __init__(self, parent, num, detail=None):
         super().__init__(detail=detail, parent=parent, num=num,
                          detail_types=[DetailsTypes.LEG_TYPE, DetailsTypes.ARM_AND_LEG_TYPE])
+
+
+class WeaponSlot(BaseSlot):
+    def __init__(self, weapon, open):
+        super(WeaponSlot, self).__init__(weapon, num=0, open=open, detail_types=[DetailsTypes.WEAPON_TYPE, ])

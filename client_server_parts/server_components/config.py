@@ -15,7 +15,7 @@ class ServerConfig:
         arguments = arg_parser.parse_args()
         LOGGER.info(f'Start args {arguments.__dict__}')
 
-        self.max_players_num = 10
+        self.max_players_num = 2
         self.game_password = arguments.password
         self.server_port = int(arguments.port)
         self.main_admin_key = str(arguments.admin_token) if arguments.admin_token != 'None' else '_'

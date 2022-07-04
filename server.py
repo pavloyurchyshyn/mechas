@@ -1,4 +1,6 @@
 import sys
+import time
+
 from common.logger import Logger
 
 LOGGER = Logger('server_logs', 0, std_handler=0).LOGGER
@@ -11,7 +13,6 @@ import traceback
 import json
 
 from _thread import *
-from time import sleep
 from client_server_parts.server_components.config import ServerConfig
 from client_server_parts.server_components.player_connection_handler import ConnectionHandler
 from client_server_parts.server_components.game_logic import GameLogic
@@ -45,7 +46,6 @@ class Server:
         LOGGER.info('Alive check started')
         while self.alive:
             self.alive = self.GAME_LOGIC.alive
-            sleep(10)
         LOGGER.info('Stopped')
 
     def disconnect_all_players(self, msg_to_players='All players disconnected'):
@@ -85,7 +85,6 @@ class Server:
         except Exception as e:
             LOGGER.error(f'Failed to stop server_components. {e}')
             LOGGER.error(traceback.format_exc())
-
         try:
             self.GAME_LOGIC.alive = 0
         except Exception as e:

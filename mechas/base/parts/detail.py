@@ -16,12 +16,17 @@ class BaseDetail:
     detail_type = None
 
     def __init__(self, unique_id=None, **kwargs):
+        """
+
+        :param unique_id:
+        :param kwargs:
+        """
         self.__unique_id = unique_id
-        # if self.name is None:
-        #     raise NoName(self)
-        #
-        # if self.__unique_id is None:
-        #     raise NotUniqueId(self)
+        if self.name is None:
+            raise NoName(self)
+
+        if self.__unique_id is None:
+            raise NotUniqueId(self)
 
         self._damage = kwargs.get(DetailsAttrs.Damage, 0)
         self._armor = kwargs.get(DetailsAttrs.Armor, 0)
@@ -30,7 +35,7 @@ class BaseDetail:
         self._add_energy = kwargs.get(DetailsAttrs.AddEnergy, 0)
         self._energy_regen = kwargs.get(DetailsAttrs.EnergyRegen, 0)
 
-        self._skills = kwargs.get(DetailsAttrs.Skills, [])
+        self._skills = [skill(self.__unique_id) for skill in kwargs.get(DetailsAttrs.Skills, [])]
 
     @property
     def damage(self):  # name according to DetailAttrs constants

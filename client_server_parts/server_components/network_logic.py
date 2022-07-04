@@ -1,10 +1,11 @@
+import traceback
 from time import sleep, time
 from _thread import start_new_thread
 from common.logger import Logger
 from constants.network_keys import *
 from settings.network import *
 from client_server_parts.server_components.player_connection_handler import ConnectionHandler
-from client_server_parts.server_components.player_data import PlayerData
+from game_logic.components.player_object import Player
 
 LOGGER = Logger()
 
@@ -22,7 +23,7 @@ class NetworkLogic:
         self.socket = None
         self.connected_players_count = 0
         self.player_connected_in_past = set()
-        self.players_data: {str: PlayerData} = server.players_data
+        self.players_data: {str: Player} = server.players_data
         self.server_actions = {}
         self.addresses_ban_list = []
         self.token_ban_list = set()
@@ -117,6 +118,7 @@ class NetworkLogic:
                         self.process_connection(player_token=player_token, addr=addr,
                                                 player_connection=player_connection, client_data=client_data)
                     except Exception as e:
+                        LOGGER.error(traceback.format_exc())
                         LOGGER.error(f'Failed to process connection {e}')
                         try:
                             self.players_data.pop(player_token)
@@ -164,16 +166,17 @@ class NetworkLogic:
         self.player_connected_in_past.add(player_token)
         self.players_connections[player_token] = player_connection
 
-        self.players_data[player_token] = PlayerData(nickname=client_data.get(PlayerAttrs.Nickname),
-                                                     token=player_token, addr=addr)
+        self.players_data[player_token] = Player(nickname=client_data.get(PlayerAttrs.Nickname),
+                                                 token=player_token, addr=addr, player_data=client_data)
 
         server_response_data[NetworkKeys.ServerAnswer] = 'Successfully connected.'
         server_response_data[ServerConnectAnswers.CONNECTION_ANSWER] = ServerConnectAnswers.Connected
         server_response_data[PlayerAttrs.Token] = player_token
+        server_response_data[NetworkKeys.DetailsPool] = self.server.GAME_LOGIC.details_pool.get_dict()
 
         LOGGER.info(f'Sending response: {server_response_data}')
         player_connection.send(self.json_to_str(server_response_data))
-        LOGGER.info(f'Successfully sent {server_response_data}')
+        LOGGER.info(f'Successfully sent.')
 
         LOGGER.info(f'Connected. {player_token}.'
                     f' Player #{self.connected_players_count}.'
@@ -197,8 +200,8 @@ class NetworkLogic:
         server_response_data[PlayerAttrs.Token] = player_token
         server_response_data[NetworkKeys.ServerAnswer] = 'Successfully reconnected.'
 
-        self.players_data[player_token] = PlayerData(nickname=client_data.get(PlayerAttrs.Nickname),
-                                                     token=player_token, addr=addr)
+        self.players_data[player_token] = Player(nickname=client_data.get(PlayerAttrs.Nickname),
+                                                 token=player_token, addr=addr, player_data=client_data)
         self.players_connections[player_token] = player_connection
         self.player_connected_in_past.add(player_token)
         self.server.GAME_LOGIC.start_player_handling(player_token)
@@ -233,6 +236,10 @@ class NetworkLogic:
                 connection.send(data_to_players)
             except Exception as e:
                 LOGGER.exception(f'Failed to send data to {player_id} before disconnect.\n\n{e}')
+
+        sleep(10)
+
+        for player_id, connection in self.players_connections.copy().items():
             try:
                 self.disconnect_player(player_id)
             except Exception as e:

@@ -32,14 +32,13 @@ class BaseMech:
     def collect_abilities(self):
         self._skills.clear()
         self._skills.extend(self.body.skills)
-        # ability_names = set()
         for slots in self.parts:
             for slot in slots.values():
                 if slot.is_full:
                     self._skills.extend(slot.detail.skills)
 
     def calculate_attrs(self):
-        print('attrs', self.parts)
+        # print('attrs', self.parts)
 
         self.calculate_damage()
         self.calculate_armor()
@@ -98,12 +97,20 @@ class BaseMech:
         self._position = position
 
     @property
+    def full_health_points(self):
+        return self._mech_hp
+
+    @property
     def health_points(self):
         return self._current_hp
 
     @property
     def health_regen(self):
         return self._mech_hp_regen
+
+    @property
+    def full_energy(self):
+        return self._mech_energy
 
     @property
     def energy(self):
@@ -143,19 +150,19 @@ class BaseMech:
 
     def dict(self):
         return {
-            MechAttrs.Damage: self._mech_damage,
-            MechAttrs.Armor: self._mech_armor,
-            MechAttrs.HP: self._mech_hp,
-            MechAttrs.HPRegen: self._mech_hp_regen,
-            MechAttrs.Energy: self._mech_energy,
-            MechAttrs.EnergyRegen: self._mech_energy_regen,
+            DetailsAttrs.Damage: self._mech_damage,
+            DetailsAttrs.Armor: self._mech_armor,
+            DetailsAttrs.AddHP: self._mech_hp,
+            DetailsAttrs.HPRegen: self._mech_hp_regen,
+            DetailsAttrs.AddEnergy: self._mech_energy,
+            DetailsAttrs.EnergyRegen: self._mech_energy_regen,
             MechAttrs.Position: self._position,
         }
 
     def set_attrs(self, data: dict):
-        for key, attr in ((MechAttrs.Damage, '_mech_damage'), (MechAttrs.Armor, '_mech_armor'),
-                          (MechAttrs.HP, '_mech_hp'), (MechAttrs.HPRegen, '_mech_hp_regen'),
-                          (MechAttrs.Energy, '_mech_energy'), (MechAttrs.EnergyRegen, '_mech_energy_regen'),
+        for key, attr in ((DetailsAttrs.Damage, '_mech_damage'), (DetailsAttrs.Armor, '_mech_armor'),
+                          (DetailsAttrs.AddHP, '_mech_hp'), (DetailsAttrs.HPRegen, '_mech_hp_regen'),
+                          (DetailsAttrs.AddEnergy, '_mech_energy'), (DetailsAttrs.EnergyRegen, '_mech_energy_regen'),
                           (MechAttrs.Position, '_position')
                           ):
             setattr(self, attr, data[key] if data.get(key) is not None else getattr(self, attr))
