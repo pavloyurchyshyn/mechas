@@ -33,3 +33,8 @@ UI:
 
   join_menu:
     join: Приєднатись
+
+  lobby:
+    exit_pop_up:
+      exit_pop_text: Закрити лоббі
+    go_button: Поїхали!

@@ -18,7 +18,7 @@ class GameLogic:
         self.server = server
         self.config: ServerConfig = self.server.config
         self.skills_pool = SkillsPool()
-        self.details_pool = DetailsPool(self.skills_pool)
+        self.details_pool = DetailsPool(self.skills_pool, 1)  # TODO
         self.details_pool.load_details_list(PoolGenerator(self.config.max_players_num).get_details_list())
         self.players_connections: dict = server.players_connections
         self.players_data: dict = server.players_data

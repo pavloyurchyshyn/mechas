@@ -21,8 +21,6 @@ class Mouse:
         self._rel = self.mouse.get_rel() if rel is None else rel
         self._pos = self.mouse.get_pos() if pos is None else pos
         self._pressed = self.mouse.get_pressed() if pressed is None else pressed
-        self._scroll_top = 0
-        self._scroll_bot = 0
 
         self._size = get_from_common_config(CROSSHAIR_SURFACE_SIZE_KEY, DEFAULT_CROSSHAIR_SIZE)
         self._line_size = get_from_common_config(CROSSHAIR_LINE_SIZE_KEY, DEFAULT_CROSSHAIR_LINE_SIZE)
@@ -134,6 +132,14 @@ class Mouse:
     @property
     def pos(self):
         return self._pos
+
+    @property
+    def x(self):
+        return self._pos[0]
+
+    @property
+    def y(self):
+        return self._pos[1]
 
     @property
     def pressed(self):

@@ -77,6 +77,9 @@ class Rectangle(CollideInterface):
         self.y1 = y + self.size_y
         self._make_dots()
 
+    def set_y(self, y):
+        self.change_position_lt((self.x0, y))
+
     def _change_position(self, xy: tuple, make_dots=None):
         """
         XY -> center of object
@@ -165,6 +168,10 @@ class Rectangle(CollideInterface):
 
     @property
     def sizes(self):
+        return self.size_x, self.size_y
+
+    @property
+    def size(self):
         return self.size_x, self.size_y
 
     @property

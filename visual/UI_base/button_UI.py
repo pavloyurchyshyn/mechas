@@ -14,7 +14,7 @@ from common.global_clock import GLOBAL_CLOCK
 
 from constants.colors import simple_colors
 
-from settings.screen import Y_SCALE, X_SCALE
+
 from settings.global_parameters import test_draw_status_is_on
 from settings.UI_settings.button_settings import ButtonsConst
 
@@ -83,10 +83,8 @@ class Button(Rectangle):
         if y is None:
             raise Exception(f'{text} Y position not defined')
 
-        size_x = int(size_x * X_SCALE) if size_x else Button.BUTTON_X_SIZE
-        size_y = int(size_y * Y_SCALE) if size_y else Button.BUTTON_Y_SIZE
-        pic_x = int(pic_x * X_SCALE)
-        pic_y = int(pic_y * Y_SCALE)
+        size_x = size_x if size_x else Button.BUTTON_X_SIZE
+        size_y = size_y if size_y else Button.BUTTON_Y_SIZE
 
         super().__init__(x=x, y=y, size_x=size_x, size_y=size_y)
         self.x = x
@@ -106,8 +104,7 @@ class Button(Rectangle):
         self._non_active_text_text = non_active_text if non_active_text else text
         self._original_text_size = text_size if text_size else DEFAULT_FONT_SIZE
         self._text_size = self._original_text_size
-        self._text_x, self._text_y = int(text_x * X_SCALE) if text_x else text_x, int(
-            text_y * Y_SCALE) if text_y else text_y
+        self._text_x, self._text_y = int(text_x) if text_x else text_x, int(text_y) if text_y else text_y
 
         self._active_text_color = text_color
         self._inactive_text_color = text_non_active_color
@@ -299,7 +296,7 @@ class Button(Rectangle):
             if test_draw_status_is_on():
                 color = simple_colors.yellow
                 for dotx, doty in self._dots[1:]:
-                    draw.circle(Button.MAIN_SCREEN, color, (dotx + dx, doty + dy), 2)
+                    draw.circle(self._screen, color, (dotx + dx, doty + dy), 2)
 
     def update(self):
         self._update()

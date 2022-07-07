@@ -1,34 +1,54 @@
-from visual.UI_base.chat import Chat
+from stages.round_lobby_stage.ui_elements.chat import ChatElement
+from stages.round_lobby_stage.ui_elements.players_window import PlayersWindow
+from visual.UI_base.button_UI import Button
 from stages.round_lobby_stage.settings.windows_sizes import LobbyWindowsSizes
-from visual.UI_base.input_element_UI import InputElement
+from common.global_mouse import GLOBAL_MOUSE
 from common.global_keyboard import GLOBAL_KEYBOARD
-from settings.default_keys import Commands
-from constants.network_keys import PlayerActions
+from stages.round_lobby_stage.ui_elements.exit_pop_up import LobbyExitPopUp
 
 
 class LobbyWindow:
     def __init__(self, player_response):
         self.player_response = player_response
-        self.chat = Chat(x=LobbyWindowsSizes.Chat.X,
-                         y=LobbyWindowsSizes.Chat.Y,
-                         size_x=LobbyWindowsSizes.Chat.X_SIZE,
-                         size_y=LobbyWindowsSizes.Chat.Y_SIZE,
-                         )
-        self.chat_input = InputElement(x=LobbyWindowsSizes.ChatInput.X, y=LobbyWindowsSizes.ChatInput.Y,
-                                       size_x=LobbyWindowsSizes.ChatInput.X_SIZE,
-                                       size_y=LobbyWindowsSizes.ChatInput.Y_SIZE,
-                                       on_enter_action=self.send_message, max_letters_num=75,
-                                       place_text_left=True, border_radius=5)
+        self.chat = ChatElement(player_response)
+        self.players_window = PlayersWindow()
+
+        self.exit_pop_up = LobbyExitPopUp()
+        self.go_button = Button(text='Go',
+                                x=LobbyWindowsSizes.GoButton.X,
+                                y=LobbyWindowsSizes.GoButton.Y,
+                                size_x=LobbyWindowsSizes.GoButton.X_SIZE,
+                                size_y=LobbyWindowsSizes.GoButton.Y_SIZE
+                                )
+
+        self.exit_button = Button(text='X',
+                                  x=LobbyWindowsSizes.ExitButton.X,
+                                  y=LobbyWindowsSizes.ExitButton.Y,
+                                  size_x=LobbyWindowsSizes.ExitButton.X_SIZE,
+                                  size_y=LobbyWindowsSizes.ExitButton.Y_SIZE,
+                                  on_click_action=self.exit_pop_up.switch,
+                                  )
 
     def update(self):
-        self.chat_input.update()
-        if Commands.Chat in GLOBAL_KEYBOARD.commands and not self.chat_input.is_focused:
-            self.chat_input.focus()
+        self.chat.update()
+        self.players_window.update()
+
+        if self.exit_pop_up.active:
+            self.exit_pop_up.update()
+
+        clicked = False
+        for b in (self.go_button, self.exit_button):
+            b.update()
+            if GLOBAL_MOUSE.lmb and not clicked and not self.exit_pop_up.active:
+                clicked = b.click(GLOBAL_MOUSE.pos)
+
+        if GLOBAL_KEYBOARD.ESC:
+            self.exit_pop_up.switch()
 
     def draw(self):
         self.chat.draw()
-        self.chat_input.draw()
+        self.players_window.draw()
+        self.go_button.draw()
+        self.exit_button.draw()
 
-    def send_message(self, inp):
-        self.chat.add_message(inp.last_message)
-        self.player_response[PlayerActions.MESSAGE] = self.chat_input.last_message
+        self.exit_pop_up.draw()

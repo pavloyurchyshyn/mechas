@@ -72,7 +72,7 @@ class RoundRelatedLogic:
         mech = self.build_mech(response)
         payer_data = response.get(PlayerUpdates.Data, {})
         self.skills_pool: SkillsPool = SkillsPool()
-        self.details_pool: DetailsPool = DetailsPool(self.skills_pool)
+        self.details_pool: DetailsPool = DetailsPool(self.skills_pool, 1)  # TODO players number
         self.details_pool.load_details_list(response[NetworkKeys.DetailsPool])
 
         self.round_ui = Round(Player(token=self.client.token, player_data=payer_data, mech=mech, nickname=None))

@@ -9,7 +9,7 @@ __all__ = [
 ]
 
 GLOBAL_SETTINGS = {
-    'test_draw': 0,
+    'test_draw': 1,
     'client_instance': 0,
     'slow_motion': 0,
     'slow_motion_value': 0.05,
@@ -17,7 +17,6 @@ GLOBAL_SETTINGS = {
     'language': get_from_common_config('language', 'eng'),
 
 }
-
 
 
 def get_language():

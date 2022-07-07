@@ -6,7 +6,10 @@ from settings.base import VERSION
 from settings.global_parameters import SET_CLIENT_INSTANCE
 
 SET_CLIENT_INSTANCE(1)
+from settings.mouse_default import SCROLL_SPEED
+
 from common.init_pygame import init_pygame  # do not remove its ok
+
 init_pygame()
 from settings.global_parameters import get_slow_motion_k, update_slow_motion, get_fps
 
@@ -15,8 +18,6 @@ from common.global_clock import GLOBAL_CLOCK, ROUND_CLOCK
 from common.global_mouse import GLOBAL_MOUSE
 from common.global_keyboard import GLOBAL_KEYBOARD
 from common.stages import Stages
-
-
 
 from constants.colors import WHITE
 from constants.game_stages import StagesConstants
@@ -88,10 +89,10 @@ class GameRunner:
             for event in events:
                 if event.type == MOUSEBUTTONDOWN:
                     if event.button == 4:
-                        G_Mouse.scroll = 1
+                        G_Mouse.scroll = 1 * SCROLL_SPEED
 
                     elif event.button == 5:
-                        G_Mouse.scroll = -1
+                        G_Mouse.scroll = -1 * SCROLL_SPEED
 
                 if event.type == MOUSEBUTTONUP:
                     if event.button == 1:

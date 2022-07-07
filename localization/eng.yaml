@@ -33,3 +33,8 @@ UI:
 
   join_menu:
     join: Join
+
+  lobby:
+    exit_pop_up:
+      exit_pop_text: Close lobby
+    go_button: Lets go!

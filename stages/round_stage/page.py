@@ -55,8 +55,7 @@ class Round:
 
         self.top_bar.draw()
 
-        if self.exit_pop_up.active:
-            self.exit_pop_up.draw()
+        self.exit_pop_up.draw()
 
         self.cards_window.draw()
         self.mech_window.draw()
