@@ -1,7 +1,7 @@
 from obj_properties.rect_form import Rectangle
 from pygame.draw import rect as draw_rect
 from pygame.draw import circle as draw_circle
-from stages.round_stage.settings.windows_sizes import RoundSizes
+from stages.play_stage.round_stage.settings.windows_sizes import RoundSizes
 from visual.main_window import MAIN_SCREEN
 from visual.sprites_functions import get_surface
 

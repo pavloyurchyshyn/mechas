@@ -2,7 +2,7 @@ from obj_properties.rect_form import Rectangle
 
 from pygame.draw import rect as draw_rect
 
-from stages.round_stage.settings.windows_sizes import RoundSizes
+from stages.play_stage.round_stage.settings.windows_sizes import RoundSizes
 
 from visual.UI_base.input_element_UI import InputElement
 from visual.UI_base.chat import Chat

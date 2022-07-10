@@ -10,7 +10,7 @@ from visual.font_loader import custom_font
 
 from common.singleton import Singleton
 from common.global_mouse import GLOBAL_MOUSE
-from stages.round_lobby_stage.settings.exit_pop_up import *
+from stages.play_stage.round_lobby_stage.settings.exit_pop_up import *
 
 
 class LobbyExitPopUp(Rectangle, LocalizationMixin, metaclass=Singleton):

@@ -1,7 +1,7 @@
 from settings.screen import SCREEN_W, SCREEN_H
 from common.stages import Stages
 from visual.UIController import UI_TREE
-from stages.round_stage.settings.UI_names import RoundUINames, RoundButtonsId
+from stages.play_stage.round_stage.settings.UI_names import RoundUINames, RoundButtonsId
 from constants.stages.localizations.round import RoundLocPaths
 
 stage_controller = Stages()

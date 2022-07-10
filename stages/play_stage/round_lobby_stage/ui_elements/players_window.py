@@ -1,7 +1,7 @@
 from obj_properties.rect_form import Rectangle
-from stages.round_lobby_stage.settings.windows_sizes import LobbyWindowsSizes
+from stages.play_stage.round_lobby_stage.settings.windows_sizes import LobbyWindowsSizes
 from visual.main_window import MAIN_SCREEN
-from stages.round_lobby_stage.ui_elements.players_container import PlayersContainer
+from stages.play_stage.round_lobby_stage.ui_elements.players_container import PlayersContainer
 from visual.UI_base.text_UI import Text
 
 

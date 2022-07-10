@@ -8,11 +8,10 @@ from common.sound_loader import GLOBAL_MUSIC_PLAYER
 from constants.game_stages import StagesConstants
 
 from stages.main_menu_stage.page import MainMenu
-from stages.round_stage.round_logic import RoundRelatedLogic
+from stages.play_stage.round_logic import RoundRelatedLogic
 from stages.settings_stage.page import SettingsMenu
 from stages.host_game_stage.page import HostWindow
 from stages.join_game_stage.page import JoinWindow
-from stages.round_lobby_stage.page import LobbyWindow
 from visual.UIController import UI_TREE
 
 LOGGER = Logger()

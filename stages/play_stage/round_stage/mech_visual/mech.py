@@ -1,7 +1,7 @@
 from pygame.draw import circle as draw_circle
 from visual.main_window import MAIN_SCREEN
 from mechas.base.mech import BaseMech
-from stages.round_stage.windows.world_window.visual_world import VisualWorld
+from stages.play_stage.round_stage.windows.world_window.visual_world import VisualWorld
 
 
 class MechVisual:

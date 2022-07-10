@@ -166,12 +166,14 @@ class NetworkLogic:
         server_response_data[PlayerAttrs.IsAdmin] = self.server.is_admin(player_token)
         server_response_data[PlayerUpdates.Data] = self.players_data[player_token].get_data_dict()
         server_response_data[SRC.OtherPlayers] = self.get_other_players_data(player_token)
+        server_response_data[NetworkKeys.RoundStage] = self.server.current_stage
 
         if self.server.current_stage == NetworkKeys.RoundRoundStage:
             server_response_data[NetworkKeys.DetailsPool] = self.server.GAME_LOGIC.details_pool.get_dict()
 
         elif self.server.current_stage == NetworkKeys.RoundLobbyStage:
             self.server.LOBBY_LOGIC.new_player_connected(player_token)
+            server_response_data[NetworkKeys.DetailsPoolSettings] = self.config.details_pool_settings
 
         LOGGER.info(f'Sending response: {server_response_data}')
         player_connection.send(self.json_to_str(server_response_data))

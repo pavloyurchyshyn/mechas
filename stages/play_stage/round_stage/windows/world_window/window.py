@@ -6,9 +6,9 @@ from common.global_mouse import GLOBAL_MOUSE
 
 from visual.main_window import MAIN_SCREEN
 
-from stages.round_stage.windows.world_window.visual_world import VisualWorld
-from stages.round_stage.settings.windows_sizes import RoundSizes
-from stages.round_stage.settings.arena_window import *
+from stages.play_stage.round_stage.windows.world_window.visual_world import VisualWorld
+from stages.play_stage.round_stage.settings.windows_sizes import RoundSizes
+from stages.play_stage.round_stage.settings.arena_window import *
 
 
 class ArenaWindow(Rectangle):

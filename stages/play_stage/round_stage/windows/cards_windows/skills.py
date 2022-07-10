@@ -1,7 +1,7 @@
 from obj_properties.rect_form import Rectangle
 from pygame.draw import rect as draw_rect
 from pygame import draw
-from stages.round_stage.settings.windows_sizes import RoundSizes
+from stages.play_stage.round_stage.settings.windows_sizes import RoundSizes
 from visual.main_window import MAIN_SCREEN
 from settings.global_parameters import test_draw_status_is_on
 from constants.colors import simple_colors

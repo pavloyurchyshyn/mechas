@@ -1,22 +1,17 @@
 from obj_properties.rect_form import Rectangle
 from visual.UI_base.button_UI import Button
 from visual.UI_base.text_UI import Text
-from stages.round_lobby_stage.settings.windows_sizes import LobbyWindowsSizes
+from stages.play_stage.round_lobby_stage.settings.windows_sizes import LobbyWindowsSizes
 from pygame.draw import rect as draw_rect
 from visual.sprites_functions import get_surface
-from settings.global_parameters import test_draw_status_is_on
-from pygame.draw import circle as draw_circle
-from visual.main_window import MAIN_SCREEN
-from stages.round_lobby_stage.settings.player_container import Colors
+from stages.play_stage.round_lobby_stage.settings.player_container import Colors
 from game_logic.components.player_object import Player
 from constants.network_keys import SLC
 
 
-
 class PlayerUIObj(Rectangle):
     def __init__(self, this_player, player_obj: Player, screen, request_dict: dict, **kwargs):
-        super(PlayerUIObj, self).__init__(x=0,
-                                          y=0,
+        super(PlayerUIObj, self).__init__(x=0, y=0,
                                           size_x=LobbyWindowsSizes.Players.PlayerUIObj.X_SIZE,
                                           size_y=LobbyWindowsSizes.Players.PlayerUIObj.Y_SIZE,
                                           )

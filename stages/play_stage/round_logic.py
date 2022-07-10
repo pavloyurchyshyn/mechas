@@ -2,12 +2,13 @@ import re
 import traceback
 from _thread import start_new_thread
 
-from stages.round_stage.page import Round
-from stages.round_lobby_stage.page import LobbyWindow
+from stages.play_stage.round_stage.page import Round
+from stages.play_stage.round_lobby_stage.page import LobbyWindow
 
 from common.logger import Logger
 from common.stages import Stages
 from common.global_clock import ROUND_CLOCK
+
 from client_server_parts.client.client_network import Network
 from client_server_parts.server_controller import ServerController
 
@@ -15,10 +16,12 @@ from constants.network_keys import NetworkKeys, PlayerUpdates
 from constants.network_keys import ServerResponseCategories, CheckRegex
 
 from game_logic.components.player_object import Player
-from mechas.default_mech import MetalMech
 from game_logic.components.pools.details_pool import DetailsPool
 from game_logic.components.pools.skills_pool import SkillsPool
+
 from visual.UIController import UI_TREE
+
+from mechas.default_mech import MetalMech
 
 LOGGER = Logger()
 
@@ -40,6 +43,7 @@ class RoundRelatedLogic:
         self.client: Network = None
         self.skills_pool: SkillsPool = None
         self.details_pool: DetailsPool = None
+        self.details_pool_settings: dict = {}
         self.this_player: Player = None
         self.other_players = {}
 
@@ -64,7 +68,8 @@ class RoundRelatedLogic:
                 LOGGER.info(f'Client connected: {response}')
                 self.this_player = Player(**response.get(PlayerUpdates.Data, {}))
                 LOGGER.info(f'This player: {self.this_player.get_data_dict()}')
-
+                self.skills_pool: SkillsPool = SkillsPool()
+                self.details_pool: DetailsPool = DetailsPool(self.skills_pool)
                 self.process_connection_data(response)
 
                 start_new_thread(self.__round_recv_thread, ())
@@ -85,7 +90,18 @@ class RoundRelatedLogic:
 
     def process_connection_data(self, response):
         # TODO make a different stages
-        self.build_lobby_menu(response)
+        self.details_pool_settings.clear()
+        self.details_pool_settings.update(response[NetworkKeys.DetailsPoolSettings])
+        self.round_stage = response[NetworkKeys.RoundStage]
+
+        for token, data in response.get(ServerResponseCategories.OtherPlayers, {}).items():
+            LOGGER.info(f'Added new player: {token} - {data}')
+            self.other_players[token] = Player(**data)
+
+        if self.round_stage == NetworkKeys.RoundRoundStage:
+            self.build_round(response)
+        elif self.round_stage == NetworkKeys.RoundLobbyStage:
+            self.build_lobby_menu(response)
 
     def update(self):
         if self.round_stage == NetworkKeys.RoundRoundStage:
@@ -96,10 +112,8 @@ class RoundRelatedLogic:
     def build_lobby_menu(self, response):
         self.lobby_ui = LobbyWindow(response, player=self.this_player, round_logic=self)
         self.lobby_ui.players_window.add_player(self.this_player)
-        for token, data in response.get(ServerResponseCategories.OtherPlayers, {}).items():
-            LOGGER.info(f'Added new player: {token} - {data}')
-            self.other_players[token] = Player(**data)
-            self.lobby_ui.players_window.add_player(self.other_players[token])
+        for obj in self.other_players.values():
+            self.lobby_ui.players_window.add_player(obj)
 
     def lobby(self):
         self.lobby_ui.update()
@@ -123,8 +137,7 @@ class RoundRelatedLogic:
 
     def build_round(self, response):
         mech = self.build_mech(response)
-        self.skills_pool: SkillsPool = SkillsPool()
-        self.details_pool: DetailsPool = DetailsPool(self.skills_pool, 1)  # TODO players number
+
         self.details_pool.load_details_list(response[NetworkKeys.DetailsPool])
 
         self.round_ui = Round(self.this_player, self.other_players)
@@ -148,7 +161,10 @@ class RoundRelatedLogic:
         self.round_ui = None
         self.this_player = None
         self.other_players.clear()
+        self.details_pool_settings.clear()
         self.stage_controller.set_main_menu_stage()
+        self.skills_pool: SkillsPool = None
+        self.details_pool: DetailsPool = None
 
     # ===========================================
     def __round_recv_thread(self):

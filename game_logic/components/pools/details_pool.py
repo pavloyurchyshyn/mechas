@@ -10,14 +10,13 @@ from common.logger import Logger
 class DetailsPool:
     logger = Logger()
 
-    def __init__(self, skills_pool: SkillsPool, players_number: int):
+    def __init__(self, skills_pool: SkillsPool):
         self.skills_pool: SkillsPool = skills_pool
         self.details = []
         self.id_to_detail: dict = {}
         self.classes_dict: dict = {}
         self.collect_details_classes()
         self.id_generator = IdGenerator()
-        self.players_number = players_number
         self.default_details = None
 
     def get_class_by_name(self, name):

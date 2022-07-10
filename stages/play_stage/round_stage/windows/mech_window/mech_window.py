@@ -4,11 +4,11 @@ from pygame.draw import rect as draw_rect
 from pygame.draw import line as draw_line
 from pygame.draw import circle as draw_circle
 # from settings_stage.UI_settings.menus_settings.settings_stage.mech_window import *
-from stages.round_stage.settings.windows_sizes import RoundSizes
+from stages.play_stage.round_stage.settings.windows_sizes import RoundSizes
 from mechas.base.mech import BaseMech
 from mechas.base.parts.body import BaseBody
-from stages.round_stage.windows.mech_window.settings import SlotSizes
-from stages.round_stage.windows.mech_window.slot_cell import VisualSlot, BodyVisualSlot
+from stages.play_stage.round_stage.windows.mech_window.settings import SlotSizes
+from stages.play_stage.round_stage.windows.mech_window.slot_cell import VisualSlot, BodyVisualSlot
 from settings.screen import Y_SCALE
 
 from settings.global_parameters import test_draw_status_is_on

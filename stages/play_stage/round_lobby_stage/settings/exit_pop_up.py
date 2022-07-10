@@ -1,7 +1,7 @@
 from settings.screen import SCREEN_W, SCREEN_H
 from common.stages import Stages
 from visual.UIController import UI_TREE
-from stages.round_lobby_stage.settings.UI_names import LobbyUIIDs, LobbyUINames
+from stages.play_stage.round_lobby_stage.settings.UI_names import LobbyUIIDs, LobbyUINames
 from constants.stages.localizations.lobby import LobbyLocPaths
 
 stage_controller = Stages()

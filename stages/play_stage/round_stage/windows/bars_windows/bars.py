@@ -1,4 +1,4 @@
-from stages.round_stage.windows.bars_windows.hp_and_mana_bars import HPBar, ManaBar
+from stages.play_stage.round_stage.windows.bars_windows.hp_and_mana_bars import HPBar, ManaBar
 from mechas.base.mech import BaseMech
 
 

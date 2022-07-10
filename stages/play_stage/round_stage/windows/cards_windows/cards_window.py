@@ -1,7 +1,7 @@
 from mechas.base.mech import BaseMech
 from visual.skill_card import SkillCard
-from stages.round_stage.windows.cards_windows.skills import UnsedSkillCards
-from stages.round_stage.windows.cards_windows.used_skills import UsedSkillsCards
+from stages.play_stage.round_stage.windows.cards_windows.skills import UnsedSkillCards
+from stages.play_stage.round_stage.windows.cards_windows.used_skills import UsedSkillsCards
 
 
 class CardsWindow:

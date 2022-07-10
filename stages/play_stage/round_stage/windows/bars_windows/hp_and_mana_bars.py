@@ -1,4 +1,4 @@
-from stages.round_stage.settings.windows_sizes import RoundSizes
+from stages.play_stage.round_stage.settings.windows_sizes import RoundSizes
 from visual.UI_base.text_UI import Text
 from visual.UI_base.progress_bar_UI import ProgressBar
 from constants.stages.localizations.round import RoundLocPaths

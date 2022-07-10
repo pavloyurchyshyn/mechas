@@ -1,17 +1,14 @@
 from obj_properties.rect_form import Rectangle
 
-from pygame import transform, Surface, mouse
+from pygame import Surface
 from pygame.draw import rect as draw_rect
 from pygame.constants import SRCALPHA
-from pygame import draw
 
-from visual.UI_base.text_UI import Text
-from common.global_clock import GLOBAL_CLOCK
 from common.global_mouse import GLOBAL_MOUSE
 
 from constants.colors import simple_colors
 from visual.main_window import MAIN_SCREEN
-from stages.round_lobby_stage.ui_elements.player_ui_obj import PlayerUIObj
+from stages.play_stage.round_lobby_stage.ui_elements.player_ui_obj import PlayerUIObj
 from common.logger import Logger
 LOGGER = Logger().LOGGER
 

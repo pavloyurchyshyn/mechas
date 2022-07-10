@@ -16,6 +16,7 @@ class NetworkKeys:
     Password = 'password'
 
     DetailsPool = 'details_pool'
+    DetailsPoolSettings = 'detail_pool_settings'
 
     SwitchRoundStageTo = 'switch_round_stage'
     RoundStage = 'round_stage'

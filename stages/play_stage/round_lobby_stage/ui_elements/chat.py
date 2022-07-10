@@ -1,7 +1,7 @@
 from pygame.draw import rect as draw_rect
 from visual.main_window import MAIN_SCREEN
 from visual.UI_base.chat import Chat
-from stages.round_lobby_stage.settings.windows_sizes import LobbyWindowsSizes
+from stages.play_stage.round_lobby_stage.settings.windows_sizes import LobbyWindowsSizes
 from visual.UI_base.input_element_UI import InputElement
 from visual.UI_base.button_UI import Button
 from common.global_keyboard import GLOBAL_KEYBOARD

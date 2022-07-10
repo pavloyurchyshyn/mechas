@@ -1,11 +1,12 @@
-from stages.round_lobby_stage.ui_elements.chat import ChatElement
-from stages.round_lobby_stage.ui_elements.players_window import PlayersWindow
+from stages.play_stage.round_lobby_stage.ui_elements.chat import ChatElement
+from stages.play_stage.round_lobby_stage.ui_elements.players_window import PlayersWindow
 from visual.UI_base.button_UI import Button
-from stages.round_lobby_stage.settings.windows_sizes import LobbyWindowsSizes
+from stages.play_stage.round_lobby_stage.settings.windows_sizes import LobbyWindowsSizes
 from common.global_mouse import GLOBAL_MOUSE
 from common.global_keyboard import GLOBAL_KEYBOARD
-from stages.round_lobby_stage.ui_elements.exit_pop_up import LobbyExitPopUp
-from constants.network_keys import ServerResponseCategories, CheckRegex, SLC
+from stages.play_stage.round_lobby_stage.ui_elements.exit_pop_up import LobbyExitPopUp
+from stages.play_stage.round_lobby_stage.ui_elements.details_pool_settings import DetailPoolSettings
+from constants.network_keys import ServerResponseCategories, SLC
 from game_logic.components.player_object import Player
 from common.logger import Logger
 
@@ -38,6 +39,9 @@ class LobbyWindow:
                                   on_click_action=self.exit_pop_up.switch,
                                   )
 
+        self.details_pool_settings = DetailPoolSettings(pool_setting=self.round_logic.details_pool_settings,
+                                                        details_pool=self.round_logic.details_pool)
+
     def update(self):
         self.chat_window.update()
         self.players_window.update()
@@ -59,6 +63,7 @@ class LobbyWindow:
         self.players_window.draw()
         self.go_button.draw()
         self.exit_button.draw()
+        self.details_pool_settings.draw()
 
         self.exit_pop_up.draw()
 
@@ -71,6 +76,7 @@ class LobbyWindow:
         if SLC.KickPlayer in data:
             LOGGER.info(f'Kicking {data[SLC.KickPlayer]}')
             token = data[SLC.KickPlayer]
+            self.other_players.pop(token)
             self.players_window.kick_player(token)
 
     def __process_new_players(self, data):

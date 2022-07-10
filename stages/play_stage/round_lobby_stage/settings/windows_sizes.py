@@ -33,8 +33,6 @@ class LobbyWindowsSizes:
         Y_SIZE = scaled_h(0.35)
 
         class PlayerUIObj:
-            X = scaled_w(0.75)
-            Y = scaled_h(0.75)
             X_SIZE = scaled_w(0.25)
             Y_SIZE = scaled_h(0.25) // 10
 
@@ -44,7 +42,15 @@ class LobbyWindowsSizes:
                 X_SIZE = scaled_w(0.025)
                 Y_SIZE = scaled_h(0.25) // 10
 
-            # class Nickname:
+    class DetailsPoolSettings:
+        X = scaled_w(0.1)
+        Y = scaled_h(0.1)
+        X_SIZE = scaled_w(0.25)
+        Y_SIZE = scaled_h(0.35)
+
+        class DetailUIObj:
+            X_SIZE = scaled_w(0.25)
+            Y_SIZE = scaled_h(0.25) // 10
 
     class GoButton:
         X = scaled_w(0.94)
