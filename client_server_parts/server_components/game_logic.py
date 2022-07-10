@@ -35,7 +35,7 @@ class GameLogic(MessageProcessorMixin, ):
 
     def build_round(self):
         self.skills_pool = SkillsPool()
-        self.details_pool = DetailsPool(self.skills_pool, self.config.max_players_num)  # TODO
+        self.details_pool = DetailsPool(self.skills_pool)  # TODO
 
         pool_generator = PoolGenerator(self.config.max_players_num, self.config.details_pool_settings)
         self.details_pool.load_details_list(pool_generator.get_details_list())
