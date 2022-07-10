@@ -61,4 +61,8 @@ class ChatElement(Rectangle):
         draw_rect(MAIN_SCREEN, (255, 255, 255), self.get_rect(), 1, 5)
 
     def send_message(self, inp):
-        self.player_response[PlayerActions.MESSAGE] = self.chat_input.last_message
+        self.player_response[PlayerActions.MESSAGE] = inp.last_message
+
+    def add_messages(self, messages: list):
+        for message in messages:
+            self.chat.add_message(message)

@@ -44,6 +44,7 @@ class Network:
         try:
             self.connection.connect(self.server_addr)
             self.connection.send(self.json_to_str(self.credentials))
+            LOGGER.info(f"Connection server request {self.credentials}")
             response = self.str_to_json(self.connection.recv(2048).decode())
             LOGGER.info(f"Connection server response {response}")
             conn_sts = response.get(ServerConnectAnswers.CONNECTION_ANSWER)

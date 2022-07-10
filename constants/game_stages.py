@@ -12,8 +12,6 @@ class StagesConstants:
 
     CONNECT = 'connect'
 
-    ROUND_LOBBY = 'round_lobby'
-
     ROUND_STAGE = 'round'
     ROUND_PAUSE_STAGE = 'round_pause'
     ROUND_CLOSE = 'round_close'

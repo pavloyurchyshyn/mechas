@@ -12,22 +12,24 @@ from common.global_mouse import GLOBAL_MOUSE
 from constants.colors import simple_colors
 from visual.main_window import MAIN_SCREEN
 from stages.round_lobby_stage.ui_elements.player_ui_obj import PlayerUIObj
+from common.logger import Logger
+LOGGER = Logger().LOGGER
 
 
 class PlayersContainer(Rectangle):
-    CLOCK = GLOBAL_CLOCK
-    MOUSE = GLOBAL_MOUSE
 
     def __init__(self, x, y,
                  screen,
                  size_x, size_y,
-                 transparent=1, background_color=(10, 10, 10, 120),  # r, g, b, t
-                 v_step=None,
+                 player_window,
+                 transparent=1,
+                 background_color=(10, 10, 10, 120),  # r, g, b, t
                  border=0, border_color=simple_colors.white,
                  id=None,
                  ):
 
         super().__init__(x=x, y=y, size_x=size_x, size_y=size_y)
+        self.player_window = player_window
         self.id = id
 
         self._screen = screen
@@ -69,7 +71,7 @@ class PlayersContainer(Rectangle):
         x, y = GLOBAL_MOUSE.x - self.x0, GLOBAL_MOUSE.y - self.y0
 
         for player_ui_obj in self.players_ui_objects.copy():
-            player_ui_obj.update()
+            player_ui_obj.update((x, y))
             if GLOBAL_MOUSE.lmb and not clicked:
                 clicked = player_ui_obj.click((x, y))
 
@@ -83,45 +85,54 @@ class PlayersContainer(Rectangle):
 
     def render(self):
         self.calculate_height()
+        self.players_ui_objects.sort(key=lambda obj: obj.player.number)
         self.surface.fill(self._background_color)
 
-        h = self.scroll
+        h = self.scroll + 2
 
         for el in self.players_ui_objects:
             el.set_y(h)
-            el.draw()
+            # el.draw()
             h += el.sizes[1]
 
     def calculate_height(self):
-        self.elements_height = 0
+        self.elements_height = 2
         for el in self.players_ui_objects:
             self.elements_height += el.size[1]
 
     def draw(self, dx=0, dy=0):
+        for obj in self.players_ui_objects:
+            obj.draw()
         self._screen.blit(self.surface, (dx + self.x0, dy + self.y0))
-        # MAIN_SCREEN.blit(self.surface, self.left_top)
-
-        draw_rect(MAIN_SCREEN, (255, 255, 255), self.get_rect(), 1, 5)
-        from settings.global_parameters import test_draw_status_is_on
-        from pygame.draw import circle as draw_circle
-
-        if test_draw_status_is_on():
-            dx, dy = self.x0, self.y0
-            for obj in self.players_ui_objects:
-                for (x, y) in obj._dots[1:]:
-                    draw_circle(MAIN_SCREEN, (255, 255, 0), (x + dx, y + dy), 3)
+        draw_rect(MAIN_SCREEN, (255, 255, 255), self.get_rect(), 1)
 
     def change_position_lt(self, xy: tuple):
         self._change_position_lt(xy)
         self.render()
 
-    def add_player(self, player_data):
-        self.players_ui_objects.append(PlayerUIObj(player_data, self.surface))
+    def add_player(self, player_obj):
+        LOGGER.info(f'Added player to container: {player_obj}')
+        self.players_ui_objects.append(PlayerUIObj(player_obj=player_obj,
+                                                   this_player=self.player_window.this_player,
+                                                   screen=self.surface,
+                                                   request_dict=self.player_window.player_request))
         self.render()
 
-    def del_element(self, element):
-        self.players_ui_objects.remove(element)
-        self.render()
+    def kick_player(self, token: str):
+        LOGGER.info(f'Kicking player to container: {token}')
+        obj: PlayerUIObj = None
+        for obj_ in self.players_ui_objects:
+            if obj_.player.token == token:
+                obj = obj_
+        if obj:
+            self.players_ui_objects.remove(obj)
+            num = obj.player.number
+            for obj_ in self.players_ui_objects:
+                if obj_.player.number > num:
+                    LOGGER.info(f'Changing num of {obj_.player.get_data_dict()}')
+                    obj_.player.number -= 1
+
+            self.render()
 
     def get_surface(self):
         flags = 0

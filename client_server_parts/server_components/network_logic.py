@@ -1,11 +1,12 @@
 import traceback
-from time import sleep, time
+from time import sleep
 from _thread import start_new_thread
 from common.logger import Logger
 from constants.network_keys import *
 from settings.network import *
 from client_server_parts.server_components.player_connection_handler import ConnectionHandler
 from game_logic.components.player_object import Player
+from client_server_parts.server_components.config import ServerConfig
 
 LOGGER = Logger()
 
@@ -15,6 +16,8 @@ class NetworkLogic:
 
     def __init__(self, server):
         self.server = server
+        self.config: ServerConfig = server.config
+
         self.json_to_str = server.json_to_str
         self.str_to_json = server.str_to_json
 
@@ -30,10 +33,8 @@ class NetworkLogic:
 
         self.players_connections: {str: ConnectionHandler} = server.players_connections  # token: socket connection
 
-        self.config = server.config
         self.address = socket.gethostbyname(socket.gethostname())
 
-        LOGGER.info(f'Server started {self.address}:{self.config.server_port}')
         self.open_connection()
         self.start()
 
@@ -55,28 +56,10 @@ class NetworkLogic:
     def start(self):
         try:
             start_new_thread(self.__connection_handling, ())
-            start_new_thread(self.all_connected_timeout, ())
             LOGGER.info(f'Server started {self.address}:{self.config.server_port}')
         except Exception as e:
             LOGGER.info(f'Connection handler error.')
             LOGGER.error(e)
-            self.server.stop()
-
-    def all_connected_timeout(self):
-        end_of_waiting = time() + self.TIME_WITHOUT_CONNECTION
-        all_connected = False
-        while True:
-            sleep(1)
-            if self.connected_players_count == self.config.max_players_num:
-                all_connected = True
-                LOGGER.info('All players connected')
-                break
-
-            elif end_of_waiting < time():
-                LOGGER.info('Not all players connected, timeout fall.')
-                break
-
-        if not all_connected:
             self.server.stop()
 
     def __connection_handling(self):
@@ -89,7 +72,8 @@ class NetworkLogic:
                 LOGGER.info('Waiting for connection')
                 try:
                     player_connection, (addr, port) = self.socket.accept()
-                    LOGGER.info(f'Connection accepted {addr}:{port}')
+                    # LOGGER.info(f'Connection accepted {addr}:{port}')
+                    LOGGER.info(f'Connection accepted :{port}')
                     player_connection = ConnectionHandler(connection=player_connection)
                 except Exception as e:
                     LOGGER.error(e)
@@ -106,9 +90,10 @@ class NetworkLogic:
                         pre_player_id = player_token
                         player_token = str(hash(str((addr, port))))
                         # if player was admin add new token as admin
-                        if self.server.is_admin(pre_player_id):
+                        if self.server.is_admin(pre_player_id) and pre_player_id not in self.players_connections:
                             self.server.add_admin(player_token)
                             self.server.remove_admin(pre_player_id)
+
                         LOGGER.info(f'New player id {player_token}')
 
                     player_connection.player_id = player_token
@@ -128,8 +113,10 @@ class NetworkLogic:
                             player_connection.send(self.json_to_str(server_response_data))
                         except Exception:
                             pass
-
+            else:
+                LOGGER.info('STOPPED')
         except Exception as e:
+            LOGGER.error(f'CONNECTION HANDLING ERROR')
             LOGGER.error(e)
             self.alive = 0
 
@@ -167,12 +154,24 @@ class NetworkLogic:
         self.players_connections[player_token] = player_connection
 
         self.players_data[player_token] = Player(nickname=client_data.get(PlayerAttrs.Nickname),
-                                                 token=player_token, addr=addr, player_data=client_data)
+                                                 token=player_token, addr=addr,
+                                                 is_admin=self.server.is_admin(player_token),
+                                                 number=self.connected_players_count+1,
+                                                 )
 
         server_response_data[NetworkKeys.ServerAnswer] = 'Successfully connected.'
+        server_response_data[NetworkKeys.Seed] = self.config.seed
         server_response_data[ServerConnectAnswers.CONNECTION_ANSWER] = ServerConnectAnswers.Connected
         server_response_data[PlayerAttrs.Token] = player_token
-        server_response_data[NetworkKeys.DetailsPool] = self.server.GAME_LOGIC.details_pool.get_dict()
+        server_response_data[PlayerAttrs.IsAdmin] = self.server.is_admin(player_token)
+        server_response_data[PlayerUpdates.Data] = self.players_data[player_token].get_data_dict()
+        server_response_data[SRC.OtherPlayers] = self.get_other_players_data(player_token)
+
+        if self.server.current_stage == NetworkKeys.RoundRoundStage:
+            server_response_data[NetworkKeys.DetailsPool] = self.server.GAME_LOGIC.details_pool.get_dict()
+
+        elif self.server.current_stage == NetworkKeys.RoundLobbyStage:
+            self.server.LOBBY_LOGIC.new_player_connected(player_token)
 
         LOGGER.info(f'Sending response: {server_response_data}')
         player_connection.send(self.json_to_str(server_response_data))
@@ -182,7 +181,15 @@ class NetworkLogic:
                     f' Player #{self.connected_players_count}.'
                     f' Nickname {client_data.get(PlayerAttrs.Nickname)}.')
         self.connected_players_count += 1
-        self.server.GAME_LOGIC.start_player_handling(player_token)
+
+        if self.server.current_stage == NetworkKeys.RoundLobbyStage:
+            self.server.LOBBY_LOGIC.start_player_thread(self.server, player_token)
+        elif self.server.current_stage == NetworkKeys.RoundRoundStage:
+            self.server.GAME_LOGIC.start_player_handling(player_token)
+
+    def get_other_players_data(self, token):
+        d = {token: self.players_data[token_].get_data_dict() for token_ in self.players_connections if token != token_ and token_ in self.players_data}
+        return d
 
     def reconnect_player(self, server_response_data, player_connection, player_token, client_data, addr):
         LOGGER.info(f'Player {player_token} is reconnecting.')
@@ -201,7 +208,7 @@ class NetworkLogic:
         server_response_data[NetworkKeys.ServerAnswer] = 'Successfully reconnected.'
 
         self.players_data[player_token] = Player(nickname=client_data.get(PlayerAttrs.Nickname),
-                                                 token=player_token, addr=addr, player_data=client_data)
+                                                 token=player_token, addr=addr) # TODO get old object
         self.players_connections[player_token] = player_connection
         self.player_connected_in_past.add(player_token)
         self.server.GAME_LOGIC.start_player_handling(player_token)

@@ -4,14 +4,24 @@ from constants.mechas.detail_const import MechSerialize
 
 
 class Player:
-    def __init__(self, token, player_data: dict, nickname, mech: BaseMech = None, addr=None):
+    def __init__(self, token, nickname, number, mech: BaseMech = None, addr=None, is_admin=False, ready=False):
         self.addr = addr
-        self.nickname = player_data.get(PlayerAttrs.Nickname) if nickname is None else nickname
+        self.nickname = nickname
+        self.number = number
         self.token = token
         self.mech: BaseMech = mech
-        self.player_data: dict = player_data
-        self.ready = False
+        self.ready: bool = ready
         self.default_details = {}
+        self.is_admin = is_admin
+
+    def get_data_dict(self):
+        return {
+            'token': self.token,
+            'nickname': self.nickname,
+            'ready': self.ready,
+            'is_admin': self.is_admin,
+            'number': self.number,
+        }
 
     def set_mech(self, mech):
         self.mech = mech

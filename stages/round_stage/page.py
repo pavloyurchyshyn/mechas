@@ -18,11 +18,11 @@ from game_logic.components.player_object import Player
 class Round:
     name = 'round'
 
-    def __init__(self, player: Player):
+    def __init__(self, player: Player, other_players: dict):
         self.player_response = {}
 
         self.player = player
-        self.other_players = {}
+        self.other_players = other_players
 
         self.arena_window = ArenaWindow()
         self.top_bar = TopBar()

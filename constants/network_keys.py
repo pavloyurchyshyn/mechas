@@ -1,11 +1,13 @@
 class PlayerAttrs:
     Token = 'access_token'
     Nickname = 'nickname'
+    IsAdmin = 'is_admin'
 
 
 class NetworkKeys:
     Address = 'address'
     Port = 'port'
+    Seed = 'seed'
     PlayerNumber = 'player_number'
     TeamNames = 'teams'
     AdminToken = 'admin_token'
@@ -14,6 +16,24 @@ class NetworkKeys:
     Password = 'password'
 
     DetailsPool = 'details_pool'
+
+    SwitchRoundStageTo = 'switch_round_stage'
+    RoundStage = 'round_stage'
+    RoundRoundStage = 'round'
+    RoundLobbyStage = 'lobby'
+
+
+class LobbyActions:
+    Kick = 'kick'
+    Start = 'start'
+
+
+class ServerLobbyCategories:
+    AddPlayer = 'add_player'
+    KickPlayer = 'kick_player'
+
+
+SLC = ServerLobbyCategories
 
 
 class PlayerActions:
@@ -55,6 +75,9 @@ class ServerResponseCategories:
     DeletePlayers = 'delete_players'
 
     ReadyState = 'ready_state'
+
+    OtherPlayers = 'other_players'
+    NewPlayers = 'new_players'
 
 
 SRC = ServerResponseCategories

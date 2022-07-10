@@ -30,7 +30,7 @@ class LobbyWindowsSizes:
         X = scaled_w(0.75)
         Y = scaled_h(0.1)
         X_SIZE = scaled_w(0.25)
-        Y_SIZE = scaled_h(0.25)
+        Y_SIZE = scaled_h(0.35)
 
         class PlayerUIObj:
             X = scaled_w(0.75)

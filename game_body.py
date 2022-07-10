@@ -15,7 +15,6 @@ from stages.join_game_stage.page import JoinWindow
 from stages.round_lobby_stage.page import LobbyWindow
 from visual.UIController import UI_TREE
 
-
 LOGGER = Logger()
 
 
@@ -40,8 +39,6 @@ class GameBody:
             StagesConstants.ROUND_STAGE: self.round,
             StagesConstants.ROUND_CLOSE: self.close_round,
             StagesConstants.EXIT_STAGE: self._close_game,
-
-            StagesConstants.ROUND_LOBBY: self.lobby_logic
         }
 
         self.settings_in_menu = SettingsMenu()
@@ -52,11 +49,6 @@ class GameBody:
         self.main_menu = MainMenu()
         self.host_menu: HostWindow = None
         self.join_menu_ui = JoinWindow()
-        self.lobby = LobbyWindow({}) # TODO
-
-    def lobby_logic(self):
-        self.lobby.update()
-        self.lobby.draw()
 
     def game_loop(self):
         self._music_player.update()
@@ -72,7 +64,7 @@ class GameBody:
         self.round_logic.connect_to_server()
 
     def round(self):
-        self.round_logic.round()
+        self.round_logic.update()
 
     def close_round(self):
         self.round_logic.close_round()
