@@ -1,7 +1,7 @@
 from game_logic.components.pools.details_pool import DetailsPool
 from mechas.base.mech import BaseMech
 from mechas.base.parts.body import BaseBody
-from constants.mechas.detail_const import MechSerialize, DetailsTypes
+from constants.mechas.detail_const import MechSerializeConst, DetailsTypes
 from common.logger import Logger
 
 
@@ -13,20 +13,20 @@ class MechBuilder:
 
     def mech_to_dict(self, mech: BaseMech):
         data = {
-            MechSerialize.Body: mech.body.unique_id,
+            MechSerializeConst.Body: mech.body.unique_id,
         }
-        for k, slots in ((MechSerialize.LeftArms, mech.left_arms),
-                         (MechSerialize.RightArms, mech.right_arms),
-                         (MechSerialize.LeftLegs, mech.left_legs),
-                         (MechSerialize.RightLegs, mech.right_legs)):
+        for k, slots in ((MechSerializeConst.LeftArms, mech.left_arms),
+                         (MechSerializeConst.RightArms, mech.right_arms),
+                         (MechSerializeConst.LeftLegs, mech.left_legs),
+                         (MechSerializeConst.RightLegs, mech.right_legs)):
 
             slots = {slot.num: slot.detail for slot in slots.values()}
             for slot_n, detail in slots.items():
                 if detail:
-                    slots[slot_n] = {MechSerialize.Detail: detail.unique_id}
+                    slots[slot_n] = {MechSerializeConst.Detail: detail.unique_id}
                     if detail.detail_type in (DetailsTypes.ARM_TYPE, DetailsTypes.ARM_AND_LEG_TYPE):
                         if detail.weapon:
-                            slots[slot_n][MechSerialize.Weapon] = detail.weapon.unique_id
+                            slots[slot_n][MechSerializeConst.Weapon] = detail.weapon.unique_id
 
             data[k] = slots
 
@@ -38,18 +38,18 @@ class MechBuilder:
         :param data:
         :return:
         """
-        body: BaseBody = self.details_pool.get_detail_by_id(data.get(MechSerialize.Body))
-        for k, set_slot_detail_func in ((MechSerialize.LeftArms, body.set_left_arm),
-                                        (MechSerialize.RightArms, body.set_right_arm),
-                                        (MechSerialize.LeftLegs, body.set_left_leg),
-                                        (MechSerialize.RightLegs, body.set_right_leg)):
+        body: BaseBody = self.details_pool.get_detail_by_id(data.get(MechSerializeConst.Body))
+        for k, set_slot_detail_func in ((MechSerializeConst.LeftArms, body.set_left_arm),
+                                        (MechSerializeConst.RightArms, body.set_right_arm),
+                                        (MechSerializeConst.LeftLegs, body.set_left_leg),
+                                        (MechSerializeConst.RightLegs, body.set_right_leg)):
             side_slots = data.get(k, {})
             for slot_num, detail_data in side_slots.items():
-                detail = self.details_pool.get_detail_by_id(detail_data[MechSerialize.Detail])
+                detail = self.details_pool.get_detail_by_id(detail_data[MechSerializeConst.Detail])
                 set_slot_detail_func(slot_num, detail)
                 if detail.detail_type in (DetailsTypes.ARM_TYPE, DetailsTypes.ARM_AND_LEG_TYPE):
-                    if detail_data.get(MechSerialize.Weapon):
-                        detail.set_weapon(self.details_pool.get_detail_by_id(detail_data.get(MechSerialize.Weapon)))
+                    if detail_data.get(MechSerializeConst.Weapon):
+                        detail.set_weapon(self.details_pool.get_detail_by_id(detail_data.get(MechSerializeConst.Weapon)))
                     else:
                         detail.remove_weapon()
 

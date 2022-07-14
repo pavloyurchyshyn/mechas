@@ -1,23 +1,23 @@
 import inspect
 from mechas.base.parts.detail import BaseDetail
-from common.id_generator import IdGenerator
 from mechas import details
-from mechas.base.exceptions import ThisDetailClassDoesntExists
+from mechas.base.exceptions import ThisDetailClassDoesntExist
 from game_logic.components.pools.skills_pool import SkillsPool
+from common.id_generator import IdGenerator
 from common.logger import Logger
 
 
 class DetailsPool:
     logger = Logger()
 
-    def __init__(self, skills_pool: SkillsPool):
+    def __init__(self, skills_pool: SkillsPool, seed: int = None):
         self.skills_pool: SkillsPool = skills_pool
         self.details = []
         self.id_to_detail: dict = {}
         self.classes_dict: dict = {}
         self.collect_details_classes()
-        self.id_generator = IdGenerator()
-        self.default_details = None
+        self.id_generator = IdGenerator(seed=seed)
+        self.default_details = {}
 
     def get_class_by_name(self, name):
         return self.classes_dict.get(name)
@@ -41,7 +41,7 @@ class DetailsPool:
         detail_class = self.classes_dict.get(detail_class_name)
 
         if detail_class is None:
-            raise ThisDetailClassDoesntExists(detail_class_name)
+            raise ThisDetailClassDoesntExist(detail_class_name)
 
         detail: BaseDetail = detail_class(unique_id=unique_id)
         self.details.append(detail)

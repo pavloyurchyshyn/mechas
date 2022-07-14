@@ -2,8 +2,8 @@ import random
 
 
 class IdGenerator:
-    def __init__(self, seed=random.getrandbits(32)):
-        self.seed = seed
+    def __init__(self, seed):
+        self.seed = seed if seed is not None else random.getrandbits(32)
 
     def set_seed(self, seed):
         self.seed = seed

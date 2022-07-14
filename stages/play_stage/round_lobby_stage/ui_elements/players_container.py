@@ -53,16 +53,7 @@ class PlayersContainer(Rectangle):
         # for button in self.elements:
         #     button.update()
 
-        if self.collide_point(GLOBAL_MOUSE.pos):
-            if GLOBAL_MOUSE.scroll and self.elements_height > self.size_y:
-                self.scroll += GLOBAL_MOUSE.scroll
-                if self.scroll > 0:
-                    self.scroll = 0
-
-                if self.size_y - self.scroll > self.elements_height:
-                    self.scroll = self.size_y - self.elements_height
-
-                self.render()
+        self.check_for_scroll()
 
         clicked = False
         x, y = GLOBAL_MOUSE.x - self.x0, GLOBAL_MOUSE.y - self.y0
@@ -79,6 +70,17 @@ class PlayersContainer(Rectangle):
         #             button.click(xy=xy)
         #             if button.clicked:
         #                 break
+    def check_for_scroll(self):
+        if self.collide_point(GLOBAL_MOUSE.pos):
+            if GLOBAL_MOUSE.scroll and self.elements_height > self.size_y:
+                self.scroll += GLOBAL_MOUSE.scroll
+                if self.scroll > 0:
+                    self.scroll = 0
+
+                if self.size_y - self.scroll > self.elements_height:
+                    self.scroll = self.size_y - self.elements_height
+
+                self.render()
 
     def render(self):
         self.calculate_height()

@@ -16,6 +16,9 @@ class ConnectionHandler:
         self.connection = connection
 
     def send(self, data):
+        self.connection.send(data)
+        # TODO is that needed? Need to think
+        return
         try:
             self.connection.send(data)
         except Exception as e:
@@ -24,6 +27,7 @@ class ConnectionHandler:
             self._last_successful_send = time()
 
     def recv(self, size=2048):
+        return self.connection.recv(size)
         try:
             data = self.connection.recv(size)
             self._last_successful_send = time()

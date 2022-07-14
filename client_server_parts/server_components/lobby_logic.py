@@ -23,42 +23,26 @@ class LobbyLogic(MPM, ):
         self.alive = True
 
         self.data_to_send = {}
-        self.start_lobby()
 
     def new_player_connected(self, token):
         self.data_to_send[SRC.NewPlayers] = self.data_to_send.get(SRC.NewPlayers, {})
         self.data_to_send[SRC.NewPlayers][token] = self.players_data[token].get_data_dict()
 
-    def start_player_thread(self, server, player_token):
-        start_new_thread(self.__player_thread, (server, player_token))
-
-    def __player_thread(self, server, player_token):
-        try:
-            connection = server.get_connection(player_token)
-
-            while self.server.current_stage == NetworkKeys.RoundLobbyStage:
-                player_request = connection.recv().decode()
-                if player_request and player_request != '{}':
-                    player_request = normalize_request(player_request)
-                    player_request = self.str_to_json(player_request)
-                    LOGGER.info(f'Received {player_token}: {player_request}')
-                    self.__process_received(player_token, player_request)
-
-        except Exception as e:
-            if player_token in self.server.players_connections:
-                LOGGER.error(e)
-                LOGGER.error(traceback.format_exc())
-                server.disconnect_player(player_token)
-                self.data_to_send[SLC.KickPlayer] = player_token
-                if self.server.is_admin(player_token):
-                    self.server.stop()
-            else:
-                LOGGER.info(f'Player {player_token} was disconnected, thread stopped.')
-
-    def __process_received(self, player_token, player_request):
+    def process_received(self, player_token, player_request):
         player = self.players_data[player_token]
         self.process_messages(player_token, player_request)
         self.__process_kicks(player_token, player_request)
+        self.__process_game_start(player_token, player_request)
+
+    def __process_game_start(self, player_token: str, player_request: dict):
+        if player_request.get(SLC.StartGame, False) and self.server.is_admin(player_token):
+            LOGGER.info(f'Game stage started')
+            self.alive = False
+            self.server.GAME_LOGIC.build_round()
+            self.data_to_send[NetworkKeys.SwitchRoundStageTo] = NetworkKeys.RoundRoundStage
+            self.data_to_send[NetworkKeys.DetailsPool] = self.server.GAME_LOGIC.details_pool.get_dict()
+            self.update()
+            self.server.switch_to_game()
 
     def __process_kicks(self, player_token, player_request):
         if SLC.KickPlayer in player_request and self.server.is_admin(player_token):
@@ -67,31 +51,6 @@ class LobbyLogic(MPM, ):
             self.data_to_send[SLC.KickPlayer] = player_request[SLC.KickPlayer]
             p_obj = self.players_data.pop(player_request[SLC.KickPlayer])
             self.send_bare_message(f'Kicking {p_obj.nickname}')
-
-    def start_lobby(self):
-        start_new_thread(self.__start_lobby, ())
-
-    def __start_lobby(self):
-        LOGGER.info('Sever Lobby loop started.')
-        update_delay = 1 / 32
-        LOGGER.info(f'Tick rate {64}. Time per frame: {update_delay}')
-
-        try:
-            while self.server.alive and self.server.current_stage == NetworkKeys.RoundLobbyStage:
-                t = time()
-                self.update()
-                sl = update_delay - (time() - t)
-                # LOGGER.info(f'Time spent for calculation {time() - t}, sleep {sl}')
-                if sl > 0:
-                    sleep(sl)
-        except Exception as e:
-            LOGGER.critical('Lobby loop stopped.')
-            LOGGER.error(e)
-            LOGGER.error(traceback.format_exc())
-        finally:
-            self.server.alive = False
-            self.alive = False
-            LOGGER.info('Stopped lobby stage')
 
     def update(self):
         if self.data_to_send:

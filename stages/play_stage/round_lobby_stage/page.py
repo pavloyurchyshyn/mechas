@@ -27,8 +27,10 @@ class LobbyWindow:
         self.go_button = Button(text='Go',
                                 x=LobbyWindowsSizes.GoButton.X,
                                 y=LobbyWindowsSizes.GoButton.Y,
+                                active=self.this_player.is_admin,
                                 size_x=LobbyWindowsSizes.GoButton.X_SIZE,
-                                size_y=LobbyWindowsSizes.GoButton.Y_SIZE
+                                size_y=LobbyWindowsSizes.GoButton.Y_SIZE,
+                                on_click_action=self.start_game,
                                 )
 
         self.exit_button = Button(text='X',
@@ -42,9 +44,14 @@ class LobbyWindow:
         self.details_pool_settings = DetailPoolSettings(pool_setting=self.round_logic.details_pool_settings,
                                                         details_pool=self.round_logic.details_pool)
 
+    def start_game(self):
+        LOGGER.info(f'Send start game request')
+        self.player_response[SLC.StartGame] = True
+
     def update(self):
         self.chat_window.update()
         self.players_window.update()
+        self.details_pool_settings.update()
 
         if self.exit_pop_up.active:
             self.exit_pop_up.update()

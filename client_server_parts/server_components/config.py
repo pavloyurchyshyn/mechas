@@ -2,7 +2,7 @@ import random
 from argparse import ArgumentParser
 from settings.network import SERVER_ARGUMENTS
 from common.logger import Logger
-from settings.mechas.default_details_pool import DEFAULT_DETAILS_POOL_SETTINGS
+from settings.mechas.default_details_pool import DEFAULT_DETAILS_POOL_SETTINGS, DEFAULT_START_DETAILS
 LOGGER = Logger('server_logs', 0, std_handler=0)
 
 
@@ -23,6 +23,7 @@ class ServerConfig:
         self.admins_list = set(filter(bool, self.main_admin_key.split(',')))
 
         self.details_pool_settings = DEFAULT_DETAILS_POOL_SETTINGS.copy()
+        self.default_details_settings = DEFAULT_START_DETAILS.copy()
         self.admins_list.add(self.main_admin_key)
         self.seed = random.getrandbits(32)
 

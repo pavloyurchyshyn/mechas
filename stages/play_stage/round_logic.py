@@ -41,9 +41,14 @@ class RoundRelatedLogic:
         self.round_ui: Round = None
         self.lobby_ui: LobbyWindow = None
         self.client: Network = None
+
         self.skills_pool: SkillsPool = None
         self.details_pool: DetailsPool = None
         self.details_pool_settings: dict = {}
+
+        self.update_method = None
+        self.process_received_data = None
+
         self.this_player: Player = None
         self.other_players = {}
 
@@ -68,8 +73,7 @@ class RoundRelatedLogic:
                 LOGGER.info(f'Client connected: {response}')
                 self.this_player = Player(**response.get(PlayerUpdates.Data, {}))
                 LOGGER.info(f'This player: {self.this_player.get_data_dict()}')
-                self.skills_pool: SkillsPool = SkillsPool()
-                self.details_pool: DetailsPool = DetailsPool(self.skills_pool)
+
                 self.process_connection_data(response)
 
                 start_new_thread(self.__round_recv_thread, ())
@@ -89,6 +93,8 @@ class RoundRelatedLogic:
             self.stage_controller.set_round_stage()
 
     def process_connection_data(self, response):
+        self.skills_pool: SkillsPool = SkillsPool()
+        self.details_pool: DetailsPool = DetailsPool(self.skills_pool, seed=response[NetworkKeys.Seed])
         # TODO make a different stages
         self.details_pool_settings.clear()
         self.details_pool_settings.update(response[NetworkKeys.DetailsPoolSettings])
@@ -100,14 +106,13 @@ class RoundRelatedLogic:
 
         if self.round_stage == NetworkKeys.RoundRoundStage:
             self.build_round(response)
+
         elif self.round_stage == NetworkKeys.RoundLobbyStage:
             self.build_lobby_menu(response)
 
     def update(self):
-        if self.round_stage == NetworkKeys.RoundRoundStage:
-            self.round()
-        elif self.round_stage == NetworkKeys.RoundLobbyStage:
-            self.lobby()
+        if self.update_method:
+            self.update_method()
 
     def build_lobby_menu(self, response):
         self.lobby_ui = LobbyWindow(response, player=self.this_player, round_logic=self)
@@ -115,7 +120,10 @@ class RoundRelatedLogic:
         for obj in self.other_players.values():
             self.lobby_ui.players_window.add_player(obj)
 
-    def lobby(self):
+        self.update_method = self.lobby_update
+        self.process_received_data = self.__process_received_data_lobby
+
+    def lobby_update(self):
         self.lobby_ui.update()
         self.lobby_ui.draw()
         if self.lobby_ui.player_response:
@@ -123,7 +131,7 @@ class RoundRelatedLogic:
             self.client.send(self.lobby_ui.player_response)
             self.lobby_ui.player_response.clear()
 
-    def round(self):
+    def round_update(self):
         self.round_ui.update()
         self.round_ui.draw()
 
@@ -136,12 +144,19 @@ class RoundRelatedLogic:
         #     self.stage_controller.set_close_round_stage()
 
     def build_round(self, response):
-        mech = self.build_mech(response)
+        try:
+            self.this_player.mech = self.build_mech(response)
 
-        self.details_pool.load_details_list(response[NetworkKeys.DetailsPool])
+            self.details_pool.load_details_list(response[NetworkKeys.DetailsPool])
 
-        self.round_ui = Round(self.this_player, self.other_players)
-        self.round_ui.mech_window.calculate_side_positions()
+            self.round_ui = Round(self.this_player, self.other_players)
+            self.round_ui.mech_window.calculate_side_positions()
+
+            self.process_received_data = self.__process_received_data_round
+            self.update_method = self.round_update
+
+        except Exception as e:
+            LOGGER.error(f'Failed to build round: {e}')
 
     def build_mech(self, response):
         return MetalMech((5, 5), )
@@ -165,6 +180,8 @@ class RoundRelatedLogic:
         self.stage_controller.set_main_menu_stage()
         self.skills_pool: SkillsPool = None
         self.details_pool: DetailsPool = None
+        self.update_method = None
+        self.process_received_data = None
 
     # ===========================================
     def __round_recv_thread(self):
@@ -188,14 +205,29 @@ class RoundRelatedLogic:
         return self.client.str_to_json(recv)
 
     def __process_received_data(self, data: dict):
+        self.__check_for_stage_switch(data)
 
-        if self.round_stage == NetworkKeys.RoundRoundStage:
-            self.__process_received_data_round(data)
-
-        elif self.round_stage == NetworkKeys.RoundLobbyStage:
-            self.__process_received_data_lobby(data)
+        self.process_received_data(data)
+        # if self.round_stage == NetworkKeys.RoundRoundStage:
+        #     self.__process_received_data_round(data)
+        #
+        # elif self.round_stage == NetworkKeys.RoundLobbyStage:
+        #     self.__process_received_data_lobby(data)
 
         self.__check_for_disconnect(data)
+
+    def __check_for_stage_switch(self, data):
+        if NetworkKeys.SwitchRoundStageTo in data:
+            new = data.get(NetworkKeys.SwitchRoundStageTo)
+            LOGGER.info(f'Switch to {new}')
+            if new != self.round_stage:
+                self.round_stage = new
+                LOGGER.info(f'Switch to {new} != {self.round_stage}')
+                LOGGER.info(f'Round UI {self.round_ui}')
+
+                if self.round_stage == NetworkKeys.RoundRoundStage and self.round_ui is None:
+                    self.build_round(data)
+                    LOGGER.info(f'New update method: {self.round_update}')
 
     def __process_received_data_lobby(self, data):
         if data:

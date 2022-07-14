@@ -6,12 +6,20 @@ class NotUniqueId(Exception):
         return f'No unique_id in {self.detail.name}: {self.detail.get_unique_id}'
 
 
-class NoName(Exception):
+class NoClassName(Exception):
     def __init__(self, detail):
         self.detail = detail
 
     def __str__(self):
         return f'No name in {type(self.detail)}: {self.detail.get_unique_id}'
+
+
+class NoVerbalName(Exception):
+    def __init__(self, detail):
+        self.detail = detail
+
+    def __str__(self):
+        return f'No verbal name in {type(self.detail)}: {self.detail.get_unique_id}'
 
 
 class SlotIsFullError(Exception):
@@ -22,7 +30,7 @@ class SlotIsFullError(Exception):
         return f'Slot is full: {self.slot.parent}'
 
 
-class ThisDetailClassDoesntExists(Exception):
+class ThisDetailClassDoesntExist(Exception):
     def __init__(self, class_name):
         self.class_name = class_name
 

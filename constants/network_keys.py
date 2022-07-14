@@ -1,7 +1,9 @@
 class PlayerAttrs:
-    Token = 'access_token'
+    Token = 'token'
     Nickname = 'nickname'
     IsAdmin = 'is_admin'
+    Ready = 'ready'
+    Number = 'number'
 
 
 class NetworkKeys:
@@ -16,7 +18,9 @@ class NetworkKeys:
     Password = 'password'
 
     DetailsPool = 'details_pool'
+    DefaultDetails = 'default_details'
     DetailsPoolSettings = 'detail_pool_settings'
+    DefaultDetailsSettings = 'default_details_settings'
 
     SwitchRoundStageTo = 'switch_round_stage'
     RoundStage = 'round_stage'
@@ -32,6 +36,7 @@ class LobbyActions:
 class ServerLobbyCategories:
     AddPlayer = 'add_player'
     KickPlayer = 'kick_player'
+    StartGame = 'start_game'
 
 
 SLC = ServerLobbyCategories

@@ -162,18 +162,20 @@ class NetworkLogic:
         server_response_data[NetworkKeys.ServerAnswer] = 'Successfully connected.'
         server_response_data[NetworkKeys.Seed] = self.config.seed
         server_response_data[ServerConnectAnswers.CONNECTION_ANSWER] = ServerConnectAnswers.Connected
+        server_response_data[SRC.OtherPlayers] = self.get_other_players_data(player_token)
+        server_response_data[NetworkKeys.RoundStage] = self.server.current_stage
         server_response_data[PlayerAttrs.Token] = player_token
         server_response_data[PlayerAttrs.IsAdmin] = self.server.is_admin(player_token)
         server_response_data[PlayerUpdates.Data] = self.players_data[player_token].get_data_dict()
-        server_response_data[SRC.OtherPlayers] = self.get_other_players_data(player_token)
-        server_response_data[NetworkKeys.RoundStage] = self.server.current_stage
 
         if self.server.current_stage == NetworkKeys.RoundRoundStage:
             server_response_data[NetworkKeys.DetailsPool] = self.server.GAME_LOGIC.details_pool.get_dict()
+            # TODO add default details for current player
 
         elif self.server.current_stage == NetworkKeys.RoundLobbyStage:
             self.server.LOBBY_LOGIC.new_player_connected(player_token)
             server_response_data[NetworkKeys.DetailsPoolSettings] = self.config.details_pool_settings
+            server_response_data[NetworkKeys.DefaultDetailsSettings] = self.config.default_details_settings
 
         LOGGER.info(f'Sending response: {server_response_data}')
         player_connection.send(self.json_to_str(server_response_data))
@@ -184,10 +186,7 @@ class NetworkLogic:
                     f' Nickname {client_data.get(PlayerAttrs.Nickname)}.')
         self.connected_players_count += 1
 
-        if self.server.current_stage == NetworkKeys.RoundLobbyStage:
-            self.server.LOBBY_LOGIC.start_player_thread(self.server, player_token)
-        elif self.server.current_stage == NetworkKeys.RoundRoundStage:
-            self.server.GAME_LOGIC.start_player_handling(player_token)
+        self.server.start_player_thread(player_token)
 
     def get_other_players_data(self, token):
         d = {token: self.players_data[token_].get_data_dict() for token_ in self.players_connections if token != token_ and token_ in self.players_data}

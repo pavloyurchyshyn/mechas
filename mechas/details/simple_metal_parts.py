@@ -13,6 +13,7 @@ __all__ = ['MetalArm', 'MetalLeg', 'MetalBody']
 
 class MetalArm(BaseArm):
     name = DetailNames.SimpleMetal.Arm
+    verbal_name = 'Metal Arm'
 
     def __init__(self, unique_id):
         super(MetalArm, self).__init__(unique_id=unique_id, damage=1, armor=1, add_hp=1, energy_regen=0.25)
@@ -20,6 +21,7 @@ class MetalArm(BaseArm):
 
 class MetalLeg(BaseLeg):
     name = DetailNames.SimpleMetal.Leg
+    verbal_name = 'Metal Leg'
 
     def __init__(self, unique_id):
         skills = (SimpleStep, )
@@ -33,6 +35,7 @@ class MetalLeg(BaseLeg):
 
 class MetalBody(BaseBody):
     name = DetailNames.SimpleMetal.Body
+    verbal_name = 'Metal Body'
 
     def __init__(self, unique_id):
         data = {DetailsAttrs.EnergyRegen: 1,

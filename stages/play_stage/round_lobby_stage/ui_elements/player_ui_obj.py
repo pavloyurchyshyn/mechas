@@ -30,7 +30,7 @@ class PlayerUIObj(Rectangle):
 
         self.under_mouse = False
 
-    def __on_click_function(self):
+    def __on_click_kick_function(self):
         self.request_dict[SLC.KickPlayer] = self.player.token
 
     def build(self):
@@ -55,7 +55,7 @@ class PlayerUIObj(Rectangle):
                                   text_color=Colors.X_text_color,
                                   active=can_kick,
                                   visible=can_kick,
-                                  on_click_action=self.__on_click_function,
+                                  on_click_action=self.__on_click_kick_function,
                                   border_color=Colors.X_button_bord_color,
                                   background_color=Colors.X_button_back_color,
                                   size_x=LobbyWindowsSizes.Players.PlayerUIObj.KickButton.X_SIZE,

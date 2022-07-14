@@ -25,7 +25,7 @@ class InputElement(Rectangle):
     UI_TYPE = 'input'
 
     def __init__(self, x, y, size_x=None, size_y=None,
-                 surface=None,
+                 screen=None,
                  text='',
                  default_text='',
                  background_color=(0, 0, 0, 120),  # r, g, b, t
@@ -87,7 +87,7 @@ class InputElement(Rectangle):
         self._background_t = transparent
         self._background_color = background_color
 
-        self._surface = surface if surface else MAIN_SCREEN
+        self._screen = screen if screen else MAIN_SCREEN
 
         self._active_text_surface = self.get_surface()
         self._non_active_text_surface = self.get_surface()
@@ -190,7 +190,7 @@ class InputElement(Rectangle):
         else:
             draw.rect(self._surface_to_draw, self._non_active_border_color, self._border, self._non_active_border_w, self.border_radius)
 
-        MAIN_SCREEN.blit(self._surface_to_draw, (self.x0, self.y0))
+        self._screen.blit(self._surface_to_draw, (self.x0, self.y0))
 
         if test_draw_status_is_on():
             for dot in self._dots:

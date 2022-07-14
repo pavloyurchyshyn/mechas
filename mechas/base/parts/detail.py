@@ -9,6 +9,7 @@ class BaseDetail:
     logger = Logger()
 
     name = None
+    verbal_name = None
 
     is_limb = False
     is_weapon = False
@@ -23,8 +24,9 @@ class BaseDetail:
         """
         self.__unique_id = unique_id
         if self.name is None:
-            raise NoName(self)
-
+            raise NoVerbalName(self)
+        if self.verbal_name is None:
+            raise NoVerbalName(self)
         if self.__unique_id is None:
             raise NotUniqueId(self)
 

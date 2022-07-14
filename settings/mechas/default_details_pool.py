@@ -1,4 +1,5 @@
 from settings.mechas.details_names import DetailNames
+from constants.mechas.detail_const import MechSerializeConst
 
 # detail_name: count of details per player
 # when number 1 -> 4 details for 4 players
@@ -14,7 +15,9 @@ DEFAULT_DETAILS_POOL_SETTINGS = {
 }
 
 DEFAULT_START_DETAILS = {
-    DetailNames.SimpleMetal.Body: 1,
-    DetailNames.SimpleMetal.Leg: 2,
-    DetailNames.SimpleMetal.Arm: 2,
+    MechSerializeConst.Body: DetailNames.SimpleMetal.Body,
+    MechSerializeConst.LeftArms: [(DetailNames.SimpleMetal.Arm, 1), ],
+    MechSerializeConst.RightArms: [(DetailNames.SimpleMetal.Arm, 1), ],
+    MechSerializeConst.LeftLegs: [(DetailNames.SimpleMetal.Leg, 1), ],
+    MechSerializeConst.RightLegs: [(DetailNames.SimpleMetal.Leg, 1), ],
 }

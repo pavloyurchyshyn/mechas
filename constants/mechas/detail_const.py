@@ -65,7 +65,7 @@ class SlotNames:
     Weapon = 'weapon_slot'
 
 
-class MechSerialize:
+class MechSerializeConst:
     Body: str = 'body'
     LeftArms: str = 'left_arms'
     RightArms: str = 'right_arms'

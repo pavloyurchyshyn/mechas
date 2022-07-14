@@ -40,37 +40,6 @@ class GameLogic(MessageProcessorMixin, ):
         pool_generator = PoolGenerator(self.config.max_players_num, self.config.details_pool_settings)
         self.details_pool.load_details_list(pool_generator.get_details_list())
 
-    def run_game(self):
-        LOGGER.info('Alive check started')
-        LOGGER.info('Sever Game loop started.')
-        update_delay = 1 / 32
-        LOGGER.info(f'Tick rate {64}. Time per frame: {update_delay}')
-
-        ROUND_CLOCK.set_time(-TIMEOUT)
-        try:
-            while self.server.alive:
-                t = time()
-                self.update()
-
-                sl = update_delay - (time() - t)
-                # LOGGER.info(f'Time spent for calculation {time() - t}, sleep {sl}')
-                if sl > 0:
-                    sleep(sl)
-
-                ROUND_CLOCK.update(time() - t)
-
-        except Exception as e:
-            LOGGER.critical('Game loop stopped.')
-            LOGGER.error(e)
-            LOGGER.error(traceback.format_exc())
-        finally:
-            self.server.alive = False
-            self.alive = False
-            LOGGER.info('Stopped')
-
-    def start_player_handling(self, player_token):
-        start_new_thread(self.player_thread, (self.server, player_token))
-
     def update(self):
         self.update_data_to_send()
         data = self.data_to_send.copy()
@@ -80,28 +49,9 @@ class GameLogic(MessageProcessorMixin, ):
     def update_data_to_send(self):
         self.data_to_send[ServerResponseCategories.MatchTime] = ROUND_CLOCK()
 
-    def player_thread(self, server, player_token):
-        try:
-            connection = server.get_connection(player_token)
-
-            while 1:
-                player_request = connection.recv().decode()
-                if player_request and player_request != '{}':
-                    player_request = normalize_request(player_request)
-                    player_request = self.str_to_json(player_request)
-                    LOGGER.info(f'Received {player_token}: {player_request}')
-                    self.process_data(player_token, player_request)
-
-        except Exception as e:
-            LOGGER.error(e)
-            LOGGER.error(traceback.format_exc())
-            server.disconnect_player(player_token)
-
-    def process_data(self, token, player_request: dict):
+    def process_received(self, token, player_request: dict):
         self.data_to_send[SRC.PlayersUpdates] = self.data_to_send.get(SRC.PlayersUpdates, {})
-        player_update = self.data_to_send[SRC.PlayersUpdates][token] = self.data_to_send[SRC.PlayersUpdates].get(token,
-                                                                                                                 {})
-
+        player_update = self.data_to_send[SRC.PlayersUpdates][token] = self.data_to_send[SRC.PlayersUpdates].get(token, {})
         self.process_messages(token, player_request)
         self.process_ready_status(player_update, token, player_request)
 

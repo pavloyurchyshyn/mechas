@@ -14,7 +14,8 @@ class PlayersWindow(Rectangle):
                                             size_x=LobbyWindowsSizes.Players.X_SIZE,
                                             size_y=LobbyWindowsSizes.Players.Y_SIZE)
 
-        self.players_header = Text('#\t\tNickname\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t Kick', x=self.x0,
+        self.players_header = Text('#\t\tNickname\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t Kick',
+                                   x=self.x0,
                                    y=self.y0 - 20)
 
         self.players_container = PlayersContainer(x=LobbyWindowsSizes.Players.X,
