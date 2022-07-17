@@ -6,12 +6,12 @@ from visual.main_window import MAIN_SCREEN
 from settings.global_parameters import test_draw_status_is_on
 from constants.colors import simple_colors
 
-
-class UnusedSkillCards(Rectangle):
+# TODO
+class TileCards(Rectangle):
     def __init__(self,
-                 x=RoundSizes.SkillsCards.X, y=RoundSizes.SkillsCards.Y,
-                 size_x=RoundSizes.SkillsCards.X_SIZE, size_y=RoundSizes.SkillsCards.Y_SIZE):
-        super(UnusedSkillCards, self).__init__(x=x, y=y, size_x=size_x, size_y=size_y)
+                 x=RoundSizes.TileCards.X, y=RoundSizes.TileCards.Y,
+                 size_x=RoundSizes.TileCards.X_SIZE, size_y=RoundSizes.TileCards.Y_SIZE):
+        super(TileCards, self).__init__(x=x, y=y, size_x=size_x, size_y=size_y)
 
         self.orig_card_x_size = self.card_x_size = self.size_x * 0.1
         self.orig_card_y_size = self.card_y_size = self.size_y * 0.8

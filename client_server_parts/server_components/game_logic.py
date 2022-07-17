@@ -42,9 +42,15 @@ class GameLogic(MessageProcessorMixin, ):
 
     def update(self):
         self.update_data_to_send()
+        self.timeout()
         data = self.data_to_send.copy()
         self.data_to_send.clear()
         self.send_data(data)
+
+    def timeout(self):
+        if ROUND_CLOCK.time > 0:
+            self.send_bare_message('Round timer end')
+            ROUND_CLOCK.set_time(-30)
 
     def update_data_to_send(self):
         self.data_to_send[ServerResponseCategories.MatchTime] = ROUND_CLOCK()
@@ -62,7 +68,7 @@ class GameLogic(MessageProcessorMixin, ):
             LOGGER.info(f'{token} ready status: {ready}')
 
     def send_data(self, data):
-        if data.get('players_updates'):
-            LOGGER.info(f'Sending: {data}')
+        # if data.get('players_updates'):
+        LOGGER.info(f'Sending: {data}')
         for token, conn in self.players_connections.copy().items():
             conn.send(self.json_to_str(data))

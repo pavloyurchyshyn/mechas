@@ -31,6 +31,24 @@ class RoundSizes:
         X_SIZE = scaled_w(0.36)
         Y_SIZE = scaled_h(0.12)
 
+    class CardsInHands:
+        X = 0
+        Y = scaled_h(0.68)
+        X_SIZE = scaled_w(0.25)
+        Y_SIZE = scaled_h(0.20)
+
+    class DecksWindow:
+        X = scaled_w(0.69)
+        Y = scaled_h(0.03)
+        X_SIZE = scaled_w(0.31)
+        Y_SIZE = scaled_h(0.20)
+
+    class TileCards:
+        X = 0
+        Y = scaled_h(0.88)
+        X_SIZE = scaled_w(0.25)
+        Y_SIZE = scaled_h(0.12)
+
     class UsedSkillsCards:
         X = scaled_w(0.25) - 1
         Y = scaled_h(0.88)
@@ -39,9 +57,9 @@ class RoundSizes:
 
     class ChatWindow:
         X = scaled_w(0.69)
-        Y = scaled_h(0.68)
+        Y = scaled_h(0.725)
         X_SIZE = scaled_w(0.31)
-        Y_SIZE = scaled_h(0.32)
+        Y_SIZE = scaled_h(0.275)
 
     class ReadyBody:
         X = scaled_w(0.61)

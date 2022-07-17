@@ -20,7 +20,7 @@ menu_text = localization.text.UI.round.ready_body
 
 
 class ReadyWindow(Rectangle):
-    emergency_time = 10.
+    emergency_time = -10.
 
     def __init__(self, player_response):
         super(ReadyWindow, self).__init__(x=RoundSizes.ReadyBody.X, y=RoundSizes.ReadyBody.Y,
@@ -58,16 +58,18 @@ class ReadyWindow(Rectangle):
         if GLOBAL_MOUSE.lmb:
             self.ready_button.click(GLOBAL_MOUSE.pos)
 
-        if ROUND_CLOCK.str_time != self.timer.text:
-            self.timer.change_text(ROUND_CLOCK.str_time)
-
-        if ROUND_CLOCK.time < self.emergency_time:
-            self.timer.change_color(simple_colors.red)
-        else:
-            self.timer.change_color(simple_colors.white)
-
     def process_server_data(self, data):
         self.update_ready(data)
+
+    def process_time(self, data):
+        if ServerResponseCategories.MatchTime in data:
+            ROUND_CLOCK.set_time(*data.pop(ServerResponseCategories.MatchTime))
+            if ROUND_CLOCK.str_time != self.timer.text:
+                self.timer.change_text(ROUND_CLOCK.str_time)
+                if ROUND_CLOCK.time > self.emergency_time:
+                    self.timer.change_color(simple_colors.red)
+                else:
+                    self.timer.change_color(simple_colors.white)
 
     def update_ready(self, data):
         if ServerResponseCategories.ReadyState in data:

@@ -58,7 +58,7 @@ class NetworkLogic:
             start_new_thread(self.__connection_handling, ())
             LOGGER.info(f'Server started {self.address}:{self.config.server_port}')
         except Exception as e:
-            LOGGER.info(f'Connection handler error.')
+            LOGGER.info(f'Connection handler error. Port: {self.config.server_port} is busy.')
             LOGGER.error(e)
             self.server.stop()
 
@@ -114,7 +114,7 @@ class NetworkLogic:
                         except Exception:
                             pass
             else:
-                LOGGER.info('STOPPED')
+                LOGGER.info('Connection handling STOPPED')
         except Exception as e:
             LOGGER.error(f'CONNECTION HANDLING ERROR')
             LOGGER.error(e)

@@ -1,6 +1,7 @@
 import sys
 import time
 
+from common.global_clock import ROUND_CLOCK
 from common.logger import Logger
 
 LOGGER = Logger('server_logs', 0, std_handler=0).LOGGER
@@ -21,7 +22,8 @@ from client_server_parts.server_components.network_logic import NetworkLogic
 from constants.network_keys import NetworkKeys
 from client_server_parts.server_components.functions.request_normalizer import normalize_request
 
-TIMEOUT = 60
+TIMEOUT = 90
+TICK_RATE = 16
 
 
 class Server:
@@ -46,11 +48,11 @@ class Server:
 
     def start(self):
         LOGGER.info('Sever Lobby loop started.')
-        TICK_RATE = 32
         update_delay = 1 / TICK_RATE
         LOGGER.info(f'Tick rate {TICK_RATE}. Time per frame: {update_delay}')
         LOGGER.info(f'Current stage: {self.current_stage}')
         LOGGER.info(f'Update method: {self.update_method}')
+        ROUND_CLOCK.set_time(-999)
         try:
             while self.alive:
                 t = time.time()
@@ -59,6 +61,8 @@ class Server:
                 # LOGGER.info(f'Time spent for calculation {time() - t}, sleep {sl}')
                 if sl > 0:
                     time.sleep(sl)
+                ROUND_CLOCK.update(time.time() - t)
+
         except Exception as e:
             LOGGER.critical('Lobby loop stopped.')
             LOGGER.error(e)
@@ -90,6 +94,7 @@ class Server:
                 # self.disconnect_player(token)
                 # self.data_to_send[SLC.KickPlayer] = player_token
                 if self.is_admin(token):
+                    LOGGER.info('Admin disconnected, stopping server.')
                     self.stop()
             else:
                 LOGGER.info(f'Player {token} was disconnected, thread stopped.')
@@ -99,8 +104,10 @@ class Server:
 
     def switch_to_game(self):
         LOGGER.info(f'Switching to game ')
+        ROUND_CLOCK.set_time(-30)
         self.current_stage = NetworkKeys.RoundRoundStage
         self.process_received_method = self.GAME_LOGIC.process_received
+        self.GAME_LOGIC.build_round()
         self.update_method = self.GAME_LOGIC.update
 
     def timeout_check(self):
@@ -156,8 +163,7 @@ class Server:
         try:
             self.network_logic.stop()
         except Exception as e:
-            LOGGER.error(f'Failed to stop server_components. {e}')
-            LOGGER.error(traceback.format_exc())
+            LOGGER.error(f'Failed to stop network_logic. {e}')
         try:
             self.GAME_LOGIC.alive = 0
         except Exception as e:
@@ -172,8 +178,12 @@ class Server:
 
 if __name__ == '__main__':
     try:
-        Server()
+        server = Server()
     except Exception as e:
+        try:
+            server.alive = False
+        except:
+            pass
         LOGGER.critical(e)
         LOGGER.error('Final fail')
         LOGGER.error(traceback.format_exc())

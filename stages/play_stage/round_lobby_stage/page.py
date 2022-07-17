@@ -31,6 +31,7 @@ class LobbyWindow:
                                 size_x=LobbyWindowsSizes.GoButton.X_SIZE,
                                 size_y=LobbyWindowsSizes.GoButton.Y_SIZE,
                                 on_click_action=self.start_game,
+                                non_active_after_click=False,
                                 )
 
         self.exit_button = Button(text='X',
@@ -39,6 +40,7 @@ class LobbyWindow:
                                   size_x=LobbyWindowsSizes.ExitButton.X_SIZE,
                                   size_y=LobbyWindowsSizes.ExitButton.Y_SIZE,
                                   on_click_action=self.exit_pop_up.switch,
+                                  non_active_after_click=False,
                                   )
 
         self.details_pool_settings = DetailPoolSettings(pool_setting=self.round_logic.details_pool_settings,

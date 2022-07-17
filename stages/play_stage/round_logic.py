@@ -93,12 +93,11 @@ class RoundRelatedLogic:
             self.stage_controller.set_round_stage()
 
     def process_connection_data(self, response):
+        self.round_stage = response[NetworkKeys.RoundStage]
         self.skills_pool: SkillsPool = SkillsPool()
         self.details_pool: DetailsPool = DetailsPool(self.skills_pool, seed=response[NetworkKeys.Seed])
         # TODO make a different stages
         self.details_pool_settings.clear()
-        self.details_pool_settings.update(response[NetworkKeys.DetailsPoolSettings])
-        self.round_stage = response[NetworkKeys.RoundStage]
 
         for token, data in response.get(ServerResponseCategories.OtherPlayers, {}).items():
             LOGGER.info(f'Added new player: {token} - {data}')
@@ -108,6 +107,7 @@ class RoundRelatedLogic:
             self.build_round(response)
 
         elif self.round_stage == NetworkKeys.RoundLobbyStage:
+            self.details_pool_settings.update(response[NetworkKeys.DetailsPoolSettings])
             self.build_lobby_menu(response)
 
     def update(self):
@@ -174,7 +174,7 @@ class RoundRelatedLogic:
             UI_TREE.delete_menu(self.round_ui.name)
 
         self.round_ui = None
-        self.this_player = None
+        self.this_player: Player = None
         self.other_players.clear()
         self.details_pool_settings.clear()
         self.stage_controller.set_main_menu_stage()
@@ -208,11 +208,6 @@ class RoundRelatedLogic:
         self.__check_for_stage_switch(data)
 
         self.process_received_data(data)
-        # if self.round_stage == NetworkKeys.RoundRoundStage:
-        #     self.__process_received_data_round(data)
-        #
-        # elif self.round_stage == NetworkKeys.RoundLobbyStage:
-        #     self.__process_received_data_lobby(data)
 
         self.__check_for_disconnect(data)
 
@@ -239,12 +234,8 @@ class RoundRelatedLogic:
         if data:
             if len(data) > 1:
                 LOGGER.info(f'Received data: {data}')
-            self.__update_time(data)
-            self.round_ui.process_server_data(data)
 
-    def __update_time(self, data: dict):
-        if ServerResponseCategories.MatchTime in data:
-            ROUND_CLOCK.set_time(*data.pop(ServerResponseCategories.MatchTime, (0, 0)))
+            self.round_ui.process_server_data(data)
 
     def __check_for_disconnect(self, response):
         if response.get(ServerResponseCategories.DisconnectAll):
