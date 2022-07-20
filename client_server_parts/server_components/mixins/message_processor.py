@@ -1,4 +1,4 @@
-from constants.network_keys import ServerResponseCategories, PlayerActions, CheckRegex, SRC
+from constants.server.network_keys import ServerResponseCategories, PlayerActions
 
 
 class MessageProcessorMixin:

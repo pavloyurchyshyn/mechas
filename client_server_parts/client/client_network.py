@@ -2,7 +2,7 @@ import socket
 import json
 import traceback
 
-from constants.network_keys import NetworkKeys, ServerConnectAnswers, PlayerAttrs
+from constants.server.network_keys import NetworkKeys, ServerConnectAnswers, PlayerAttrs
 from common.save_and_load_json_config import save_to_common_config, get_from_common_config
 from common.logger import Logger
 from settings.network import DEFAULT_PORT, NETWORK_DATA, RECV_SIZE

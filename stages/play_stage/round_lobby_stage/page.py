@@ -6,7 +6,7 @@ from common.global_mouse import GLOBAL_MOUSE
 from common.global_keyboard import GLOBAL_KEYBOARD
 from stages.play_stage.round_lobby_stage.ui_elements.exit_pop_up import LobbyExitPopUp
 from stages.play_stage.round_lobby_stage.ui_elements.details_pool_settings import DetailPoolSettings
-from constants.network_keys import ServerResponseCategories, SLC
+from constants.server.network_keys import ServerResponseCategories, SLC
 from game_logic.components.player_object import Player
 from common.logger import Logger
 

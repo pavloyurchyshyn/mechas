@@ -2,7 +2,7 @@ import subprocess
 import os
 from settings.base import ROOT_OF_GAME
 from settings.network import *
-from constants.network_keys import NetworkKeys, PlayerAttrs
+from constants.server.network_keys import NetworkKeys, PlayerAttrs
 import time
 from common.save_and_load_json_config import get_from_common_config
 from _thread import start_new_thread

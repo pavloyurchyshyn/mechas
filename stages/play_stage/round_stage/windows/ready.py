@@ -10,7 +10,7 @@ from common.global_clock import ROUND_CLOCK
 from common.logger import Logger
 
 from settings.localization import LocalizationLoader
-from constants.network_keys import PlayerActions, ServerResponseCategories
+from constants.server.network_keys import PlayerActions, ServerResponseCategories
 from constants.colors import simple_colors
 
 LOGGER = Logger()
@@ -22,7 +22,7 @@ menu_text = localization.text.UI.round.ready_body
 class ReadyWindow(Rectangle):
     emergency_time = -10.
 
-    def __init__(self, player_response):
+    def __init__(self, player_response, players_number):
         super(ReadyWindow, self).__init__(x=RoundSizes.ReadyBody.X, y=RoundSizes.ReadyBody.Y,
                                           size_x=RoundSizes.ReadyBody.X_SIZE, size_y=RoundSizes.ReadyBody.Y_SIZE,
                                           )
@@ -42,10 +42,11 @@ class ReadyWindow(Rectangle):
         self.timer = Text(text='00:00', font_size=22,
                           x=RoundSizes.ReadyBody.TimerText.X, y=RoundSizes.ReadyBody.TimerText.Y,
                           )
-
-        self.ready_count = Text(text='0/0', font_size=30,
-                                x=RoundSizes.ReadyBody.ReadyCount.X, y=RoundSizes.ReadyBody.ReadyCount.Y,
-                                )
+        self.ready_count = 0
+        self.players_number = players_number
+        self.ready_count_text = Text(text=f'0/{players_number}', font_size=30,
+                                     x=RoundSizes.ReadyBody.ReadyCount.X, y=RoundSizes.ReadyBody.ReadyCount.Y,
+                                     )
 
         self.player_response = player_response
         self.ready_status = False
@@ -58,8 +59,9 @@ class ReadyWindow(Rectangle):
         if GLOBAL_MOUSE.lmb:
             self.ready_button.click(GLOBAL_MOUSE.pos)
 
-    def process_server_data(self, data):
-        self.update_ready(data)
+    def process_server_data(self, data, this_player_data):
+        self.process_ready(data, this_player_data)
+        self.process_time(data)
 
     def process_time(self, data):
         if ServerResponseCategories.MatchTime in data:
@@ -71,17 +73,22 @@ class ReadyWindow(Rectangle):
                 else:
                     self.timer.change_color(simple_colors.white)
 
-    def update_ready(self, data):
-        if ServerResponseCategories.ReadyState in data:
-            ready = data.pop(ServerResponseCategories.ReadyState)
+    def process_ready(self, data, this_player_data):
+        if ServerResponseCategories.ReadyState in this_player_data:
+            ready = this_player_data.pop(ServerResponseCategories.ReadyState)
             LOGGER.info(f'Ready status changed to {ready}')
 
             self.ready_status = ready
-            # self.ready_button.active = ready
-            self.ready_button.change_picture(ready)
+            self.ready_button.change_picture(1 if ready else 0)
+
+        if ServerResponseCategories.ReadyCount in data:
+            count = data.pop(ServerResponseCategories.ReadyCount)
+            if count != self.ready_count:
+                self.ready_count = count
+                self.ready_count_text.change_text(f"{count}/{self.players_number}")
 
     def draw(self):
         draw_rect(MAIN_SCREEN, (255, 255, 255), self.get_rect(), 1, 5)
         self.ready_button.draw()
         self.timer.draw()
-        self.ready_count.draw()
+        self.ready_count_text.draw()

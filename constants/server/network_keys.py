@@ -81,6 +81,7 @@ class ServerResponseCategories:
     DeletePlayers = 'delete_players'
 
     ReadyState = 'ready_state'
+    ReadyCount = 'ready_count'
 
     OtherPlayers = 'other_players'
     NewPlayers = 'new_players'

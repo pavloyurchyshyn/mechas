@@ -26,5 +26,8 @@ class ServerConfig:
         self.default_details_settings = DEFAULT_START_DETAILS.copy()
         self.admins_list.add(self.main_admin_key)
         self.seed = random.getrandbits(32)
+        self.planing_time = -20
+        self.prepare_time = -20
+        self.time_per_step = -10
 
         self.host_token = self.main_admin_key

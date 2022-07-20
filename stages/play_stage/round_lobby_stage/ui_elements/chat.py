@@ -6,7 +6,7 @@ from visual.UI_base.input_element_UI import InputElement
 from visual.UI_base.button_UI import Button
 from common.global_keyboard import GLOBAL_KEYBOARD
 from settings.default_keys import Commands
-from constants.network_keys import PlayerActions
+from constants.server.network_keys import PlayerActions
 from visual.UIController import UI_TREE
 from common.global_mouse import GLOBAL_MOUSE
 from obj_properties.rect_form import Rectangle

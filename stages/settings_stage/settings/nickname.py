@@ -5,7 +5,7 @@ from visual.UI_base.localization_mixin import LocalizationMixin
 
 from settings.network import NETWORK_DATA
 from common.save_and_load_json_config import get_from_common_config, save_to_common_config
-from constants.network_keys import PlayerAttrs
+from constants.server.network_keys import PlayerAttrs
 
 
 def nickname_input(inp: InputElement):

@@ -1,8 +1,5 @@
-import traceback
-import re
-from _thread import start_new_thread
-from time import sleep, time
-from constants.network_keys import ServerResponseCategories, PlayerActions, CheckRegex, SRC
+from constants.server.network_keys import ServerResponseCategories, PlayerActions, SRC
+from constants.server.game_logic_stages import GameLogicStagesConst
 from common.logger import Logger
 from common.global_clock import ROUND_CLOCK
 from game_logic.components.pools.skills_pool import SkillsPool
@@ -10,14 +7,21 @@ from game_logic.components.pools.details_pool import DetailsPool
 from game_logic.components.pools.pools_generator import PoolGenerator
 from client_server_parts.server_components.config import ServerConfig
 from client_server_parts.server_components.mixins.message_processor import MessageProcessorMixin
-from client_server_parts.server_components.functions.request_normalizer import normalize_request
+from client_server_parts.server_components.game_logic.mixins.ready_status_mixin import ReadyStatusMixin
+
 LOGGER = Logger('server_logs', 0, std_handler=0).LOGGER
 
 TIMEOUT = 45
 
 
-class GameLogic(MessageProcessorMixin, ):
+class GameLogic(MessageProcessorMixin,
+                ReadyStatusMixin,
+                ):
+    logger = LOGGER
+
     def __init__(self, server):
+        self.init()
+
         self.server = server
         self.config: ServerConfig = self.server.config
 
@@ -33,6 +37,13 @@ class GameLogic(MessageProcessorMixin, ):
         self.skills_pool: SkillsPool = None
         self.details_pool: DetailsPool = None
 
+        self.stage = GameLogicStagesConst.Preparing
+
+    def init(self):
+        for class_ in self.__class__.__mro__:
+            if class_ != GameLogic:
+                class_.__init__(self)
+
     def build_round(self):
         self.skills_pool = SkillsPool()
         self.details_pool = DetailsPool(self.skills_pool)  # TODO
@@ -42,30 +53,25 @@ class GameLogic(MessageProcessorMixin, ):
 
     def update(self):
         self.update_data_to_send()
-        self.timeout()
+        self.check_for_timeout()
         data = self.data_to_send.copy()
         self.data_to_send.clear()
         self.send_data(data)
 
-    def timeout(self):
+    def check_for_timeout(self):
         if ROUND_CLOCK.time > 0:
             self.send_bare_message('Round timer end')
-            ROUND_CLOCK.set_time(-30)
+            ROUND_CLOCK.set_time(self.config.planing_time)
+            self.unready_all()
 
     def update_data_to_send(self):
         self.data_to_send[ServerResponseCategories.MatchTime] = ROUND_CLOCK()
+        self.data_to_send[ServerResponseCategories.ReadyCount] = self.ready_count
 
     def process_received(self, token, player_request: dict):
         self.data_to_send[SRC.PlayersUpdates] = self.data_to_send.get(SRC.PlayersUpdates, {})
-        player_update = self.data_to_send[SRC.PlayersUpdates][token] = self.data_to_send[SRC.PlayersUpdates].get(token, {})
         self.process_messages(token, player_request)
-        self.process_ready_status(player_update, token, player_request)
-
-    def process_ready_status(self, player_update, token, data):
-        if PlayerActions.READY_STATUS in data:
-            ready = data.pop(PlayerActions.READY_STATUS)
-            player_update[ServerResponseCategories.ReadyState] = ready
-            LOGGER.info(f'{token} ready status: {ready}')
+        self.process_ready_status(token, player_request)
 
     def send_data(self, data):
         # if data.get('players_updates'):

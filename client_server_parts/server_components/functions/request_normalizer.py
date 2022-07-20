@@ -1,5 +1,5 @@
 import re
-from constants.network_keys import CheckRegex
+from constants.server.network_keys import CheckRegex
 
 
 def normalize_request(player_request):

@@ -1,5 +1,5 @@
 from mechas.base.mech import BaseMech
-from constants.network_keys import PlayerAttrs
+from constants.server.network_keys import PlayerAttrs
 from constants.mechas.detail_const import MechSerializeConst
 
 

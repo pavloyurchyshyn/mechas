@@ -13,7 +13,7 @@ from visual.UIController import UI_TREE
 from common.global_mouse import GLOBAL_MOUSE
 from common.global_keyboard import GLOBAL_KEYBOARD
 
-from constants.network_keys import PlayerActions
+from constants.server.network_keys import PlayerActions
 from settings.default_keys import Commands
 
 

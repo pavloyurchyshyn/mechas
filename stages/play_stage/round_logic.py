@@ -7,13 +7,12 @@ from stages.play_stage.round_lobby_stage.page import LobbyWindow
 
 from common.logger import Logger
 from common.stages import Stages
-from common.global_clock import ROUND_CLOCK
 
 from client_server_parts.client.client_network import Network
 from client_server_parts.server_controller import ServerController
 
-from constants.network_keys import NetworkKeys, PlayerUpdates
-from constants.network_keys import ServerResponseCategories, CheckRegex
+from constants.server.network_keys import NetworkKeys, PlayerUpdates
+from constants.server.network_keys import ServerResponseCategories, CheckRegex
 
 from game_logic.components.player_object import Player
 from game_logic.components.pools.details_pool import DetailsPool
@@ -232,7 +231,7 @@ class RoundRelatedLogic:
 
     def __process_received_data_round(self, data):
         if data:
-            if len(data) > 1:
+            if len(data) > 2:
                 LOGGER.info(f'Received data: {data}')
 
             self.round_ui.process_server_data(data)

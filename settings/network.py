@@ -1,6 +1,6 @@
 from common.save_and_load_json_config import get_from_common_config
 import socket
-from constants.network_keys import NetworkKeys, PlayerAttrs
+from constants.server.network_keys import NetworkKeys, PlayerAttrs
 
 DEFAULT_PORT = 8002
 RECV_SIZE = 2048

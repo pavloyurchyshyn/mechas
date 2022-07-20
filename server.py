@@ -19,7 +19,7 @@ from client_server_parts.server_components.player_connection_handler import Conn
 from client_server_parts.server_components.game_logic import GameLogic
 from client_server_parts.server_components.lobby_logic import LobbyLogic
 from client_server_parts.server_components.network_logic import NetworkLogic
-from constants.network_keys import NetworkKeys
+from constants.server.network_keys import NetworkKeys
 from client_server_parts.server_components.functions.request_normalizer import normalize_request
 
 TIMEOUT = 90
@@ -98,6 +98,7 @@ class Server:
                     self.stop()
             else:
                 LOGGER.info(f'Player {token} was disconnected, thread stopped.')
+            LOGGER.info(f"Player {token} thread stopped.")
 
     def process_received(self, token, request):
         self.process_received_method(token, request)

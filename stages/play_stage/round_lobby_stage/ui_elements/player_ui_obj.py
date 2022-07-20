@@ -6,7 +6,7 @@ from pygame.draw import rect as draw_rect
 from visual.sprites_functions import get_surface
 from stages.play_stage.round_lobby_stage.settings.player_container import Colors
 from game_logic.components.player_object import Player
-from constants.network_keys import SLC
+from constants.server.network_keys import SLC
 
 
 class PlayerUIObj(Rectangle):

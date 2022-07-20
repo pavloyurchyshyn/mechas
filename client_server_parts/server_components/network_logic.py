@@ -2,7 +2,7 @@ import traceback
 from time import sleep
 from _thread import start_new_thread
 from common.logger import Logger
-from constants.network_keys import *
+from constants.server.network_keys import *
 from settings.network import *
 from client_server_parts.server_components.player_connection_handler import ConnectionHandler
 from game_logic.components.player_object import Player
