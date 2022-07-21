@@ -148,7 +148,7 @@ class RoundRelatedLogic:
 
             self.details_pool.load_details_list(response[NetworkKeys.DetailsPool])
 
-            self.round_ui = Round(self.this_player, self.other_players)
+            self.round_ui = Round(self.this_player, self.other_players, response[NetworkKeys.PlayersNumber])
             self.round_ui.mech_window.calculate_side_positions()
 
             self.process_received_data = self.__process_received_data_round

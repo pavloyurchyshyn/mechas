@@ -27,6 +27,8 @@ class NetworkKeys:
     RoundRoundStage = 'round'
     RoundLobbyStage = 'lobby'
 
+    PlayersNumber = 'players_number'
+
 
 class LobbyActions:
     Kick = 'kick'

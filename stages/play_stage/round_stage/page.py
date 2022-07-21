@@ -22,7 +22,7 @@ from game_logic.components.player_object import Player
 class Round:
     name = 'round'
 
-    def __init__(self, player: Player, other_players: dict):
+    def __init__(self, player: Player, other_players: dict, players_num: int):
         self.player_response = {}
 
         self.player = player
@@ -39,7 +39,7 @@ class Round:
         self.mech_visual = MechVisual(mech=self.mech, world=self.arena_window.visual_world)
         self.mana_and_hp_bars = BarsLogic(mech=self.mech)
         self.decks = DeckOfCardsWindow()
-        self.ready = ReadyWindow(self.player_response, (1+len(other_players)))
+        self.ready = ReadyWindow(self.player_response, players_num)
 
         UI_TREE.add_menu(self, self.exit_pop_up)
 

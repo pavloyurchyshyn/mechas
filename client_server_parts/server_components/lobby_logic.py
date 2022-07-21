@@ -34,8 +34,11 @@ class LobbyLogic(MPM, ):
             LOGGER.info(f'Game stage started')
             self.alive = False
             self.server.GAME_LOGIC.build_round()
-            self.data_to_send[NetworkKeys.SwitchRoundStageTo] = NetworkKeys.RoundRoundStage
-            self.data_to_send[NetworkKeys.DetailsPool] = self.server.GAME_LOGIC.details_pool.get_dict()
+            data_to_send = {}
+            data_to_send[NetworkKeys.SwitchRoundStageTo] = NetworkKeys.RoundRoundStage
+            data_to_send[NetworkKeys.PlayersNumber] = self.config.max_players_num
+            data_to_send[NetworkKeys.DetailsPool] = self.server.GAME_LOGIC.details_pool.get_dict()
+            self.data_to_send.update(data_to_send)
             self.update()
             self.server.switch_to_game()
 

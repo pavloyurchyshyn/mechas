@@ -160,6 +160,7 @@ class NetworkLogic:
                                                  )
 
         server_response_data[NetworkKeys.ServerAnswer] = 'Successfully connected.'
+        server_response_data[NetworkKeys.PlayersNumber] = self.config.max_players_num
         server_response_data[NetworkKeys.Seed] = self.config.seed
         server_response_data[ServerConnectAnswers.CONNECTION_ANSWER] = ServerConnectAnswers.Connected
         server_response_data[SRC.OtherPlayers] = self.get_other_players_data(player_token)
