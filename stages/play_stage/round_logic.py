@@ -188,20 +188,22 @@ class RoundRelatedLogic:
 
         while self.client.connected:
             try:
-                recv = self.__normalize_recv(self.client.receive())
-                self.__process_received_data(recv)
+                # recv = self.__normalize_recv(self.client.receive())
+                recvs = self.client.bulk_receive()
+                for recv in recvs:
+                    self.__process_received_data(self.client.str_to_json(recv))
             except Exception as e:
                 LOGGER.error(e)
                 LOGGER.error(traceback.format_exc())
                 self.client.disconnect()
                 self.stage_controller.set_close_round_stage()
 
-    def __normalize_recv(self, recv):
-        if self.FEW_RECV_SYMBOL in recv and not re.search(CheckRegex.good_recv_re, recv):
-            recv: str = recv.split(self.FEW_RECV_SYMBOL)[-1]
-            recv = recv if recv.startswith('{') else '{' + recv
-
-        return self.client.str_to_json(recv)
+    # def __normalize_recv(self, recv):
+    #     if self.FEW_RECV_SYMBOL in recv and not re.search(CheckRegex.good_recv_re, recv):
+    #         recv: str = recv.split(self.FEW_RECV_SYMBOL)[-1]
+    #         recv = recv if recv.startswith('{') else '{' + recv
+    #
+    #     return self.client.str_to_json(recv)
 
     def __process_received_data(self, data: dict):
         self.__check_for_stage_switch(data)

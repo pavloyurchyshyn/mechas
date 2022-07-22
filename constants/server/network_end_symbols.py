@@ -1,0 +1,1 @@
+END_OF_REQUEST = b'\x00\x00'

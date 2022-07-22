@@ -15,9 +15,7 @@ DEFAULT_DETAILS_POOL_SETTINGS = {
 }
 
 DEFAULT_START_DETAILS = {
-    MechSerializeConst.Body: DetailNames.SimpleMetal.Body,
-    MechSerializeConst.LeftArms: [(DetailNames.SimpleMetal.Arm, 1), ],
-    MechSerializeConst.RightArms: [(DetailNames.SimpleMetal.Arm, 1), ],
-    MechSerializeConst.LeftLegs: [(DetailNames.SimpleMetal.Leg, 1), ],
-    MechSerializeConst.RightLegs: [(DetailNames.SimpleMetal.Leg, 1), ],
+    DetailNames.SimpleMetal.Body: 1,
+    DetailNames.SimpleMetal.Leg: 2,
+    DetailNames.SimpleMetal.Arm: 2,
 }

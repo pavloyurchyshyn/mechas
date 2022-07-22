@@ -9,14 +9,6 @@ class PoolGenerator:
                  ):
         self.players_num = players_num
         self.detail_pool_settings = detail_pool_settings
-        self.default_details = dict.fromkeys(range(players_num))
-
-    def get_default_details(self, default_set):
-        # TODO not ready
-        return {
-            MechSerializeConst.Body: []
-
-        }
 
     def get_details_list(self):
         l = []

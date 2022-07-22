@@ -1,14 +1,20 @@
 from stages.play_stage.round_lobby_stage.ui_elements.chat import ChatElement
 from stages.play_stage.round_lobby_stage.ui_elements.players_window import PlayersWindow
-from visual.UI_base.button_UI import Button
-from stages.play_stage.round_lobby_stage.settings.windows_sizes import LobbyWindowsSizes
-from common.global_mouse import GLOBAL_MOUSE
-from common.global_keyboard import GLOBAL_KEYBOARD
 from stages.play_stage.round_lobby_stage.ui_elements.exit_pop_up import LobbyExitPopUp
 from stages.play_stage.round_lobby_stage.ui_elements.details_pool_settings import DetailPoolSettings
-from constants.server.network_keys import ServerResponseCategories, SLC
-from game_logic.components.player_object import Player
+from stages.play_stage.round_lobby_stage.ui_elements.players_number import PlayersNumber
+
+from stages.play_stage.round_lobby_stage.settings.windows_sizes import LobbyWindowsSizes
+
+from visual.UI_base.button_UI import Button
+
+from common.global_mouse import GLOBAL_MOUSE
+from common.global_keyboard import GLOBAL_KEYBOARD
 from common.logger import Logger
+
+from constants.server.network_keys import ServerResponseCategories, SLC, NetworkKeys
+
+from game_logic.components.player_object import Player
 
 LOGGER = Logger().LOGGER
 
@@ -22,7 +28,7 @@ class LobbyWindow:
         self.player_response = {}  # that a dict which sends to server
         self.chat_window = ChatElement(self.player_response)
         self.players_window = PlayersWindow(self.player_response, self.this_player)
-
+        self.players_number = PlayersNumber(server_response, self.player_response)
         self.exit_pop_up = LobbyExitPopUp()
         self.go_button = Button(text='Go',
                                 x=LobbyWindowsSizes.GoButton.X,
@@ -54,6 +60,7 @@ class LobbyWindow:
         self.chat_window.update()
         self.players_window.update()
         self.details_pool_settings.update()
+        self.players_number.update()
 
         if self.exit_pop_up.active:
             self.exit_pop_up.update()
@@ -73,13 +80,14 @@ class LobbyWindow:
         self.go_button.draw()
         self.exit_button.draw()
         self.details_pool_settings.draw()
-
         self.exit_pop_up.draw()
+        self.players_number.draw()
 
     def process_server_data(self, data):
         self.chat_window.add_messages(data.pop(ServerResponseCategories.MessagesToAll, []))
         self.__process_new_players(data)
         self.__process_kicks(data)
+        self.players_number.process_server_data(data)
 
     def __process_kicks(self, data):
         if SLC.KickPlayer in data:

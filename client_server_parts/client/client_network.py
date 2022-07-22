@@ -6,6 +6,8 @@ from constants.server.network_keys import NetworkKeys, ServerConnectAnswers, Pla
 from common.save_and_load_json_config import save_to_common_config, get_from_common_config
 from common.logger import Logger
 from settings.network import DEFAULT_PORT, NETWORK_DATA, RECV_SIZE
+from constants.server.network_end_symbols import END_OF_REQUEST
+
 LOGGER = Logger()
 
 
@@ -45,7 +47,15 @@ class Network:
             self.connection.connect(self.server_addr)
             self.connection.send(self.json_to_str(self.credentials))
             LOGGER.info(f"Connection server request {self.credentials}")
-            response = self.str_to_json(self.connection.recv(2048).decode())
+            recv = b''
+            while True:
+                recv_ = self.connection.recv(4096)
+                if recv_.endswith(END_OF_REQUEST):
+                    recv += recv_
+                    break
+                recv += recv_
+
+            response = self.str_to_json(recv.replace(END_OF_REQUEST, b'').decode())
             LOGGER.info(f"Connection server response {response}")
             conn_sts = response.get(ServerConnectAnswers.CONNECTION_ANSWER)
             LOGGER.info(f'Connection status: {conn_sts}')
@@ -84,6 +94,7 @@ class Network:
                 return {}
         except Exception as e:
             LOGGER.error(f'Failed to convert {string} to json: {e}')
+            # LOGGER.error(traceback.format_exc())
             return {}
 
     @staticmethod
@@ -99,8 +110,28 @@ class Network:
             LOGGER.error(f"Failed to send data {e}")
             self.disconnect()
 
+    def bulk_receive(self):
+        recv = b''
+        while True:
+            recv_ = self.connection.recv(4096)
+            if recv_.endswith(END_OF_REQUEST):
+                recv += recv_
+                break
+            recv += recv_
+
+        return (r.decode() for r in recv.split(END_OF_REQUEST)[:-1])
+
     def receive(self):
-        return self.connection.recv(RECV_SIZE).decode()
+        recv = b''
+        while True:
+            recv_ = self.connection.recv(4096)
+            if recv_.endswith(END_OF_REQUEST):
+                recv += recv_
+                break
+            recv += recv_
+
+        return recv.replace(END_OF_REQUEST, b'').decode()
+#        return self.connection.recv(RECV_SIZE).replace(b'\x00\x00', b'').decode()
 
     def get_data(self):
         data = self.receive()

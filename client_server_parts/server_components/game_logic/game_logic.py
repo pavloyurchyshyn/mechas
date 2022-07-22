@@ -8,6 +8,7 @@ from game_logic.components.pools.pools_generator import PoolGenerator
 from client_server_parts.server_components.config import ServerConfig
 from client_server_parts.server_components.mixins.message_processor import MessageProcessorMixin
 from client_server_parts.server_components.game_logic.mixins.ready_status_mixin import ReadyStatusMixin
+from constants.server.network_end_symbols import END_OF_REQUEST
 
 LOGGER = Logger('server_logs', 0, std_handler=0).LOGGER
 
@@ -38,6 +39,7 @@ class GameLogic(MessageProcessorMixin,
         self.details_pool: DetailsPool = None
 
         self.stage = GameLogicStagesConst.Preparing
+        self.players_default_details = {}
 
     def init(self):
         for class_ in self.__class__.__mro__:
@@ -50,6 +52,7 @@ class GameLogic(MessageProcessorMixin,
 
         pool_generator = PoolGenerator(self.config.max_players_num, self.config.details_pool_settings)
         self.details_pool.load_details_list(pool_generator.get_details_list())
+        self.players_default_details = self.details_pool.get_default_details(self.config.default_details_settings, self.config.max_players_num)
 
     def update(self):
         self.update_data_to_send()
@@ -76,5 +79,6 @@ class GameLogic(MessageProcessorMixin,
     def send_data(self, data):
         # if data.get('players_updates'):
         LOGGER.info(f'Sending: {data}')
+        data = self.json_to_str(data) + END_OF_REQUEST
         for token, conn in self.players_connections.copy().items():
-            conn.send(self.json_to_str(data))
+            conn.send(data)

@@ -42,6 +42,25 @@ class LobbyWindowsSizes:
                 X_SIZE = scaled_w(0.025)
                 Y_SIZE = scaled_h(0.25) // 10
 
+    class PlayersNumber:
+        class AddButton:
+            X = scaled_w(0.55)
+            Y = scaled_h(0.1)
+            X_SIZE = scaled_w(0.02)
+            Y_SIZE = scaled_h(0.025)
+
+        class MinusButton:
+            X = scaled_w(0.45)
+            Y = scaled_h(0.1)
+            X_SIZE = scaled_w(0.02)
+            Y_SIZE = scaled_h(0.025)
+
+        class NumberText:
+            X = scaled_w(0.5)
+            Y = scaled_h(0.1)
+            X_SIZE = scaled_w(0.02)
+            Y_SIZE = scaled_h(0.025)
+
     class DetailsPoolSettings:
         X = scaled_w(0.1)
         Y = scaled_h(0.1)

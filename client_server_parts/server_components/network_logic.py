@@ -2,11 +2,16 @@ import traceback
 from time import sleep
 from _thread import start_new_thread
 from common.logger import Logger
+
 from constants.server.network_keys import *
+from constants.server.network_end_symbols import END_OF_REQUEST
+
 from settings.network import *
+
 from client_server_parts.server_components.player_connection_handler import ConnectionHandler
-from game_logic.components.player_object import Player
 from client_server_parts.server_components.config import ServerConfig
+
+from game_logic.components.player_object import Player
 
 LOGGER = Logger()
 
@@ -179,7 +184,7 @@ class NetworkLogic:
             server_response_data[NetworkKeys.DefaultDetailsSettings] = self.config.default_details_settings
 
         LOGGER.info(f'Sending response: {server_response_data}')
-        player_connection.send(self.json_to_str(server_response_data))
+        player_connection.send(self.json_to_str(server_response_data) + END_OF_REQUEST)
         LOGGER.info(f'Successfully sent.')
 
         LOGGER.info(f'Connected. {player_token}.'

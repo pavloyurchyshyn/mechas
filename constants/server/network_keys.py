@@ -4,6 +4,7 @@ class PlayerAttrs:
     IsAdmin = 'is_admin'
     Ready = 'ready'
     Number = 'number'
+    DefaultDetails = 'default_details'
 
 
 class NetworkKeys:
@@ -39,6 +40,9 @@ class ServerLobbyCategories:
     AddPlayer = 'add_player'
     KickPlayer = 'kick_player'
     StartGame = 'start_game'
+    AddPlayersNumber = 'add_players_number'
+    MinusPlayersNumber = 'minus_players_number'
+    PlayersNumber = NetworkKeys.PlayersNumber
 
 
 SLC = ServerLobbyCategories

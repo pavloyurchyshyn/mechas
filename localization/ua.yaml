@@ -36,5 +36,5 @@ UI:
 
   lobby:
     exit_pop_up:
-      exit_pop_text: Закрити лоббі
+      exit_pop_text: Закрити лобі
     go_button: Поїхали!
