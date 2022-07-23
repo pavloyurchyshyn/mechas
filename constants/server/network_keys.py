@@ -5,6 +5,7 @@ class PlayerAttrs:
     Ready = 'ready'
     Number = 'number'
     DefaultDetails = 'default_details'
+    Position = 'position'
 
 
 class NetworkKeys:

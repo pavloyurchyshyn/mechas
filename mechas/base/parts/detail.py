@@ -18,7 +18,6 @@ class BaseDetail:
 
     def __init__(self, unique_id=None, **kwargs):
         """
-
         :param unique_id:
         :param kwargs:
         """

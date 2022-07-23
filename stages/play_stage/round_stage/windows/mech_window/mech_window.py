@@ -21,9 +21,9 @@ class MechWindow(Rectangle):
                  size_x=RoundSizes.MechWindow.X_SIZE, size_y=RoundSizes.MechWindow.Y_SIZE):
         super(MechWindow, self).__init__(x=x, y=y, size_x=size_x, size_y=size_y)
 
-        self.player_mech = player_mech
+        self.player_mech: BaseMech = player_mech
 
-        self.mech_body: BaseMech = None
+        self.mech_body: BaseBody = None
         self.mech_parts = []
 
         self.element_size = SlotSizes.X
@@ -40,10 +40,10 @@ class MechWindow(Rectangle):
     def build_mech_UI(self):
         self.mech_parts.clear()
         if self.player_mech:
-            self.mech_body: BaseBody = self.player_mech
+            self.mech_body: BaseBody = self.player_mech.body
 
-            l_parts = [parts for parts in [getattr(self.mech_body, s) for s in BaseBody.Sides.left_parts]]
-            r_parts = [parts for parts in [getattr(self.mech_body, s) for s in BaseBody.Sides.right_parts]]
+            l_parts = [parts for parts in self.player_mech.left_slots.values()]#[getattr(self.mech_body, s) for s in BaseBody.Sides.left_parts]]
+            r_parts = [parts for parts in self.player_mech.right_slots.values()]#[getattr(self.mech_body, s) for s in BaseBody.Sides.right_parts]]
 
             self.add_left_parts(l_parts)
             self.add_right_part(r_parts)

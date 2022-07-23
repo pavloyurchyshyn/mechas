@@ -41,9 +41,7 @@ class MetalBody(BaseBody):
         data = {DetailsAttrs.EnergyRegen: 1,
                 DetailsAttrs.AddEnergy: 10,
                 DetailsAttrs.AddHP: 10,
-                DetailsAttrs.HPRegen: 1,
-                BodyInitAttrs.arm_class: ArmSlot,
-                BodyInitAttrs.leg_class: LegSlot, }
+                DetailsAttrs.HPRegen: 1}
         super(MetalBody, self).__init__(unique_id=unique_id, damage=1, armor=1, **data)
 
 

@@ -11,8 +11,8 @@ from common.stages import Stages
 from client_server_parts.client.client_network import Network
 from client_server_parts.server_controller import ServerController
 
-from constants.server.network_keys import NetworkKeys, PlayerUpdates
-from constants.server.network_keys import ServerResponseCategories, CheckRegex
+from constants.server.network_keys import NetworkKeys, PlayerUpdates, PlayerAttrs
+from constants.server.network_keys import ServerResponseCategories
 
 from game_logic.components.player_object import Player
 from game_logic.components.pools.details_pool import DetailsPool
@@ -20,7 +20,7 @@ from game_logic.components.pools.skills_pool import SkillsPool
 
 from visual.UIController import UI_TREE
 
-from mechas.default_mech import MetalMech
+from mechas.base.mech import BaseMech
 
 LOGGER = Logger()
 
@@ -102,16 +102,12 @@ class RoundRelatedLogic:
             LOGGER.info(f'Added new player: {token} - {data}')
             self.other_players[token] = Player(**data)
 
-        if self.round_stage == NetworkKeys.RoundRoundStage:
-            self.build_round(response)
-
-        elif self.round_stage == NetworkKeys.RoundLobbyStage:
+        if self.round_stage == NetworkKeys.RoundLobbyStage:
             self.details_pool_settings.update(response[NetworkKeys.DetailsPoolSettings])
             self.build_lobby_menu(response)
 
-    def update(self):
-        if self.update_method:
-            self.update_method()
+        elif self.round_stage == NetworkKeys.RoundRoundStage:
+            self.build_round(response)
 
     def build_lobby_menu(self, response):
         self.lobby_ui = LobbyWindow(response, player=self.this_player, round_logic=self)
@@ -121,6 +117,27 @@ class RoundRelatedLogic:
 
         self.update_method = self.lobby_update
         self.process_received_data = self.__process_received_data_lobby
+
+    def build_round(self, response):
+        LOGGER.info(f'Build round: {response}')
+        try:
+            self.this_player.mech = self.build_mech(response)
+
+            self.details_pool.load_details_list(response[NetworkKeys.DetailsPool])
+
+            self.round_ui = Round(self.this_player, self.other_players, response[NetworkKeys.PlayersNumber])
+            self.round_ui.mech_window.calculate_side_positions()
+
+            self.process_received_data = self.__process_received_data_round
+            self.update_method = self.round_update
+
+        except Exception as e:
+            LOGGER.error(f'Failed to build round: {e}')
+
+    # ------------- UPDATE METHODS -------------------
+    def update(self):
+        if self.update_method:
+            self.update_method()
 
     def lobby_update(self):
         self.lobby_ui.update()
@@ -142,23 +159,14 @@ class RoundRelatedLogic:
         # if not self.client.connected:
         #     self.stage_controller.set_close_round_stage()
 
-    def build_round(self, response):
-        try:
-            self.this_player.mech = self.build_mech(response)
-
-            self.details_pool.load_details_list(response[NetworkKeys.DetailsPool])
-
-            self.round_ui = Round(self.this_player, self.other_players, response[NetworkKeys.PlayersNumber])
-            self.round_ui.mech_window.calculate_side_positions()
-
-            self.process_received_data = self.__process_received_data_round
-            self.update_method = self.round_update
-
-        except Exception as e:
-            LOGGER.error(f'Failed to build round: {e}')
+    # -----------------------------------------------------------
 
     def build_mech(self, response):
-        return MetalMech((5, 5), )
+        this_player = response.get(ServerResponseCategories.PlayersUpdates).get(self.this_player.token)
+        default_details = this_player.get(PlayerAttrs.DefaultDetails)
+        def_details = [self.details_pool.get_detail_by_id(d_id) for d_id in default_details]
+        self.this_player.default_details = def_details
+        return BaseMech(this_player.get(PlayerAttrs.Position, (5, 5)), )
 
     def close_round(self):
         if self.client:
@@ -198,13 +206,6 @@ class RoundRelatedLogic:
                 self.client.disconnect()
                 self.stage_controller.set_close_round_stage()
 
-    # def __normalize_recv(self, recv):
-    #     if self.FEW_RECV_SYMBOL in recv and not re.search(CheckRegex.good_recv_re, recv):
-    #         recv: str = recv.split(self.FEW_RECV_SYMBOL)[-1]
-    #         recv = recv if recv.startswith('{') else '{' + recv
-    #
-    #     return self.client.str_to_json(recv)
-
     def __process_received_data(self, data: dict):
         self.__check_for_stage_switch(data)
 
@@ -227,8 +228,7 @@ class RoundRelatedLogic:
 
     def __process_received_data_lobby(self, data):
         if data:
-            if data:
-                LOGGER.info(f'Received data: {data}')
+            LOGGER.info(f'Received data: {data}')
             self.lobby_ui.process_server_data(data)
 
     def __process_received_data_round(self, data):

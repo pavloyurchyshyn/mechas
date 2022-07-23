@@ -9,12 +9,10 @@ __all__ = ['BaseSlot', 'ArmSlot', 'LegSlot', 'WeaponSlot']
 class BaseSlot:
     logger = Logger()
 
-    def __init__(self, parent, num: int, detail=None, detail_types: list[DetailsTypes: str, ] = None, open=True):
-        self.__open = open
+    def __init__(self, detail=None, detail_types: list[DetailsTypes: str, ] = None, is_open=True):
+        self.__open = is_open
         self.__detail = detail
         self.__detail_types = detail_types
-        self.__parent = parent
-        self.__num = num
 
     def switch_detail(self, detail) -> BaseDetail:
         detail_ = self.detail
@@ -80,23 +78,19 @@ class BaseSlot:
     def types(self):
         return self.__detail_types
 
-    @property
-    def num(self):
-        return self.__num
-
 
 class ArmSlot(BaseSlot):
-    def __init__(self, parent, num, detail=None):
-        super().__init__(detail=detail, parent=parent, num=num,
+    def __init__(self, detail=None, is_open=True):
+        super().__init__(detail=detail, is_open=is_open,
                          detail_types=[DetailsTypes.ARM_TYPE, DetailsTypes.ARM_AND_LEG_TYPE])
 
 
 class LegSlot(BaseSlot):
-    def __init__(self, parent, num, detail=None):
-        super().__init__(detail=detail, parent=parent, num=num,
+    def __init__(self, detail=None, is_open=True):
+        super().__init__(detail=detail, is_open=is_open,
                          detail_types=[DetailsTypes.LEG_TYPE, DetailsTypes.ARM_AND_LEG_TYPE])
 
 
 class WeaponSlot(BaseSlot):
-    def __init__(self, weapon, open):
-        super(WeaponSlot, self).__init__(weapon, num=0, open=open, detail_types=[DetailsTypes.WEAPON_TYPE, ])
+    def __init__(self, weapon=None, is_open=True):
+        super(WeaponSlot, self).__init__(detail=weapon, is_open=is_open, detail_types=[DetailsTypes.WEAPON_TYPE, ])

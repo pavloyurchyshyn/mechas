@@ -25,25 +25,9 @@ class SpecialValues:
 
 
 class MechAttrs:
-    Position = 'position'
-    BodyClass = 'body_class'
-    BodyData = 'body_data'
-
-    LeftArms = 'left_arms'
-    RightArms = 'right_arms'
-    LeftLegs = 'left_legs'
-    RightLegs = 'right_legs'
-
-
-class BodyInitAttrs:
-    unique_id = DetailsAttrs.Id
-    arm_class = 'arm_slot_class'
-    leg_class = 'leg_slot_class'
-
-    LeftArmsNum = 'left_arms_num'
-    RightArmsNum = 'right_arms_num'
-    LeftLegsNum = 'left_legs_num'
-    RightLegsNum = 'right_legs_num'
+    Position: str = 'position'
+    CurrentHP: str = 'current_hp'
+    CurrentEnergy: str = 'current_energy'
 
 
 class DetailsTypes:
@@ -67,9 +51,7 @@ class SlotNames:
 
 class MechSerializeConst:
     Body: str = 'body'
-    LeftArms: str = 'left_arms'
-    RightArms: str = 'right_arms'
-    LeftLegs: str = 'left_legs'
-    RightLegs: str = 'right_legs'
+    LeftSlots: str = 'left_slots'
+    RightSlots: str = 'right_slots'
     Weapon: str = 'weapon'
     Detail: str = 'detail'

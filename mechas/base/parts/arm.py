@@ -12,7 +12,7 @@ class BaseArm(BaseDetail):
 
     def __init__(self, unique_id=None, weapon=None, **kwargs):
         super().__init__(unique_id=unique_id, **kwargs)
-        self.__weapon = WeaponSlot(weapon=weapon, open=self.can_handle_weapon)
+        self.__weapon = WeaponSlot(weapon=weapon, is_open=self.can_handle_weapon)
 
     def set_weapon(self, weapon):
         self.__weapon.set_detail(weapon)
