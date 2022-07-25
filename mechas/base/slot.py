@@ -14,6 +14,9 @@ class BaseSlot:
         self.__detail = detail
         self.__detail_types = detail_types
 
+    def type_is_ok(self, detail) -> bool:
+        return detail.detail_type in self.__detail_types
+
     def switch_detail(self, detail) -> BaseDetail:
         detail_ = self.detail
         self.clear()
@@ -28,13 +31,16 @@ class BaseSlot:
             return detail_
 
     def set_detail(self, detail):
+        if detail is None:
+            return
+
         if self.is_closed:
             raise SlotClosed
 
         if self.__detail:
             raise SlotIsFullError(self)
 
-        elif detail.detail_type not in self.__detail_types:
+        elif not self.type_is_ok(detail):
             raise WrongDetailType(detail, self.__detail_types)
 
         else:

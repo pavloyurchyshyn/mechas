@@ -1,9 +1,11 @@
 import re
 import traceback
 from _thread import start_new_thread
+from constants.mechas.detail_const import DetailsTypes
 
 from stages.play_stage.round_stage.page import Round
 from stages.play_stage.round_lobby_stage.page import LobbyWindow
+from stages.play_stage.round_stage.windows.cards_windows.cards_factory import CardsFactory
 
 from common.logger import Logger
 from common.stages import Stages
@@ -19,18 +21,14 @@ from game_logic.components.pools.details_pool import DetailsPool
 from game_logic.components.pools.skills_pool import SkillsPool
 
 from visual.UIController import UI_TREE
+from visual.skill_card import SkillCard
 
 from mechas.base.mech import BaseMech
 
 LOGGER = Logger()
 
 
-class RoundStages:
-    Lobby = 'lobby'
-
-
 class RoundRelatedLogic:
-    FEW_RECV_SYMBOL = '}{'
 
     def __init__(self):
         self.stage_controller = Stages()
@@ -40,7 +38,7 @@ class RoundRelatedLogic:
         self.round_ui: Round = None
         self.lobby_ui: LobbyWindow = None
         self.client: Network = None
-
+        self.cards_factory = CardsFactory(SkillCard)
         self.skills_pool: SkillsPool = None
         self.details_pool: DetailsPool = None
         self.details_pool_settings: dict = {}
@@ -121,9 +119,8 @@ class RoundRelatedLogic:
     def build_round(self, response):
         LOGGER.info(f'Build round: {response}')
         try:
-            self.this_player.mech = self.build_mech(response)
-
             self.details_pool.load_details_list(response[NetworkKeys.DetailsPool])
+            self.this_player.mech = self.build_mech(response)
 
             self.round_ui = Round(self.this_player, self.other_players, response[NetworkKeys.PlayersNumber])
             self.round_ui.mech_window.calculate_side_positions()
@@ -133,6 +130,8 @@ class RoundRelatedLogic:
 
         except Exception as e:
             LOGGER.error(f'Failed to build round: {e}')
+            LOGGER.error(traceback.format_exc())
+            self.stage_controller.set_close_round_stage()
 
     # ------------- UPDATE METHODS -------------------
     def update(self):
@@ -166,7 +165,32 @@ class RoundRelatedLogic:
         default_details = this_player.get(PlayerAttrs.DefaultDetails)
         def_details = [self.details_pool.get_detail_by_id(d_id) for d_id in default_details]
         self.this_player.default_details = def_details
-        return BaseMech(this_player.get(PlayerAttrs.Position, (5, 5)), )
+
+        mech = BaseMech(this_player.get(PlayerAttrs.Position, (5, 5)))
+        self._details_auto_set(mech, def_details)
+        mech.update_details_and_attrs()
+        return mech
+
+    def _details_auto_set(self, mech, details):
+        body = list(filter(lambda d: d.detail_type == DetailsTypes.BODY, details))
+        if body:
+            mech.set_body(body[0])
+            details.remove(body[0])
+
+            for detail in details:
+                if detail.detail_type == DetailsTypes.BODY:
+                    if mech.body is None:
+                        mech.set_body(detail)
+                else:
+                    connected = False
+                    for side in (mech.left_slots, mech.right_slots):
+                        if connected:
+                            break
+                        for slot in side.values():
+                            if slot.type_is_ok(detail) and slot.is_empty:
+                                slot.set_detail(detail)
+                                connected = True
+                                break
 
     def close_round(self):
         if self.client:
@@ -189,6 +213,7 @@ class RoundRelatedLogic:
         self.details_pool: DetailsPool = None
         self.update_method = None
         self.process_received_data = None
+        self.cards_factory.clear()
 
     # ===========================================
     def __round_recv_thread(self):

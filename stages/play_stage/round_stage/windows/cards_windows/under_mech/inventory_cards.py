@@ -5,28 +5,38 @@ from stages.play_stage.round_stage.settings.windows_sizes import RoundSizes
 from visual.main_window import MAIN_SCREEN
 from settings.global_parameters import test_draw_status_is_on
 from constants.colors import simple_colors
+from visual.skill_card import SkillCard
+
 
 # TODO
-class TileCards(Rectangle):
+class InventoryCards(Rectangle):
     def __init__(self,
-                 x=RoundSizes.TileCards.X, y=RoundSizes.TileCards.Y,
-                 size_x=RoundSizes.TileCards.X_SIZE, size_y=RoundSizes.TileCards.Y_SIZE):
-        super(TileCards, self).__init__(x=x, y=y, size_x=size_x, size_y=size_y)
+                 x=RoundSizes.CardsInHands.X, y=RoundSizes.CardsInHands.Y,
+                 size_x=RoundSizes.CardsInHands.X_SIZE, size_y=RoundSizes.CardsInHands.Y_SIZE):
+        super(InventoryCards, self).__init__(x=x, y=y, size_x=size_x, size_y=size_y)
 
         self.orig_card_x_size = self.card_x_size = self.size_x * 0.1
         self.orig_card_y_size = self.card_y_size = self.size_y * 0.8
         self.right_border_step = self.size_x * 0.01
-        self.card_y_pos = self.y0 + (self.size_y - self.orig_card_y_size)//2
+        self.card_y_pos = self.y0 + (self.size_y - self.orig_card_y_size) // 2
 
         self.card_rect = self.right_border_step, self.card_y_pos, self.card_x_size, self.card_y_size
 
         self.cards = []
 
-    def add_card(self, card):
+    def get_cards_by_mouse_pos(self, pos) -> SkillCard:
+        x, y = pos
+        x -= self.x0
+        y -= self.y0
+        for card in self.cards:
+            if card.collide_point((x, y)):
+                return card
+
+    def add_card(self, card: SkillCard):
         self.cards.append(card)
         self.calculate_cards_positions()
 
-    def remove_card(self, card):
+    def remove_card(self, card: SkillCard):
         self.cards.remove(card)
         self.calculate_cards_positions()
 
@@ -45,10 +55,10 @@ class TileCards(Rectangle):
         if w_space > sum_width:
             step_between_cards = 2
         else:
-            size_scale = (w_space - self.card_x_size//2) / sum_width
+            size_scale = (w_space - self.card_x_size // 2) / sum_width
 
         step_w = (cards_num - 1) * step_between_cards
-        x = self.x0 + self.size_x//2 - step_w - sum_width//2 * size_scale - self.right_border_step
+        x = self.x0 + self.size_x // 2 - step_w - sum_width // 2 * size_scale - self.right_border_step
 
         for card in self.cards:
             card.change_position_lt((x, self.card_y_pos))
@@ -59,7 +69,7 @@ class TileCards(Rectangle):
 
     def draw(self):
         draw_rect(MAIN_SCREEN, (0, 255, 0), self.get_rect(), 1, 5)
-        for card in self.cards:
+        for card in sorted(self.cards, key=lambda c: c.chosen):
             card.draw()
 
         if test_draw_status_is_on():

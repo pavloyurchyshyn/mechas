@@ -41,50 +41,35 @@ class MechWindow(Rectangle):
         self.mech_parts.clear()
         if self.player_mech:
             self.mech_body: BaseBody = self.player_mech.body
+            l_slots = [part for part in self.player_mech.left_slots.values()]
+            r_slots = [part for part in self.player_mech.right_slots.values()]
 
-            l_parts = [parts for parts in self.player_mech.left_slots.values()]#[getattr(self.mech_body, s) for s in BaseBody.Sides.left_parts]]
-            r_parts = [parts for parts in self.player_mech.right_slots.values()]#[getattr(self.mech_body, s) for s in BaseBody.Sides.right_parts]]
+            self.add_left_slots(l_slots)
+            self.add_right_slots(r_slots)
 
-            self.add_left_parts(l_parts)
-            self.add_right_part(r_parts)
-
-            self.body_ui_slot = BodyVisualSlot(x=self.midle_column, y=self.y0 + (self.size_y - SlotSizes.X) / 2,
+            self.body_ui_slot = BodyVisualSlot(x=self.midle_column,
+                                               y=self.y0 + (self.size_y - SlotSizes.X) / 2,
                                                size=SlotSizes.X, body=self.mech_body)
 
-    def add_left_parts(self, parts: list):
-        x = self.left_column
-        count = 0
-        for items in parts:
-            count += len(items)
+    def add_left_slots(self, slots: list):
+        self.__build_column(self.left_column, slots)
 
-        step = (self.size_y - (count * SlotSizes.X)) / (count + 1)
-        if step > 20 * Y_SCALE:
-            step = 20 * Y_SCALE
-        y = self.y0 + (self.size_y - count * SlotSizes.X - (count + 1) * step) / 2 + step
-        for parts_ in parts:
-            for part in parts_.values():
-                r = VisualSlot(x=x, y=y, size=self.element_size, slot=part)
-                self.mech_parts.append(r)
-                y += self.element_size + step
+    def add_right_slots(self, slots: list):
+        self.__build_column(self.right_column, slots)
 
-    def add_right_part(self, parts):
-        x = self.right_column
-
-        count = 0
-        for items in parts:
-            count += len(items)
+    def __build_column(self, x, slots):
+        count = len(slots)
 
         step = (self.size_y - (count * SlotSizes.X)) / (count + 1)
         if step > 20 * Y_SCALE:
             step = 20 * Y_SCALE
         y = self.y0 + (self.size_y - count * SlotSizes.X - (count + 1) * step) / 2 + step
 
-        for parts_ in parts:
-            for part in parts_.values():
-                r = VisualSlot(x=x, y=y, size=self.element_size, slot=part)
+        for part in slots:
+            r = VisualSlot(x=x, y=y, size=self.element_size, slot=part)
 
-                self.mech_parts.append(r)
-                y += self.element_size + step
+            self.mech_parts.append(r)
+            y += self.element_size + step
 
     def get_start_y_and_step(self, count):
         step = (self.size_y - (count * SlotSizes.X)) / (count + 1)

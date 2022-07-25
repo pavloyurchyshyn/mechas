@@ -25,6 +25,13 @@ class RoundSizes:
         X = scaled_w(0.25) - 1
         Y = scaled_h(0.03)
 
+    # ======= Cards settings ===========
+    class CardSize:
+        X = 0
+        Y = 0
+        X_SIZE = scaled_w(0.036)
+        Y_SIZE = scaled_h(0.096)
+
     class SkillsCards:
         X = scaled_w(0.25) - 1
         Y = scaled_h(0.76)
@@ -60,7 +67,7 @@ class RoundSizes:
         Y = scaled_h(0.725)
         X_SIZE = scaled_w(0.31)
         Y_SIZE = scaled_h(0.275)
-
+    # =============================
     class ReadyBody:
         X = scaled_w(0.61)
         Y = scaled_h(0.881)

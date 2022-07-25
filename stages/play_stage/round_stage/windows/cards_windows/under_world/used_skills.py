@@ -8,7 +8,11 @@ from constants.colors import simple_colors
 
 
 class UsedCardSlot(Rectangle):
-    def __init__(self, x, y, size_x, size_y):
+    def __init__(self,
+                 x=RoundSizes.CardSize.X,
+                 y=RoundSizes.CardSize.Y,
+                 size_x=RoundSizes.CardSize.X_SIZE,
+                 size_y=RoundSizes.CardSize.Y_SIZE):
         super().__init__(x=x, y=y, size_x=size_x, size_y=size_y)
 
         self.slot = None
@@ -44,7 +48,7 @@ class UsedSkillsCards(Rectangle):
     def build_slots(self):
         self.slots.clear()
         for i in range(self.cards_num):
-            self.slots.append(UsedCardSlot(0, self.card_y_pos, self.orig_card_x_size, self.orig_card_y_size))
+            self.slots.append(UsedCardSlot())
 
         self.calculate_cards_positions()
 
@@ -70,6 +74,7 @@ class UsedSkillsCards(Rectangle):
 
     def update(self):
         pass
+        # TODO
 
     def draw(self):
         for slot in self.slots:

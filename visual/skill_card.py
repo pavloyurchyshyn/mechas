@@ -7,19 +7,35 @@ from settings.global_parameters import test_draw_status_is_on
 from constants.colors import simple_colors
 from pygame import draw
 from skills.base.skill import BaseSkill
-__all__ = ['SkillCard']
+from stages.play_stage.round_stage.settings.windows_sizes import RoundSizes
+
+__all__ = ['SkillCard', ]
 
 
 class SkillCard(Rectangle):
-    def __init__(self, x, y, size_x, size_y, skill: BaseSkill, text=''):
+    def __init__(self, skill: BaseSkill,
+                 x=RoundSizes.CardSize.X,
+                 y=RoundSizes.CardSize.Y,
+                 size_x=RoundSizes.CardSize.X_SIZE,
+                 size_y=RoundSizes.CardSize.Y_SIZE,
+                 text=''):
         super().__init__(x=x, y=y, size_x=size_x, size_y=size_y)
         self.font = custom_font(size=10)
         self.skill: BaseSkill = skill
+        self.unique_id = self.skill.unique_id
         self.text = text if text else skill.name
         self.surface = get_surface(size_x=size_x, size_y=size_y, transparent=1)
         self.border_radius = int(size_x * 0.1)
 
+        self.chosen = False
+
         self.build()
+
+    def chose(self):
+        self.chosen = True
+
+    def unchoose(self):
+        self.chosen = False
 
     def build(self):
         self.surface = get_surface(size_x=self.size_x, size_y=self.size_y, transparent=1)

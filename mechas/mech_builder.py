@@ -42,8 +42,6 @@ class MechBuilder:
         :return:
         """
         body: BaseBody = self.details_pool.get_detail_by_id(data.get(MechSerializeConst.Body))
-        print(data.get(MechSerializeConst.Body), self.details_pool.id_to_detail)
-        print('build body', body)
         mech = BaseMech(data.get(MechAttrs.Position), body_detail=body)
 
         for k, set_slot_detail_func in ((MechSerializeConst.LeftSlots, mech.set_left_detail),

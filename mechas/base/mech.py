@@ -40,6 +40,15 @@ class BaseMech:
         self.calculate_attrs()
         self.collect_abilities()
 
+    def set_body(self, body):
+        self.body = body
+        self.build_slots()
+
+    def drop_body(self) -> BaseBody:
+        b = self.body
+        self.body = None
+        return b
+
     def build_slots(self):
         if self.body:
             self.__build_slots(self._left_slots, self.body.get_left_slots())
@@ -55,8 +64,7 @@ class BaseMech:
         slots = sorted(slots, key=lambda s: DetailsTypes.LEG_TYPE in s.types)
         for i, slot in enumerate(slots):
             if i in old_slots and old_slots[i].is_full:
-                detail = old_slots[i].get_and_clear()
-                slot.set_detail(detail)
+                slot.set_detail(old_slots[i].get_and_clear())
 
             side[i] = slot
 
