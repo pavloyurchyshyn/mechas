@@ -5,7 +5,7 @@ from stages.play_stage.round_stage.settings.windows_sizes import RoundSizes
 from visual.main_window import MAIN_SCREEN
 from settings.global_parameters import test_draw_status_is_on
 from constants.colors import simple_colors
-from visual.skill_card import SkillCard
+from visual.cards.skill_card import SkillCard
 
 
 # TODO

@@ -16,7 +16,7 @@ class DetailsAttrs:
     HPRegen: str = 'hp_regen'  # regeneration
     AddEnergy: str = 'add_energy'
     EnergyRegen: str = 'energy_regen'
-    Skills: str = 'skills'
+    Skills: str = 'skills_logic'
 
 
 class SpecialValues:

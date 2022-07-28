@@ -11,6 +11,7 @@ from stages.play_stage.round_stage.mech_visual.mech import MechVisual
 from stages.play_stage.round_stage.windows.bars_windows.bars import BarsLogic
 from stages.play_stage.round_stage.windows.cards_windows.deck_of_cards import DeckOfCardsWindow
 
+from stages.play_stage.round_stage.windows.cards_windows.cards_factory import CardsFactory
 
 from constants.server.network_keys import ServerResponseCategories
 
@@ -28,18 +29,24 @@ class Round:
         self.player = player
         self.other_players = other_players
 
+        self.cards_factory = CardsFactory()
+
         self.arena_window = ArenaWindow()
         self.top_bar = TopBar()
         self.exit_pop_up = ExitPopUp()
-        self.cards_window = CardsWindow(mech=player.mech)
-        self.inventory_and_tile_cards_window = InventoryAndTileCards()
-        self.mech_window = MechWindow(player_mech=player.mech)
-        self.chat_window = ChatWindow(self.player_response)
         self.dice = DiceWindow()
+
+        self.mech_window = MechWindow(player=player)
         self.mech_visual = MechVisual(mech=self.mech, world=self.arena_window.visual_world)
+
+        self.skills_cards_window = CardsWindow(mech=player.mech, cards_factory=self.cards_factory)
+        self.inventory_and_tile_cards_window = InventoryAndTileCards(self.player, cards_factory=self.cards_factory)
+        self.decks = DeckOfCardsWindow(cards_factory=self.cards_factory)
+
         self.mana_and_hp_bars = BarsLogic(mech=self.mech)
-        self.decks = DeckOfCardsWindow()
+
         self.ready = ReadyWindow(self.player_response, players_num)
+        self.chat_window = ChatWindow(self.player_response)
 
         UI_TREE.add_menu(self, self.exit_pop_up)
 
@@ -54,6 +61,7 @@ class Round:
             self.arena_window.update()
             self.top_bar.update()
 
+        self.mech_window.update()
         self.chat_window.update()
         self.ready.update()
 
@@ -65,7 +73,7 @@ class Round:
         self.exit_pop_up.draw()
         self.decks.draw()
 
-        self.cards_window.draw()
+        self.skills_cards_window.draw()
         self.inventory_and_tile_cards_window.draw()
 
         self.mech_window.draw()

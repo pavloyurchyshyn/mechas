@@ -2,6 +2,7 @@ from mechas.base.parts.body import BaseBody
 from mechas.base.exceptions import NotEnoughEnergyError
 from constants.mechas.detail_const import DetailsAttrs, MechAttrs, DetailsTypes
 from mechas.base.exceptions import SlotDoesntExistsError
+from mechas.base.exceptions import WrongDetailType
 
 
 class BaseMech:
@@ -40,7 +41,10 @@ class BaseMech:
         self.calculate_attrs()
         self.collect_abilities()
 
-    def set_body(self, body):
+    def set_body(self, body: BaseBody):
+        if body.detail_type != BaseBody.detail_type:
+            raise WrongDetailType(body, BaseBody.detail_type)
+
         self.body = body
         self.build_slots()
 

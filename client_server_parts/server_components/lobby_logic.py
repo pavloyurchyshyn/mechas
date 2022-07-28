@@ -11,7 +11,9 @@ LOGGER = Logger('server_logs', 0, std_handler=0).LOGGER
 class LobbyLogic(MPM, ):
     def __init__(self, server):
         self.config = server.config
+        self.data_to_send = server.data_to_send
         self.server = server
+
         self.players_connections = server.players_connections
         self.players_data: {str: Player} = server.players_data
 
@@ -19,7 +21,6 @@ class LobbyLogic(MPM, ):
         self.str_to_json = server.str_to_json
         self.alive = True
 
-        self.data_to_send = {}
         self.pause_send = False
 
     def new_player_connected(self, token):
@@ -49,6 +50,7 @@ class LobbyLogic(MPM, ):
             self.alive = False
             self.server.GAME_LOGIC.build_round()
             self.set_default_details()
+            self.server.GAME_LOGIC.update_request_for_players_mechas()
 
             data_to_send = {}
             data_to_send[NetworkKeys.SwitchRoundStageTo] = NetworkKeys.RoundRoundStage

@@ -1,7 +1,4 @@
-from visual.main_window import MAIN_SCREEN
-from pygame.draw import circle as draw_circle
-from pygame.draw import line as draw_line
-from visual.skill_card import SkillCard
+from visual.cards.skill_card import SkillCard
 from common.global_mouse import GLOBAL_MOUSE
 from stages.play_stage.round_stage.windows.cards_windows.under_mech.tile_cards import TileCards
 from stages.play_stage.round_stage.windows.cards_windows.under_mech.inventory_cards import InventoryCards

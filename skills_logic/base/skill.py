@@ -9,6 +9,7 @@ class BaseSkill:
     """
     Clock = StepsClock()
     name = None
+    verbal_name = None
 
     def __init__(self, unique_id: str, spell_cost: int, cooldown: int = 1):
         if self.name is None:
@@ -25,8 +26,8 @@ class BaseSkill:
             self.cooldown -= 1
 
     @abstractmethod
-    def use(self, *args, **kwargs):
+    def use(self, *args, **kwargs) -> dict:
         raise NotImplementedError
 
     def on_cooldown(self):
-        return self.cooldown_value != 0
+        return self.cooldown_value > 0

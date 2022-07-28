@@ -72,7 +72,7 @@ class PlayerUpdates:
     Position = 'position'
     Energy = 'energy'
 
-    UseCard = 'use_card'
+    SkillUse = 'skill_use'
     MechActions = 'mech_actions'
     ReadyStatus = 'ready_status'
 

@@ -5,7 +5,7 @@ from constants.mechas.detail_const import MechSerializeConst, DetailsTypes, Mech
 from common.logger import Logger
 
 
-class MechBuilder:
+class MechSerializer:
     logger = Logger()
 
     def __init__(self, details_pool: DetailsPool):
@@ -13,25 +13,27 @@ class MechBuilder:
 
     def mech_to_dict(self, mech: BaseMech):
         data = {
-            MechSerializeConst.Body: mech.body.unique_id,
             MechAttrs.Position: mech.position,
             MechAttrs.CurrentHP: mech.health_points,
             MechAttrs.CurrentEnergy: mech.energy,
         }
-        for key, slots in (
-                (MechSerializeConst.LeftSlots, mech.left_slots),
-                (MechSerializeConst.RightSlots, mech.right_slots),
-        ):
+        if mech.body:
+            data[MechSerializeConst.Body]: mech.body.unique_id
 
-            slots = {num: slot.detail for num, slot in slots.items()}
-            for slot_n, detail in slots.items():
-                if detail:
-                    slots[slot_n] = {MechSerializeConst.Detail: detail.unique_id}
-                    if detail.detail_type in (DetailsTypes.ARM_TYPE, DetailsTypes.ARM_AND_LEG_TYPE):
-                        if detail.weapon:
-                            slots[slot_n][MechSerializeConst.Weapon] = detail.weapon.unique_id
+            for key, slots in (
+                    (MechSerializeConst.LeftSlots, mech.left_slots),
+                    (MechSerializeConst.RightSlots, mech.right_slots),
+            ):
 
-            data[key] = slots
+                slots = {num: slot.detail for num, slot in slots.items()}
+                for slot_n, detail in slots.items():
+                    if detail:
+                        slots[slot_n] = {MechSerializeConst.Detail: detail.unique_id}
+                        if detail.detail_type in (DetailsTypes.ARM_TYPE, DetailsTypes.ARM_AND_LEG_TYPE):
+                            if detail.weapon:
+                                slots[slot_n][MechSerializeConst.Weapon] = detail.weapon.unique_id
+
+                data[key] = slots
 
         return data
 
@@ -68,7 +70,7 @@ if __name__ == '__main__':
     from mechas.test_mech import MetalMech
     from game_logic.components.pools.skills_pool import SkillsPool
 
-    builder = MechBuilder(DetailsPool(SkillsPool()))
+    builder = MechSerializer(DetailsPool(SkillsPool()))
     builder.details_pool.load_details_list([
         ('simple_metal_body', 0),
         ('simple_metal_arm', 1),

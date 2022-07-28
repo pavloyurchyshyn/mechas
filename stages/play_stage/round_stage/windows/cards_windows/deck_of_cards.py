@@ -6,12 +6,15 @@ from visual.main_window import MAIN_SCREEN
 from settings.global_parameters import test_draw_status_is_on
 from constants.colors import simple_colors
 
+
 # TODO
 class DeckOfCardsWindow(Rectangle):
-    def __init__(self,
+    def __init__(self, cards_factory,
                  x=RoundSizes.DecksWindow.X, y=RoundSizes.DecksWindow.Y,
                  size_x=RoundSizes.DecksWindow.X_SIZE, size_y=RoundSizes.DecksWindow.Y_SIZE):
         super(DeckOfCardsWindow, self).__init__(x=x, y=y, size_x=size_x, size_y=size_y)
+
+        self.cards_factory = cards_factory
 
     def update(self):
         pass

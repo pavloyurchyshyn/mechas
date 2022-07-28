@@ -29,5 +29,6 @@ class ServerConfig:
         self.planing_time = -20
         self.prepare_time = -20
         self.time_per_step = -10
+        self.inventory_size = 5
 
         self.host_token = self.main_admin_key

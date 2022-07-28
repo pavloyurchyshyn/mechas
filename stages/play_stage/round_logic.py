@@ -1,11 +1,9 @@
-import re
 import traceback
 from _thread import start_new_thread
 from constants.mechas.detail_const import DetailsTypes
 
-from stages.play_stage.round_stage.page import Round
+from stages.play_stage.round_stage.page import Round as RoundUI
 from stages.play_stage.round_lobby_stage.page import LobbyWindow
-from stages.play_stage.round_stage.windows.cards_windows.cards_factory import CardsFactory
 
 from common.logger import Logger
 from common.stages import Stages
@@ -21,7 +19,6 @@ from game_logic.components.pools.details_pool import DetailsPool
 from game_logic.components.pools.skills_pool import SkillsPool
 
 from visual.UIController import UI_TREE
-from visual.skill_card import SkillCard
 
 from mechas.base.mech import BaseMech
 
@@ -35,10 +32,9 @@ class RoundRelatedLogic:
         self.server_controller: ServerController = ServerController()
         self.round_stage = NetworkKeys.RoundLobbyStage
 
-        self.round_ui: Round = None
+        self.round_ui: RoundUI = None
         self.lobby_ui: LobbyWindow = None
         self.client: Network = None
-        self.cards_factory = CardsFactory(SkillCard)
         self.skills_pool: SkillsPool = None
         self.details_pool: DetailsPool = None
         self.details_pool_settings: dict = {}
@@ -70,12 +66,12 @@ class RoundRelatedLogic:
                 LOGGER.info(f'Client connected: {response}')
                 self.this_player = Player(**response.get(PlayerUpdates.Data, {}))
                 LOGGER.info(f'This player: {self.this_player.get_data_dict()}')
+                self.stage_controller.set_round_stage()
 
                 self.process_connection_data(response)
 
                 start_new_thread(self.__round_recv_thread, ())
 
-                self.stage_controller.set_round_stage()
             else:
                 self.client = None
                 raise ConnectionError(response.get(NetworkKeys.ServerMessages, ''))
@@ -90,22 +86,28 @@ class RoundRelatedLogic:
             self.stage_controller.set_round_stage()
 
     def process_connection_data(self, response):
-        self.round_stage = response[NetworkKeys.RoundStage]
-        self.skills_pool: SkillsPool = SkillsPool()
-        self.details_pool: DetailsPool = DetailsPool(self.skills_pool, seed=response[NetworkKeys.Seed])
-        # TODO make a different stages
-        self.details_pool_settings.clear()
+        try:
+            self.round_stage = response[NetworkKeys.RoundStage]
+            self.skills_pool: SkillsPool = SkillsPool()
+            self.details_pool: DetailsPool = DetailsPool(self.skills_pool, seed=response[NetworkKeys.Seed])
+            # TODO make a different stages
+            self.details_pool_settings.clear()
 
-        for token, data in response.get(ServerResponseCategories.OtherPlayers, {}).items():
-            LOGGER.info(f'Added new player: {token} - {data}')
-            self.other_players[token] = Player(**data)
+            for token, data in response.get(ServerResponseCategories.OtherPlayers, {}).items():
+                LOGGER.info(f'Added new player: {token} - {data}')
+                self.other_players[token] = Player(**data)
 
-        if self.round_stage == NetworkKeys.RoundLobbyStage:
-            self.details_pool_settings.update(response[NetworkKeys.DetailsPoolSettings])
-            self.build_lobby_menu(response)
+            if self.round_stage == NetworkKeys.RoundLobbyStage:
+                self.details_pool_settings.update(response[NetworkKeys.DetailsPoolSettings])
+                self.build_lobby_menu(response)
 
-        elif self.round_stage == NetworkKeys.RoundRoundStage:
-            self.build_round(response)
+            elif self.round_stage == NetworkKeys.RoundRoundStage:
+                self.build_round(response)
+
+        except Exception as e:
+            LOGGER.error(f'Failed to build round: {e}')
+            LOGGER.error(traceback.format_exc())
+            self.stage_controller.set_close_round_stage()
 
     def build_lobby_menu(self, response):
         self.lobby_ui = LobbyWindow(response, player=self.this_player, round_logic=self)
@@ -118,20 +120,14 @@ class RoundRelatedLogic:
 
     def build_round(self, response):
         LOGGER.info(f'Build round: {response}')
-        try:
-            self.details_pool.load_details_list(response[NetworkKeys.DetailsPool])
-            self.this_player.mech = self.build_mech(response)
+        self.details_pool.load_details_list(response[NetworkKeys.DetailsPool])
+        self.this_player.mech = self.build_mech(response)
 
-            self.round_ui = Round(self.this_player, self.other_players, response[NetworkKeys.PlayersNumber])
-            self.round_ui.mech_window.calculate_side_positions()
+        self.round_ui = RoundUI(self.this_player, self.other_players, response[NetworkKeys.PlayersNumber])
+        self.round_ui.mech_window.calculate_side_positions()
 
-            self.process_received_data = self.__process_received_data_round
-            self.update_method = self.round_update
-
-        except Exception as e:
-            LOGGER.error(f'Failed to build round: {e}')
-            LOGGER.error(traceback.format_exc())
-            self.stage_controller.set_close_round_stage()
+        self.process_received_data = self.__process_received_data_round
+        self.update_method = self.round_update
 
     # ------------- UPDATE METHODS -------------------
     def update(self):
@@ -171,7 +167,7 @@ class RoundRelatedLogic:
         mech.update_details_and_attrs()
         return mech
 
-    def _details_auto_set(self, mech, details):
+    def _details_auto_set(self, mech: BaseMech, details):
         body = list(filter(lambda d: d.detail_type == DetailsTypes.BODY, details))
         if body:
             mech.set_body(body[0])
@@ -213,7 +209,6 @@ class RoundRelatedLogic:
         self.details_pool: DetailsPool = None
         self.update_method = None
         self.process_received_data = None
-        self.cards_factory.clear()
 
     # ===========================================
     def __round_recv_thread(self):

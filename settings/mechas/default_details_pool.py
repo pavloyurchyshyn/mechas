@@ -9,13 +9,13 @@ from constants.mechas.detail_const import MechSerializeConst
 # etc
 
 DEFAULT_DETAILS_POOL_SETTINGS = {
-    DetailNames.SimpleMetal.Body: 1,
-    DetailNames.SimpleMetal.Leg: 2,
-    DetailNames.SimpleMetal.Arm: 2,
+    # DetailNames.SimpleMetal.Body: 1,
+    # DetailNames.SimpleMetal.Leg: 2,
+    # DetailNames.SimpleMetal.Arm: 2,
 }
 
 DEFAULT_START_DETAILS = {
     DetailNames.SimpleMetal.Body: 1,
     DetailNames.SimpleMetal.Leg: 2,
-    DetailNames.SimpleMetal.Arm: 2,
+    DetailNames.SimpleMetal.Arm: 3,
 }

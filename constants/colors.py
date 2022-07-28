@@ -29,6 +29,14 @@ SILVER = [192, 192, 192]
 BULLET_COLOR = [155, 125, 0]
 
 
+class RedButtonColors:
+    text_color = (255, 100, 100)
+    button_bord_color = (255, 120, 120)
+    button_bord_color_blocked = (90, 90, 90)
+    button_back_color = (55, 0, 0)
+    button_back_color_blocked = (55, 55, 55)
+
+
 class CommonColors:
     blue = BLUE
     red = RED
@@ -39,6 +47,7 @@ class CommonColors:
     grey2 = GREY_DARK_2
     grey3 = GREY_DARK_3
     yellow = YELLOW
+    silver = SILVER
 
 
 simple_colors = CommonColors
@@ -46,15 +55,4 @@ simple_colors = CommonColors
 BLOOD_COLOR = (75, 0, 0)
 
 PLAYERS_COLORS = {
-    'blue': {'body': (181, 244, 253, 255),
-             'face': (112, 170, 241)},
-
-    'red': {'body': (237, 121, 126, 255),
-            'face': (185, 65, 70, 255)},
-
-    'purple': {'body': (157, 98, 230, 255),
-               'face': (125, 45, 223, 255)},
-
-    'green': {'body': (62, 210, 111, 255),
-              'face': (27, 114, 55, 255)}
 }

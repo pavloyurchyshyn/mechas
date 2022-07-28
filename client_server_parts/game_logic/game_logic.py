@@ -1,4 +1,4 @@
-from constants.server.network_keys import ServerResponseCategories, PlayerActions, SRC
+from constants.server.network_keys import ServerResponseCategories, SRC
 from constants.server.game_logic_stages import GameLogicStagesConst
 from common.logger import Logger
 from common.global_clock import ROUND_CLOCK
@@ -6,22 +6,27 @@ from game_logic.components.pools.skills_pool import SkillsPool
 from game_logic.components.pools.details_pool import DetailsPool
 from game_logic.components.pools.pools_generator import PoolGenerator
 from client_server_parts.server_components.config import ServerConfig
-from client_server_parts.server_components.mixins.message_processor import MessageProcessorMixin
-from client_server_parts.server_components.game_logic.mixins.ready_status_mixin import ReadyStatusMixin
-from constants.server.network_end_symbols import END_OF_REQUEST
 
-LOGGER = Logger('server_logs', 0, std_handler=0).LOGGER
+from client_server_parts.server_components.mixins.message_processor import MessageProcessorMixin
+from client_server_parts.game_logic.mixins.ready_status_mixin import ReadyStatusMixin
+from client_server_parts.game_logic.mixins.mech_logic_mixin import MechLogicMixin
+from mechas.mech_serializer import MechSerializer
+
+from constants.server.network_end_symbols import END_OF_REQUEST
 
 TIMEOUT = 45
 
 
 class GameLogic(MessageProcessorMixin,
                 ReadyStatusMixin,
+                MechLogicMixin,
                 ):
-    logger = LOGGER
+    logger = Logger('server_logs', 0, std_handler=0).LOGGER
 
     def __init__(self, server):
         self.init()
+
+        self.mech_serializer = None
 
         self.server = server
         self.config: ServerConfig = self.server.config
@@ -33,7 +38,7 @@ class GameLogic(MessageProcessorMixin,
         self.str_to_json = server.str_to_json
         self.alive = True
 
-        self.data_to_send = {}
+        self.data_to_send = server.data_to_send
 
         self.skills_pool: SkillsPool = None
         self.details_pool: DetailsPool = None
@@ -49,10 +54,18 @@ class GameLogic(MessageProcessorMixin,
     def build_round(self):
         self.skills_pool = SkillsPool()
         self.details_pool = DetailsPool(self.skills_pool)  # TODO
+        self.mech_serializer = MechSerializer(self.details_pool)
 
         pool_generator = PoolGenerator(self.config.max_players_num, self.config.details_pool_settings)
         self.details_pool.load_details_list(pool_generator.get_details_list())
-        self.players_default_details = self.details_pool.get_default_details(self.config.default_details_settings, self.config.max_players_num)
+        self.players_default_details = self.details_pool.get_default_details(self.config.default_details_settings,
+                                                                             self.config.max_players_num)
+        self.build_players_mechas()
+        self.update_players_inventory_size()
+
+    def update_players_inventory_size(self):
+        for player in self.players_data.values():
+            player.inventory.update_size(self.config.inventory_size)
 
     def update(self):
         self.update_data_to_send()
@@ -78,7 +91,7 @@ class GameLogic(MessageProcessorMixin,
 
     def send_data(self, data):
         # if data.get('players_updates'):
-        LOGGER.info(f'Sending: {data}')
+        self.logger.info(f'Sending: {data}')
         data = self.json_to_str(data) + END_OF_REQUEST
         for token, conn in self.players_connections.copy().items():
             conn.send(data)

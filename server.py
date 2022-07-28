@@ -16,19 +16,20 @@ import json
 from _thread import *
 from client_server_parts.server_components.config import ServerConfig
 from client_server_parts.server_components.player_connection_handler import ConnectionHandler
-from client_server_parts.server_components.game_logic import GameLogic
+from client_server_parts.game_logic.game_logic import GameLogic
 from client_server_parts.server_components.lobby_logic import LobbyLogic
 from client_server_parts.server_components.network_logic import NetworkLogic
 from constants.server.network_keys import NetworkKeys
 from client_server_parts.server_components.functions.request_normalizer import normalize_request
 
-TIMEOUT = 90
+TIMEOUT = 30#90
 TICK_RATE = 16
 
 
 class Server:
     def __init__(self):
         self.alive = 1
+        self.data_to_send = {}
         self.current_stage = NetworkKeys.RoundLobbyStage
 
         start_new_thread(self.timeout_check, ())

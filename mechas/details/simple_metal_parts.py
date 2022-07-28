@@ -1,9 +1,8 @@
 from mechas.base.parts.body import BaseBody
 from mechas.base.parts.arm import BaseArm
 from mechas.base.parts.leg import BaseLeg
-from mechas.base.slot import ArmSlot, LegSlot
 
-from skills.simple_step import SimpleStep
+from skills_logic.skills.simple_step import SimpleStep
 
 from constants.mechas.detail_const import *
 from settings.mechas.details_names import DetailNames

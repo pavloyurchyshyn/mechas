@@ -10,6 +10,9 @@ class Inventory(list):
 
         super(Inventory, self).__init__(details)
 
+    def update_size(self, size):
+        self.length = size
+
     def append(self, detail) -> None:
         if len(self) < self.length:
             super(Inventory, self).append(detail)
@@ -21,7 +24,7 @@ class Player:
     def __init__(self, token, nickname, number,
                  mech: BaseMech = None, addr=None,
                  is_admin=False, ready=False,
-                 inventory: tuple = ()):
+                 inventory: tuple = (), inventory_size=5):
 
         self.addr = addr
         self.nickname = nickname
@@ -31,11 +34,14 @@ class Player:
         self.ready: bool = ready
         self.is_admin = is_admin
 
-        self.inventory = Inventory(inventory)
+        self.start_pos = (5, 5)  # TODO make normal pos
+
+        self.inventory = Inventory(inventory, length=inventory_size)
         self.default_details: list = []
 
     def set_default_details(self, default_details: list):
         self.default_details = default_details
+        self.inventory.extend(default_details)
 
     def get_data_dict(self):
         return {

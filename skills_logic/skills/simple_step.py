@@ -1,11 +1,12 @@
-from skills.base.skill import BaseSkill
-from skills.base.exceptions import OnCooldownException
+from skills_logic.base.skill import BaseSkill
+from skills_logic.base.exceptions import OnCooldownException
 from mechas.base.mech import BaseMech
 from settings.skills.simple_step import SimpleStepAttrs
 
 
 class SimpleStep(BaseSkill):
     name = SimpleStepAttrs.name
+    verbal_name = SimpleStepAttrs.verbal_name
 
     def __init__(self, unique_id):
         super(SimpleStep, self).__init__(unique_id=unique_id,
